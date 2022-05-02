@@ -11,9 +11,9 @@ const { errorHandler } = require('./middleware/errorMiddleware');
 // setting the express server port:
 const PORT = process.env.PORT || 5000;
 
-// connects to the database once set:
+// connects to the database:
 const connectDB = require('./config/db');
-// connectDB();
+connectDB();
 
 // you need to use cors in order to make a request
 // across different ports. react is served from
@@ -40,6 +40,8 @@ app.get('/api/message', (req, res) => {
 // routes and their handler functions. the handler functions are imported
 // from the controller file, which contains all of the logic for handling
 // the requests.
+// routes:
+app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/messages', require('./routes/messageRoutes'));
 
 // catch errors:
