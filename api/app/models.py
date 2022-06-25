@@ -20,3 +20,4 @@ class Post(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   body = models.CharField(max_length=200)
   time = models.DateTimeField()
+  likes = ArrayField(base_field=models.UUIDField())
