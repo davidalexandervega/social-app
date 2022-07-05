@@ -17,7 +17,7 @@ def userApi(request, user_id=0):
   elif request.method == 'POST':
     user_data = JSONParser().parse(request)
     user_serializer = UserSerializer(data=user_data)
-    if user_serializer.is_valid():
+    if user_serializer.is_valid(raise_exception=True):
       user_serializer.save()
       return JsonResponse('created a user', safe=False)
     return JsonResponse('failed to create a user', safe=False)
