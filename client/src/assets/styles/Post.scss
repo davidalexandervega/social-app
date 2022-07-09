@@ -1,0 +1,22 @@
+.post {
+  display: flex;
+  flex-direction: column;
+  min-height: 10vh;
+  width: 70vw;
+  max-width: 500px;
+  border: 1px solid black;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: default;
+}
+
+.postHeader {
+  display: flex;
+}
+
+.postUserPicture,
+.postUsername,
+.postTime {
+  display: inline-flex;
+  align-items: center;
+}

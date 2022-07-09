@@ -3,6 +3,9 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'source';
+}
+
+body {
   background-color: whitesmoke;
 }
 
@@ -10,11 +13,7 @@ input {
   padding: 4px;
   border: 1px solid black;
   border-radius: 10px;
-}
-
-@font-face {
-  font-family: 'inter';
-  src: url('../fonts/Inter-3.19/Inter\ Web/Inter-Regular.woff2');
+  background-color: whitesmoke;
 }
 
 @font-face {
@@ -48,7 +47,7 @@ input {
 
 .sidebar {
   display: none;
-  position: fixed;
+  position: sticky;
   flex-direction: column;
   margin-left: 1vw;
   margin-right: 2vw;
@@ -56,6 +55,15 @@ input {
 
 .profileButton {
   margin-top: 3vh;
+}
+
+.feedPage {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  gap: 5vh;
+  margin-top: 7vh;
+  align-items: center;
 }
 
 .formContainer {
@@ -80,18 +88,12 @@ input {
   .header {
     display: flex;
   }
-  body {
-    background-color: #f09a9d; /* Red */
-  }
 }
 
 /* tablet styles */
 @media only screen and (min-width: 401px) and (max-width: 960px) {
   .header {
     display: flex;
-  }
-  body {
-    background-color: #f5cf8e; /* Yellow */
   }
 }
 
@@ -102,8 +104,5 @@ input {
   }
   .sidebar {
     display: flex;
-  }
-  body {
-    background-color: #b2d6ff; /* Blue */
   }
 }

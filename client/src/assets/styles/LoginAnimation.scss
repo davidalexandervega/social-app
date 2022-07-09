@@ -1,0 +1,64 @@
+* {
+  box-sizing: border-box;
+}
+
+.scene {
+  margin-top: 11vh;
+  width: 50px;
+  height: 50px;
+  margin: 50px;
+  perspective: 300px;
+  perspective-origin: 50% 0%;
+}
+
+.cube {
+  margin-top: 11vh;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: translateZ(-100px);
+  animation-name: spin;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.cube_face {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  outline: 1px solid rgba(0, 0, 0, 0.7);
+  line-height: 50px;
+  text-align: center;
+  user-select: none;
+  background-color: rgba(116, 43, 226, 0.1);
+}
+
+.cube_face_front {
+  transform: rotateY(0deg) translateZ(25px);
+}
+.cube_face_right {
+  transform: rotateY(90deg) translateZ(25px);
+}
+.cube_face_back {
+  transform: rotateY(180deg) translateZ(25px);
+}
+.cube_face_left {
+  transform: rotateY(-90deg) translateZ(25px);
+}
+.cube_face_top {
+  transform: rotateX(90deg) translateZ(25px);
+}
+.cube_face_bottom {
+  transform: rotateX(-90deg) translateZ(25px);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate3d(0, 0, 0, 0deg);
+  }
+  to {
+    transform: rotate3d(0, 1, 1, 360deg);
+  }
+}
