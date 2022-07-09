@@ -1,3 +1,109 @@
-body {
-    background-color: whitesmoke;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'source';
+  background-color: whitesmoke;
+}
+
+input {
+  padding: 4px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+@font-face {
+  font-family: 'inter';
+  src: url('../fonts/Inter-3.19/Inter\ Web/Inter-Regular.woff2');
+}
+
+@font-face {
+  font-family: 'source';
+  src: url('../fonts/source-code-pro/SourceCodePro-Light.otf');
+}
+
+.labelButton {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  margin: 1vh 0 1vh 0;
+  user-select: none;
+}
+
+.button:hover {
+  color: rgb(116, 43, 226);
+  cursor: pointer;
+}
+
+.header {
+  display: none;
+  position: sticky;
+  justify-content: space-between;
+  margin: 1vh 1vw 1vh 1vw;
+}
+
+#page {
+  display: flex;
+}
+
+.sidebar {
+  display: none;
+  position: fixed;
+  flex-direction: column;
+  margin-left: 1vw;
+  margin-right: 2vw;
+}
+
+.profileButton {
+  margin-top: 3vh;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1vh;
+  border: 1px solid black;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 75vw;
+  max-width: 400px;
+}
+
+.formItem {
+  margin-top: 1vh;
+}
+
+/* mobile styles */
+@media only screen and (max-width: 400px) {
+  .header {
+    display: flex;
+  }
+  body {
+    background-color: #f09a9d; /* Red */
+  }
+}
+
+/* tablet styles */
+@media only screen and (min-width: 401px) and (max-width: 960px) {
+  .header {
+    display: flex;
+  }
+  body {
+    background-color: #f5cf8e; /* Yellow */
+  }
+}
+
+/* desktop styles */
+@media only screen and (min-width: 961px) {
+  .siteBanner {
+    display: flex;
+  }
+  .sidebar {
+    display: flex;
+  }
+  body {
+    background-color: #b2d6ff; /* Blue */
+  }
 }

@@ -1,0 +1,20 @@
+.siteBanner {
+  user-select: none;
+}
+
+.loginPage {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  margin-top: 7vh;
+  align-items: center;
+}
+
+.loginButton {
+  margin-bottom: 1.5vh;
+}
+
+.registerButton {
+  font-size: 0.75em;
+  margin-top: 3vh;
+}

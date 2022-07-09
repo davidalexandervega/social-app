@@ -3,6 +3,12 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import LoginBanner from '../components/LoginBanner';
+import LoginAnimation from '../components/LoginAnimation';
+import { login, reset } from '../features/auth/authSlice';
+
+import '../assets/styles/Login.scss';
+
 const Login = () => {
   const [formData, setFormData] = useState({
     username: '',
@@ -28,7 +34,8 @@ const Login = () => {
       errorRef.current.innerHTML = '';
       navigate('/');
     }
-    
+
+    dispatch(reset());
   }, [user, isError, isSuccess, message, navigate, dispatch]);
 
   const onChange = (e) => {
@@ -45,13 +52,15 @@ const Login = () => {
       username,
       password,
     };
+
+    dispatch(login(userData));
   };
 
   return (
     <div className="loginPage">
-      <div className="loginContainer">
-        <div className="formHeader">login</div>
-
+      <span className="siteBanner">social</span>
+      <LoginBanner />
+      <div className="formContainer">
         <form className="authForm">
           <div className="formItem">
             <label htmlFor="username">username </label>
@@ -62,7 +71,7 @@ const Login = () => {
               name="username"
               value={username}
               onChange={onChange}
-              size="25"
+              size="20"
             />
           </div>
 
@@ -75,35 +84,19 @@ const Login = () => {
               name="password"
               value={password}
               onChange={onChange}
-              size="21"
+              size="20"
             />
           </div>
         </form>
         <div className="error" ref={errorRef}></div>
-        <span onClick={() => onSubmit()} className="confirm">
-          <svg
-            width="16"
-            height="16"
-            strokeWidth="1.5"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M7 12.5L10 15.5L17 8.5"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+        <span onClick={() => onSubmit()} className="button labelButton loginButton">
+          login
         </span>
       </div>
+      <span onClick={() => navigate('/register')} className="button labelButton registerButton">
+        register
+      </span>
+      <LoginAnimation />
     </div>
   );
 };

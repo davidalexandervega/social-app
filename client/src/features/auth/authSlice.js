@@ -61,14 +61,12 @@ export const authSlice = createSlice({
   // a 'payload' is the return value of an action (see above).
   extraReducers: (builder) => {
     builder
-      .addCase(register.fulfilled, (state, action) => {
+      .addCase(register.fulfilled, (state) => {
         state.isSuccess = true;
-        state.user = action.payload;
       })
       .addCase(register.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
-        state.user = null;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isSuccess = true;

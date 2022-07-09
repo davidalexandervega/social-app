@@ -21,8 +21,7 @@ from django.conf.urls import include
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    # by using include, we can dictate that every path starting
-    # in '' will use the file specified by the path app.urls
-    # starting from the root 'api' folder:
+    # by using include, it's dictated that every path starting
+    # in '' will use ./app/urls.py to resolve urls:
     re_path(r'^', include('app.urls'))
 ]

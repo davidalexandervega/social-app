@@ -9,6 +9,12 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import UserManager
 
+# since the default AUTH_USER has been overridden in settings.py,
+# this user must extend AbstractBaseUser as well as PermissionsMixin.
+# the username and email fields are standard here, which is necessary,
+# if the default UserManager is to be utilized.
+# finally, USERNAME_FIELD must be specified.
+# the final steps in overriding the default user are in admin.py.
 class User(AbstractBaseUser, PermissionsMixin):
   id = models.UUIDField(primary_key=True)
   email = models.CharField(max_length=765)

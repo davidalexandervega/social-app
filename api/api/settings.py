@@ -14,6 +14,10 @@ from pathlib import Path
 from datetime import timedelta
 import environ
 
+# here a custom authorization user model is specified.
+# this way, third-party auth plugins like simple-jwt
+# can be used more easily.
+# more details can be found in models.py.
 AUTH_USER_MODEL = 'app.User'
 
 env = environ.Env()
