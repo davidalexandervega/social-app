@@ -8,15 +8,18 @@ const Post = ({ post }) => {
     <div className="post">
       <span className="postHeader">
         <span className="postUserPicture">
-          <ProfileCircled />
+          <ProfileCircled height="2em" width="2em" strokeWidth="1.1" />
         </span>
+        &nbsp;
         <span className="postUsername">@user</span>
+        &nbsp;
         <span className="postTime">{post.time}</span>
       </span>
       <div className="postBody">{post.body}</div>
       <div className="postActions">
         <span className="postLike">
-          <Heart />
+          <Heart className="postLikeButton" strokeWidth="1.1" />
+          &nbsp;{post.likes.length}
         </span>
       </div>
     </div>

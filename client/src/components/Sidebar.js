@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { logout, reset } from '../features/auth/authSlice';
+import NewPost from './NewPost';
 
 import { ProfileCircled, Bell, Globe, Settings, LogIn, LogOut } from 'iconoir-react';
 
@@ -58,6 +59,7 @@ const Sidebar = () => {
           login
         </span>
       )}
+      {user ? <NewPost /> : ''}
     </header>
   );
 };

@@ -9,16 +9,27 @@ body {
   background-color: whitesmoke;
 }
 
-input {
+input,
+textarea {
   padding: 4px;
   border: 1px solid black;
   border-radius: 10px;
   background-color: whitesmoke;
 }
 
+input:focus,
+textarea:focus {
+  outline: 2px solid rgba(116, 43, 226, 0.3);
+}
+
 @font-face {
   font-family: 'source';
   src: url('../fonts/source-code-pro/SourceCodePro-Light.otf');
+}
+
+@font-face {
+  font-family: 'source-bold';
+  src: url('../fonts/source-code-pro/SourceCodePro-MediumIt.otf');
 }
 
 .labelButton {
@@ -29,6 +40,21 @@ input {
   user-select: none;
 }
 
+.solidButton {
+  justify-content: center;
+  height: 30px;
+  width: 70px;
+  font-size: 0.75em;
+  border: 1px solid black;
+  border-radius: 10px;
+  background-color: rgba(116, 43, 226, 0.1);
+}
+
+.solidButton:hover {
+  background-color: rgba(116, 43, 226, 0.25);
+  cursor: pointer;
+}
+
 .button:hover {
   color: rgb(116, 43, 226);
   cursor: pointer;
@@ -37,8 +63,12 @@ input {
 .header {
   display: none;
   position: sticky;
+  top: 0;
   justify-content: space-between;
-  margin: 1vh 1vw 1vh 1vw;
+  padding-top: 0.5vh;
+  padding-bottom: 0.5vh;
+  margin: 0 1vw 1vh 1vw;
+  background-color: whitesmoke;
 }
 
 #page {
@@ -47,10 +77,11 @@ input {
 
 .sidebar {
   display: none;
-  position: sticky;
+  position: fixed;
   flex-direction: column;
   margin-left: 1vw;
   margin-right: 2vw;
+  width: 200px;
 }
 
 .profileButton {

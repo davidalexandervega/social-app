@@ -11,6 +11,7 @@
 }
 
 .postHeader {
+  margin: 2px 4px 2px 4px;
   display: flex;
 }
 
@@ -19,4 +20,49 @@
 .postTime {
   display: inline-flex;
   align-items: center;
+}
+
+.postUsername {
+  font-family: 'source-bold';
+}
+
+.postBody {
+  margin: 2px 4px 2px 4px;
+}
+
+.postLike {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75em;
+  margin: 2px 4px 2px 4px;
+}
+
+.postLikeButton {
+  font-size: 1.2em;
+}
+
+.postLikeButton:hover {
+  color: rgb(116, 43, 226);
+  cursor: pointer;
+}
+
+/* mobile styles */
+@media only screen and (max-width: 400px) {
+  .postBody {
+    font-size: 1em;
+  }
+}
+
+/* tablet styles */
+@media only screen and (min-width: 401px) and (max-width: 960px) {
+  .postBody {
+    font-size: 1em;
+  }
+}
+
+/* desktop styles */
+@media only screen and (min-width: 961px) {
+  .postBody {
+    font-size: 1.25em;
+  }
 }

@@ -1,0 +1,14 @@
+.newPost {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5vh;
+  height: 250px;
+  width: 100%;
+  border-radius: 10px;
+}
+
+#newPostBody {
+  height: 80%;
+  width: 100%;
+  resize: none;
+}
