@@ -1,7 +1,10 @@
+import re
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
+from rest_framework_simplejwt.authentication import JWTAuthentication
+JWT_authenticator = JWTAuthentication()
 
 from app.models import User, Post
 from app.serializers import UserSerializer, PostSerializer
@@ -36,18 +39,36 @@ def userApi(request, user_id=0):
 
 @csrf_exempt
 def postApi(request, post_id=0):
-  if request.method == 'GET':
-    post = Post.objects.get(id=post_id)
-    post_serializer = PostSerializer(post)
-    return JsonResponse(post_serializer.data, safe=False)
-  elif request.method == 'POST':
-    post_data = JSONParser().parse(request)
-    post_serializer = PostSerializer(data=post_data)
-    if post_serializer.is_valid():
-      post_serializer.save()
-      return JsonResponse('created a post', safe=False)
-    return JsonResponse('failed to create a post', safe=False)
-  elif request.method == 'DELETE':
-    post = Post.objects.get(id=post_id)
-    post.delete()
-    return JsonResponse('deleted a post')
+  response = JWT_authenticator.authenticate(request)
+  if response is not None:
+    user , token = response
+    print("token.payload:", token.payload)
+    if (request.method == 'GET') and (not request.body.user) and (not request.body.id):
+      posts = Post.objects.all()
+      return JsonResponse(PostSerializer(posts).data, safe=False)
+    elif (request.method == 'GET') and (request.body.user):
+      posts = Post.objects.get(user=request.body.user)
+      return JsonResponse(PostSerializer(posts).data, safe=False)
+    elif (request.method == 'GET') and (request.body.id):
+      post = Post.objects.get(id=request.body.id)
+      post_serializer = PostSerializer(post)
+      return JsonResponse(post_serializer.data, safe=False)
+    elif request.method == 'POST':
+      post_data = JSONParser().parse(request)
+      post_data['user'] = token.payload['user_id']
+      post_serializer = PostSerializer(data=post_data)
+      print(post_serializer.is_valid())
+      print(post_serializer.errors)
+      if post_serializer.is_valid():
+        print("serializer is valid!")
+        post_serializer.save()
+        return JsonResponse('created a post', safe=False)
+      return JsonResponse('failed to create a post', safe=False)
+    elif request.method == 'DELETE':
+      post = Post.objects.get(id=post_id)
+      if post['user'] == token.payload['user_id']:
+        post.delete()
+        return JsonResponse('deleted a post')
+      return JsonResponse('failed to delete a post', safe=False)
+  else:
+    print("no token is present in the header, or no header")

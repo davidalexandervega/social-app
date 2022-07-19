@@ -7,7 +7,9 @@ import NewPost from './NewPost';
 
 import { ProfileCircled, Bell, Globe, Settings, LogIn, LogOut } from 'iconoir-react';
 
-const Sidebar = () => {
+const Sidebar = (props) => {
+  const { newPostData, setNewPost } = props;
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -24,7 +26,7 @@ const Sidebar = () => {
 
   return (
     <header className="sidebar">
-      <span className="button labelButton profileButton" onClick={() => navigate('/profile')}>
+      <span className="button labelButton" onClick={() => navigate('/profile')}>
         <ProfileCircled height="2em" width="2em" strokeWidth="1.1" />
         profile
       </span>
@@ -59,7 +61,7 @@ const Sidebar = () => {
           login
         </span>
       )}
-      {user ? <NewPost /> : ''}
+      {user ? <NewPost newPostData={newPostData} setNewPost={setNewPost} /> : ''}
     </header>
   );
 };

@@ -32,6 +32,62 @@ textarea:focus {
   src: url('../fonts/source-code-pro/SourceCodePro-MediumIt.otf');
 }
 
+.header {
+  display: none;
+  position: sticky;
+  top: 0;
+  justify-content: space-between;
+  padding-top: 0.5vh;
+  padding-bottom: 0.5vh;
+  margin: 0 1vw 1vh 1vw;
+  background-color: whitesmoke;
+}
+
+#page {
+  display: flex;
+}
+
+.sidebar {
+  display: none;
+  position: fixed;
+  flex-direction: column;
+  margin: 2vh 2vw 0 1vw;
+  width: 200px;
+}
+
+.feedPage {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  gap: 5vh;
+  align-items: center;
+}
+
+.footer {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: whitesmoke;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1vh;
+  border: 1px solid black;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 75vw;
+  max-width: 400px;
+}
+
+.formItem {
+  margin-top: 1vh;
+}
+
 .labelButton {
   display: flex;
   align-items: center;
@@ -60,71 +116,29 @@ textarea:focus {
   cursor: pointer;
 }
 
-.header {
-  display: none;
-  position: sticky;
-  top: 0;
-  justify-content: space-between;
-  padding-top: 0.5vh;
-  padding-bottom: 0.5vh;
-  margin: 0 1vw 1vh 1vw;
-  background-color: whitesmoke;
-}
-
-#page {
-  display: flex;
-}
-
-.sidebar {
-  display: none;
-  position: fixed;
-  flex-direction: column;
-  margin-left: 1vw;
-  margin-right: 2vw;
-  width: 200px;
-}
-
-.profileButton {
-  margin-top: 3vh;
-}
-
-.feedPage {
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  gap: 5vh;
-  margin-top: 7vh;
-  align-items: center;
-}
-
-.formContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  gap: 1vh;
-  border: 1px solid black;
-  border-radius: 10px;
-  overflow: hidden;
-  width: 75vw;
-  max-width: 400px;
-}
-
-.formItem {
-  margin-top: 1vh;
-}
-
 /* mobile styles */
 @media only screen and (max-width: 400px) {
-  .header {
+  .header,
+  .footer {
     display: flex;
+  }
+  .feedPage {
+    margin-top: 4vh;
+    /* this margin accounts for the height of the footer: */
+    margin-bottom: 200px;
   }
 }
 
 /* tablet styles */
 @media only screen and (min-width: 401px) and (max-width: 960px) {
-  .header {
+  .header,
+  .footer {
     display: flex;
+  }
+  .feedPage {
+    margin-top: 7vh;
+    /* this margin accounts for the height of the footer: */
+    margin-bottom: 200px;
   }
 }
 
@@ -135,5 +149,9 @@ textarea:focus {
   }
   .sidebar {
     display: flex;
+  }
+  .feedPage {
+    margin-top: 7vh;
+    margin-bottom: 7vh;
   }
 }

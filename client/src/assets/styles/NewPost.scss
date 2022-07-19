@@ -1,14 +1,58 @@
 .newPost {
   display: flex;
   flex-direction: column;
-  margin-top: 5vh;
-  height: 250px;
-  width: 100%;
-  border-radius: 10px;
 }
 
-#newPostBody {
-  height: 80%;
-  width: 100%;
+.newPostBody {
   resize: none;
+}
+
+.postActions {
+  display: flex;
+  align-items: center;
+}
+
+/* mobile styles */
+@media only screen and (max-width: 400px) {
+  .newPost {
+    margin-top: 1vh;
+    height: 165px;
+    width: 100%;
+    align-items: center;
+    border-radius: 10px;
+  }
+  .newPostBody {
+    height: 80%;
+    width: 90%;
+  }
+}
+
+/* tablet styles */
+@media only screen and (min-width: 401px) and (max-width: 960px) {
+  .newPost {
+    margin-top: 2vh;
+    height: 165px;
+    width: 100%;
+    align-items: center;
+    border-radius: 10px;
+  }
+  .newPostBody {
+    height: 80%;
+    width: 70vw;
+    max-width: 500px;
+  }
+}
+
+/* desktop styles */
+@media only screen and (min-width: 961px) {
+  .newPost {
+    margin-top: 5vh;
+    height: 250px;
+    width: 100%;
+    border-radius: 10px;
+  }
+  .newPostBody {
+    height: 80%;
+    width: 100%;
+  }
 }
