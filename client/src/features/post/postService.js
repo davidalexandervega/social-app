@@ -6,7 +6,6 @@ const API_URL = '/api/posts/';
 
 const createPost = async (newPostData, token) => {
   // set the correct header with the token to access the protected route:
-  console.log(token);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

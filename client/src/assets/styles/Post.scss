@@ -8,6 +8,7 @@
   border-radius: 10px;
   overflow: hidden;
   cursor: default;
+  background-color: rgba(116, 43, 226, 0.1);
 }
 
 .postHeader {
@@ -27,7 +28,12 @@
 }
 
 .postBody {
-  margin: 2px 4px 2px 4px;
+  padding: 2px 4px 2px 4px;
+  background-color: whitesmoke;
+}
+
+.postActions {
+  background-color: whitesmoke;
 }
 
 .postLike {

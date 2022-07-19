@@ -8,7 +8,7 @@ const Post = ({ post }) => {
     <div className="post">
       <span className="postHeader">
         <span className="postUserPicture">
-          <ProfileCircled height="2em" width="2em" strokeWidth="1.1" />
+          <ProfileCircled height="2em" width="2em" strokeWidth="1.1" fill="whitesmoke" />
         </span>
         &nbsp;
         <span className="postUsername">@user</span>

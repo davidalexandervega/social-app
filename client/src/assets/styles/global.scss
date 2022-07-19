@@ -37,9 +37,8 @@ textarea:focus {
   position: sticky;
   top: 0;
   justify-content: space-between;
-  padding-top: 0.5vh;
-  padding-bottom: 0.5vh;
-  margin: 0 1vw 1vh 1vw;
+  padding: 0.5vh 1vw 1vh 1vw;
+  border-bottom: 1px solid black;
   background-color: whitesmoke;
 }
 
@@ -65,10 +64,10 @@ textarea:focus {
 
 .footer {
   display: none;
+  justify-content: center;
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: whitesmoke;
 }
 
 .formContainer {
@@ -103,12 +102,17 @@ textarea:focus {
   font-size: 0.75em;
   border: 1px solid black;
   border-radius: 10px;
-  background-color: rgba(116, 43, 226, 0.1);
+  background-color: rgb(232, 226, 244);
 }
 
 .solidButton:hover {
-  background-color: rgba(116, 43, 226, 0.25);
+  background-color: rgb(212, 196, 240);
   cursor: pointer;
+}
+
+.newPostButton {
+  height: 40px;
+  width: 95px;
 }
 
 .button:hover {

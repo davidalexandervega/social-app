@@ -60,7 +60,6 @@ def postApi(request, post_id=0):
       print(post_serializer.is_valid())
       print(post_serializer.errors)
       if post_serializer.is_valid():
-        print("serializer is valid!")
         post_serializer.save()
         return JsonResponse('created a post', safe=False)
       return JsonResponse('failed to create a post', safe=False)

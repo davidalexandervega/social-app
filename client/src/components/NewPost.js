@@ -6,11 +6,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createPost } from '../features/post/postSlice';
 
 import '../assets/styles/NewPost.scss';
-import { DoubleCheck } from 'iconoir-react';
+import { DoubleCheck, Cancel } from 'iconoir-react';
 
 const NewPost = (props) => {
   const dispatch = useDispatch();
-  const { newPostData, setNewPost } = props;
+  const { newPostData, setNewPost, mode, switchMode } = props;
 
   const { newPostBody } = newPostData;
 
@@ -54,13 +54,21 @@ const NewPost = (props) => {
         maxLength="200"
         placeholder="talk about what's going on."
       />
-      <div className="postActions">
+      <div className="postActions newPostActions">
         <span className="labelButton solidButton" onClick={() => onSubmit()}>
-          post&nbsp;
+          post &nbsp;
           <DoubleCheck />
         </span>
         &nbsp;
-        <span ref={charLeftRef}></span>
+        <span className="charLeft" ref={charLeftRef}></span>
+        &nbsp;
+        {mode === 'expanded' ? (
+          <span className="labelButton solidButton cancelNewPost" onClick={() => switchMode()}>
+            <Cancel />
+          </span>
+        ) : (
+          ''
+        )}
       </div>
     </div>
   );
