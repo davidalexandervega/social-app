@@ -23,6 +23,7 @@
 .charLeft {
   cursor: default;
   user-select: none;
+  min-width: 30px;
 }
 
 .cancelNewPost {
@@ -51,6 +52,9 @@
     width: 100%;
     justify-content: center;
   }
+  .charLeft {
+    text-align: center;
+  }
 }
 
 /* tablet styles */
@@ -70,6 +74,9 @@
   .newPostActions {
     width: 100%;
     justify-content: center;
+  }
+  .charLeft {
+    text-align: center;
   }
 }
 

@@ -1,5 +1,3 @@
-import re
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
@@ -41,33 +39,47 @@ def userApi(request, user_id=0):
 def postApi(request, post_id=0):
   response = JWT_authenticator.authenticate(request)
   if response is not None:
-    user , token = response
+    username , token = response
+    userID = token.payload['user_id']
     print("token.payload:", token.payload)
-    if (request.method == 'GET') and (not request.body.user) and (not request.body.id):
+    if (request.method == 'GET') and (request.path == '/api/posts/all'):
       posts = Post.objects.all()
-      return JsonResponse(PostSerializer(posts).data, safe=False)
-    elif (request.method == 'GET') and (request.body.user):
-      posts = Post.objects.get(user=request.body.user)
-      return JsonResponse(PostSerializer(posts).data, safe=False)
-    elif (request.method == 'GET') and (request.body.id):
-      post = Post.objects.get(id=request.body.id)
-      post_serializer = PostSerializer(post)
-      return JsonResponse(post_serializer.data, safe=False)
+      return JsonResponse(PostSerializer(posts, many=True).data, safe=False)
+    elif (request.method == 'GET') and (request.path == '/api/posts/user'):
+      posts = Post.objects.get(user=userID)
+      return JsonResponse(PostSerializer(posts, many=True).data, safe=False)
+    elif (request.method == 'GET') and (request.path == '/api/posts/post'):
+      post = Post.objects.get(id='post')
+      if post:
+        return JsonResponse(PostSerializer(post).data, safe=False)
+      return JsonResponse('post not found', safe=False)
     elif request.method == 'POST':
       post_data = JSONParser().parse(request)
-      post_data['user'] = token.payload['user_id']
+      post_data['user'] = userID
       post_serializer = PostSerializer(data=post_data)
-      print(post_serializer.is_valid())
-      print(post_serializer.errors)
+      # print(post_serializer.is_valid())
+      # print(post_serializer.errors)
       if post_serializer.is_valid():
         post_serializer.save()
-        return JsonResponse('created a post', safe=False)
+        return JsonResponse(post_data, safe=False)
       return JsonResponse('failed to create a post', safe=False)
+    elif (request.method == 'PUT') and ('like' in request.path):
+      post_data = JSONParser().parse(request)
+      if userID in post_data['likes']:
+        post_data['likes'].remove(userID)
+      else:
+        post_data['likes'].append(userID)
+      post = Post.objects.get(id=post_data['id'])
+      post_serializer = PostSerializer(post, data=post_data)
+      if post_serializer.is_valid():
+        post_serializer.save()
+        return JsonResponse(post_data, safe=False)
+      return JsonResponse('failed to like a post', safe=False)
     elif request.method == 'DELETE':
       post = Post.objects.get(id=post_id)
-      if post['user'] == token.payload['user_id']:
+      if post['user'] == userID:
         post.delete()
         return JsonResponse('deleted a post')
       return JsonResponse('failed to delete a post', safe=False)
   else:
-    print("no token is present in the header, or no header")
+    return JsonResponse('no token is present in the header, or no header', safe=False)

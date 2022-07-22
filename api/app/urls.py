@@ -12,6 +12,6 @@ urlpatterns = [
   path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
   path('api/users/', views.userApi),
   # re_path(r'^api/users/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', views.userApi),
-  path('api/posts/', views.postApi),
-  # re_path(r'^api/posts/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', views.postApi)
+  # path('api/posts/', views.postApi),
+  re_path(r'^api/posts/.*', views.postApi)
 ]

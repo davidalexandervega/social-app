@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { createPost } from '../features/post/postSlice';
 
@@ -24,19 +24,21 @@ const NewPost = (props) => {
   };
 
   const onSubmit = () => {
-    const newPostData = {
-      id: uuidv4(),
-      body: newPostBody,
-      time: new Date(),
-      likes: [],
-    };
+    if (newPostBody !== '') {
+      const newPostData = {
+        id: uuidv4(),
+        body: newPostBody,
+        time: new Date(),
+        likes: [],
+      };
 
-    setNewPost((prevState) => ({
-      ...prevState,
-      newPostBody: '',
-    }));
+      setNewPost((prevState) => ({
+        ...prevState,
+        newPostBody: '',
+      }));
 
-    dispatch(createPost(newPostData));
+      dispatch(createPost(newPostData));
+    }
   };
 
   const charLeftRef = useRef();

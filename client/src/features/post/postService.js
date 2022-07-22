@@ -17,14 +17,28 @@ const createPost = async (newPostData, token) => {
   return response.data;
 };
 
-const fetchPosts = async (fetchCriteria, token) => {
+const fetchAllPosts = async (token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
 
-  const response = await axios.get(API_URL, fetchCriteria, config);
+  const response = await axios.get(API_URL + 'all', config);
+
+  return response.data;
+};
+
+const likePost = async (postData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.put(API_URL + postData.id + '/like', postData, config);
+
+  console.log(response.data);
 
   return response.data;
 };
@@ -43,7 +57,8 @@ const deletePost = async (postID, token) => {
 
 const postService = {
   createPost,
-  fetchPosts,
+  fetchAllPosts,
+  likePost,
   deletePost,
 };
 
