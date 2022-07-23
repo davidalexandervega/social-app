@@ -2,7 +2,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 10vh;
+  height: auto;
+  max-height: 0;
   width: 70vw;
   max-width: 500px;
   border: 1px solid black;
@@ -10,6 +11,20 @@
   overflow: hidden;
   cursor: default;
   background-color: rgb(232, 226, 244);
+  /* these are respective to the setTimeout() calls in 
+  Post.js and DeletePostPrompt.js: */
+  transition: opacity 0.75s ease-out, max-height 0.5s linear;
+  opacity: 0;
+}
+
+.fade {
+  opacity: 1;
+}
+
+.slide {
+  /* transitioning the max-height instead of height
+  is a workaround due to the use of height: auto. */
+  max-height: 1000px;
 }
 
 .postHeader {

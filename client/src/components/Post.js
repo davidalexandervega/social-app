@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import jwt from 'jwt-decode';
 
@@ -13,7 +13,21 @@ import { likePost } from '../features/post/postSlice';
 const Post = ({ post }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const userID = jwt(user.access).user_id;
+
+  let userID = '';
+  if (user) {
+    userID = jwt(user.access).user_id;
+  }
+
+  const time = new Date(post.time).toString().split('GMT')[0];
+
+  const postRef = useRef();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      postRef.current.classList.add('fade', 'slide');
+    }, 10);
+    return () => clearTimeout(timer);
+  }, []);
 
   const [isLiked, setIsLiked] = useState({
     color: 'whitesmoke',
@@ -65,7 +79,7 @@ const Post = ({ post }) => {
   const [deleteMode, setDeleteMode] = useState('off');
 
   return (
-    <div className="post">
+    <div className="post" ref={postRef}>
       <span className="postHeader">
         <span className="postUserPicture">
           <ProfileCircled height="2em" width="2em" strokeWidth="1" fill="whitesmoke" />
@@ -73,7 +87,7 @@ const Post = ({ post }) => {
         &nbsp;
         <span className="postUsername">@user</span>
         &nbsp;
-        <span className="postTime">{post.time}</span>
+        <span className="postTime">{time}</span>
       </span>
       <div className="postBody">{post.body}</div>
       <div className="postActions">
@@ -89,7 +103,11 @@ const Post = ({ post }) => {
           ''
         )}
       </div>
-      {deleteMode === 'on' ? <DeletePostPrompt post={post} setDeleteMode={setDeleteMode} /> : ''}
+      {deleteMode === 'on' ? (
+        <DeletePostPrompt post={post} postRef={postRef} setDeleteMode={setDeleteMode} />
+      ) : (
+        ''
+      )}
     </div>
   );
 };

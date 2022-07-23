@@ -3,14 +3,19 @@ import { useDispatch } from 'react-redux';
 
 import '../assets/styles/DeletePostPrompt.scss';
 
-import { deletePost } from '../features/post/postSlice';
+import { removePost, deletePost } from '../features/post/postSlice';
 
 const DeletePostPrompt = (props) => {
   const dispatch = useDispatch();
-  const { post, setDeleteMode } = props;
+  const { post, postRef, setDeleteMode } = props;
 
-  const onDelete = (postID) => {
-    dispatch(deletePost(postID));
+  const onDelete = async (postID) => {
+    postRef.current.classList.remove('fade');
+    const timer = setTimeout(() => {
+      dispatch(removePost(postID));
+      dispatch(deletePost(postID));
+    }, 750);
+    return () => clearTimeout(timer);
   };
 
   return (

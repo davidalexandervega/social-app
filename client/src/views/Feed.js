@@ -15,6 +15,7 @@ const Feed = () => {
   const { posts } = useSelector((state) => state.post);
 
   const examplePosts = [
+    /*
     {
       id: '14443316-5a4d-4757-9a64-25b9e1206b42',
       user: '3c3191f7-71a2-4803-930a-1826c905e431',
@@ -50,6 +51,7 @@ const Feed = () => {
       time: '2022-07-07T23:59:59Z',
       likes: [],
     },
+    */
   ];
 
   useEffect(() => {

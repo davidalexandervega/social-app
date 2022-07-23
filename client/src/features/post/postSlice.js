@@ -66,6 +66,11 @@ export const postSlice = createSlice({
   name: 'todos',
   initialState,
   reducers: {
+    // here a post is actually removed from the global store before it's deleted,
+    // enabling a more responsive user experience:
+    removePost: (state, action) => {
+      state.posts = state.posts.filter((post) => post.id !== action.payload);
+    },
     // in this slice the entire state may be reset to the original,
     // whereas in authSlice.js the user must be persisted if authenticated:
     reset: (state) => initialState,
@@ -119,5 +124,5 @@ export const postSlice = createSlice({
   },
 });
 
-export const { reset } = postSlice.actions;
+export const { reset, removePost } = postSlice.actions;
 export default postSlice.reducer;
