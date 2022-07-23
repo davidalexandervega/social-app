@@ -37,6 +37,10 @@ const NewPost = (props) => {
         newPostBody: '',
       }));
 
+      if (mode === 'expanded') {
+        switchMode();
+      }
+
       dispatch(createPost(newPostData));
     }
   };
@@ -65,7 +69,10 @@ const NewPost = (props) => {
         <span className="charLeft" ref={charLeftRef}></span>
         &nbsp;
         {mode === 'expanded' ? (
-          <span className="labelButton solidButton cancelNewPost" onClick={() => switchMode()}>
+          <span
+            className="labelButton solidButton redButton cancelNewPost"
+            onClick={() => switchMode()}
+          >
             <Cancel />
           </span>
         ) : (

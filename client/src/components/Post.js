@@ -62,7 +62,7 @@ const Post = ({ post }) => {
     }
   }, [post.likes, userID]);
 
-  const onDeletePost = () => {};
+  const [deleteMode, setDeleteMode] = useState('off');
 
   return (
     <div className="post">
@@ -78,18 +78,18 @@ const Post = ({ post }) => {
       <div className="postBody">{post.body}</div>
       <div className="postActions">
         <span className="postLike" onClick={() => onLikePost(post)}>
-          <Heart className="postLikeButton" strokeWidth="1.1" fill={isLiked.color} />
+          <Heart className="button postLikeButton" strokeWidth="1.1" fill={isLiked.color} />
           &nbsp;{post.likes.length + isLiked.placeholder}
         </span>
         {post.user === userID ? (
-          <span className="postDelete" onClick={() => onDeletePost(post)}>
+          <span className="postDelete" onClick={() => setDeleteMode('on')}>
             <Cancel className="postDeleteButton" strokeWidth="1.1" />
           </span>
         ) : (
           ''
         )}
       </div>
-      <DeletePostPrompt />
+      {deleteMode === 'on' ? <DeletePostPrompt post={post} setDeleteMode={setDeleteMode} /> : ''}
     </div>
   );
 };

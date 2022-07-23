@@ -36,12 +36,11 @@ def userApi(request, user_id=0):
     return JsonResponse('deleted a user')
 
 @csrf_exempt
-def postApi(request, post_id=0):
+def postApi(request):
   response = JWT_authenticator.authenticate(request)
   if response is not None:
     username , token = response
     userID = token.payload['user_id']
-    print("token.payload:", token.payload)
     if (request.method == 'GET') and (request.path == '/api/posts/all'):
       posts = Post.objects.all()
       return JsonResponse(PostSerializer(posts, many=True).data, safe=False)
@@ -72,10 +71,13 @@ def postApi(request, post_id=0):
         return JsonResponse(post_data, safe=False)
       return JsonResponse('failed to like a post', safe=False)
     elif request.method == 'DELETE':
+      post_id = (request.path.split('/api/posts/'))[1]
       post = Post.objects.get(id=post_id)
-      if post['user'] == userID:
+      post_serializer = PostSerializer(post)
+      if str(post.user_id) == userID:
+        print(post_serializer.data)
         post.delete()
-        return JsonResponse('deleted a post')
+        return JsonResponse(post_serializer.data, safe=False)
       return JsonResponse('failed to delete a post', safe=False)
   else:
     return JsonResponse('no token is present in the header, or no header', safe=False)
