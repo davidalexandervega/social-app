@@ -8,7 +8,7 @@
   border-radius: 10px;
   overflow: hidden;
   cursor: default;
-  background-color: rgba(116, 43, 226, 0.1);
+  background-color: rgb(232, 226, 244);
 }
 
 .postHeader {
@@ -33,10 +33,13 @@
 }
 
 .postActions {
+  width: 100%;
   background-color: whitesmoke;
+  user-select: none;
 }
 
-.postLike {
+.postLike,
+.postDelete {
   display: inline-flex;
   align-items: center;
   font-size: 0.75em;
@@ -50,6 +53,15 @@
 .postLikeButton:hover {
   color: rgb(116, 43, 226);
   cursor: pointer;
+}
+
+.postDelete {
+  margin-left: auto;
+}
+
+.postDeleteButton:hover {
+  cursor: pointer;
+  color: rgb(255, 64, 0);
 }
 
 /* mobile styles */

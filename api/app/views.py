@@ -65,10 +65,6 @@ def postApi(request, post_id=0):
       return JsonResponse('failed to create a post', safe=False)
     elif (request.method == 'PUT') and ('like' in request.path):
       post_data = JSONParser().parse(request)
-      if userID in post_data['likes']:
-        post_data['likes'].remove(userID)
-      else:
-        post_data['likes'].append(userID)
       post = Post.objects.get(id=post_data['id'])
       post_serializer = PostSerializer(post, data=post_data)
       if post_serializer.is_valid():
