@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import NewPost from './NewPost';
 import { useSelector } from 'react-redux';
 
-import { Minus, Plus } from 'iconoir-react';
+import { Plus } from 'iconoir-react';
 
 const Footer = (props) => {
   const { newPostData, setNewPost } = props;
@@ -11,23 +11,11 @@ const Footer = (props) => {
 
   const [mode, setMode] = useState('collapsed');
 
-  const switchMode = () => {
-    if (mode === 'collapsed') {
-      setMode('expanded');
-    }
-    if (mode === 'expanded') {
-      setMode('collapsed');
-
-      setNewPost((prevState) => ({
-        ...prevState,
-        newPostBody: '',
-      }));
-    }
-  };
-
   useEffect(() => {
     if (newPostData.newPostBody !== '') {
       setMode('expanded');
+    } else {
+      setMode('collapsed');
     }
   }, [newPostData.newPostBody]);
 
@@ -36,7 +24,10 @@ const Footer = (props) => {
       {user ? (
         <footer className="footer">
           {mode === 'collapsed' ? (
-            <span className="labelButton solidButton newPostButton" onClick={() => switchMode()}>
+            <span
+              className="labelButton solidButton newPostButton"
+              onClick={() => setMode('expanded')}
+            >
               new post &nbsp;
               <Plus />
             </span>
@@ -45,7 +36,7 @@ const Footer = (props) => {
               newPostData={newPostData}
               setNewPost={setNewPost}
               mode={mode}
-              switchMode={switchMode}
+              setMode={setMode}
             />
           )}
         </footer>

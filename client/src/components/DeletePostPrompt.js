@@ -14,7 +14,7 @@ const DeletePostPrompt = (props) => {
     const timer = setTimeout(() => {
       dispatch(removePost(postID));
       dispatch(deletePost(postID));
-    }, 750);
+    }, 1000);
     return () => clearTimeout(timer);
   };
 

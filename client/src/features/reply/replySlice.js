@@ -1,17 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import postService from './postService';
+import replyService from './replyService';
 
 const initialState = {
-  posts: [],
+  replies: [],
   isError: false,
   isSuccess: false,
   message: '',
 };
 
-export const createPost = createAsyncThunk('posts/create', async (newPostData, thunkAPI) => {
+export const createReply = createAsyncThunk('replies/create', async (newReplyData, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.user.access;
-    return await postService.createPost(newPostData, token);
+    return await replyService.createReply(newReplyData, token);
   } catch (error) {
     // check if any errors, and using the message as the payload if so:
     const message =
@@ -22,10 +22,10 @@ export const createPost = createAsyncThunk('posts/create', async (newPostData, t
   }
 });
 
-export const fetchAllPosts = createAsyncThunk('/posts/fetch', async (_, thunkAPI) => {
+export const fetchReplies = createAsyncThunk('/replies/fetch', async (_, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.user.access;
-    return await postService.fetchAllPosts(token);
+    return await replyService.fetchReplies(token);
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -35,11 +35,11 @@ export const fetchAllPosts = createAsyncThunk('/posts/fetch', async (_, thunkAPI
   }
 });
 
-export const likePost = createAsyncThunk('/posts/like', async (postData, thunkAPI) => {
+export const likeReply = createAsyncThunk('/replies/like', async (replyData, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.user.access;
 
-    return await postService.likePost(postData, token);
+    return await replyService.likeReply(replyData, token);
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -49,10 +49,10 @@ export const likePost = createAsyncThunk('/posts/like', async (postData, thunkAP
   }
 });
 
-export const deletePost = createAsyncThunk('posts/delete', async (postID, thunkAPI) => {
+export const deleteReply = createAsyncThunk('replies/delete', async (replyID, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.user.access;
-    return await postService.deletePost(postID, token);
+    return await replyService.deleteReply(replyID, token);
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -62,14 +62,14 @@ export const deletePost = createAsyncThunk('posts/delete', async (postID, thunkA
   }
 });
 
-export const postSlice = createSlice({
-  name: 'posts',
+export const replySlice = createSlice({
+  name: 'replies',
   initialState,
   reducers: {
-    // here a post is actually removed from the global store before it's deleted,
+    // here a reply is actually removed from the global store before it's deleted,
     // enabling a more responsive user experience:
-    removePost: (state, action) => {
-      state.posts = state.posts.filter((post) => post.id !== action.payload);
+    removeReply: (state, action) => {
+      state.replies = state.replies.filter((reply) => reply.id !== action.payload);
     },
     // in this slice the entire state may be reset to the original,
     // whereas in authSlice.js the user must be persisted if authenticated:
@@ -77,52 +77,52 @@ export const postSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createPost.fulfilled, (state, action) => {
+      .addCase(createReply.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.posts.push(action.payload);
-        state.posts.sort((a, b) => new Date(b.time) - new Date(a.time));
+        state.replies.push(action.payload);
+        state.replies.sort((a, b) => new Date(b.time) - new Date(a.time));
       })
-      .addCase(createPost.rejected, (state, action) => {
+      .addCase(createReply.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(fetchAllPosts.fulfilled, (state, action) => {
+      .addCase(fetchReplies.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.posts = action.payload.sort((a, b) => new Date(b.time) - new Date(a.time));
+        state.replies = action.payload.sort((a, b) => new Date(b.time) - new Date(a.time));
       })
-      .addCase(fetchAllPosts.rejected, (state, action) => {
+      .addCase(fetchReplies.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(likePost.fulfilled, (state, action) => {
+      .addCase(likeReply.fulfilled, (state, action) => {
         state.isSuccess = true;
         // to reflect the edited change so it immediately appears
         // in the UI without reloading:
-        state.posts = state.posts.map((post) =>
-          post.id === action.payload.id
+        state.replies = state.replies.map((reply) =>
+          reply.id === action.payload.id
             ? {
-                ...post,
+                ...reply,
                 likes: action.payload.likes,
               }
-            : post,
+            : reply,
         );
       })
-      .addCase(likePost.rejected, (state, action) => {
+      .addCase(likeReply.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(deletePost.fulfilled, (state, action) => {
+      .addCase(deleteReply.fulfilled, (state, action) => {
         state.isSuccess = true;
-        // the deleted post is filtered out so the UI
+        // the deleted reply is filtered out so the UI
         // is immediately updated without reloading:
-        state.posts = state.posts.filter((post) => post.id !== action.payload.id);
+        state.replies = state.replies.filter((reply) => reply.id !== action.payload.id);
       })
-      .addCase(deletePost.rejected, (state, action) => {
+      .addCase(deleteReply.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
       });
   },
 });
 
-export const { reset, removePost } = postSlice.actions;
-export default postSlice.reducer;
+export const { reset, removeReply } = replySlice.actions;
+export default replySlice.reducer;

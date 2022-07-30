@@ -4,8 +4,8 @@ from django.http.response import JsonResponse
 from rest_framework_simplejwt.authentication import JWTAuthentication
 JWT_authenticator = JWTAuthentication()
 
-from app.models import User, Post
-from app.serializers import UserSerializer, PostSerializer
+from app.models import User, Post, Reply
+from app.serializers import UserSerializer, PostSerializer, ReplySerializer
 
 # Create your views here.
 
@@ -79,5 +79,47 @@ def postApi(request):
         post.delete()
         return JsonResponse(post_serializer.data, safe=False)
       return JsonResponse('failed to delete a post', safe=False)
+  else:
+    return JsonResponse('no token is present in the header, or no header', safe=False)
+
+@csrf_exempt
+def replyApi(request):
+  response = JWT_authenticator.authenticate(request)
+  if response is not None:
+    username , token = response
+    userID = token.payload['user_id']
+    if (request.method == 'GET') and (request.path == '/api/replies/'):
+      request_data = JSONParser().parse(request)
+      replies = Reply.objects.get(origin=request_data['post_id'])
+      if replies:
+        return JsonResponse(ReplySerializer(replies, many=True).data, safe=False)
+      return JsonResponse('replies not found', safe=False)
+    elif request.method == 'POST':
+      reply_data = JSONParser().parse(request)
+      reply_data['user'] = userID
+      reply_serializer = ReplySerializer(data=reply_data)
+      if reply_serializer.is_valid():
+        reply_serializer.save()
+        origin = Post.objects.get(id=reply_data['origin'])
+        origin['replies'].append(reply_data['id'])
+        return JsonResponse(reply_data, safe=False)
+      return JsonResponse('failed to create a reply', safe=False)
+    elif (request.method == 'PUT') and ('like' in request.path):
+      reply_data = JSONParser().parse(request)
+      reply = Reply.objects.get(id=reply_data['id'])
+      reply_serializer = ReplySerializer(reply, data=reply_data)
+      if reply_serializer.is_valid():
+        reply_serializer.save()
+        return JsonResponse(reply_data, safe=False)
+      return JsonResponse('failed to like a reply', safe=False)
+    elif request.method == 'DELETE':
+      reply_id = (request.path.split('/api/replies/'))[1]
+      reply = Reply.objects.get(id=reply_id)
+      reply_serializer = ReplySerializer(reply)
+      if str(reply.user_id) == userID:
+        print(reply_serializer.data)
+        reply.delete()
+        return JsonResponse(reply_serializer.data, safe=False)
+      return JsonResponse('failed to delete a reply', safe=False)
   else:
     return JsonResponse('no token is present in the header, or no header', safe=False)

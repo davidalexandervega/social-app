@@ -13,7 +13,7 @@
   background-color: rgb(232, 226, 244);
   /* these are respective to the setTimeout() calls in 
   Post.js and DeletePostPrompt.js: */
-  transition: opacity 0.75s ease-out, max-height 0.5s linear;
+  transition: opacity 0.75s ease-out /* , max-height 1s linear */;
   opacity: 0;
 }
 
@@ -25,10 +25,11 @@
   /* transitioning the max-height instead of height
   is a workaround due to the use of height: auto. */
   max-height: 1000px;
+  margin-bottom: 5vh;
 }
 
 .postHeader {
-  margin: 2px 4px 2px 4px;
+  padding: 2px 4px 2px 4px;
   display: flex;
 }
 
@@ -55,14 +56,16 @@
 }
 
 .postLike,
+.postReply,
 .postDelete {
   display: inline-flex;
   align-items: center;
   font-size: 0.75em;
-  margin: 2px 4px 2px 4px;
+  padding: 2px 4px 2px 4px;
 }
 
-.postLikeButton {
+.postLikeButton,
+.postReplyButton {
   font-size: 1.2em;
 }
 

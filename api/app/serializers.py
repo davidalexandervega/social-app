@@ -14,4 +14,9 @@ class UserSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
   class Meta:
     model = Post
-    fields = ['id', 'user', 'body', 'time', 'likes']
+    fields = ['id', 'user', 'image', 'body', 'time', 'likes', 'replies']
+
+class ReplySerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Post
+    fields = ['id', 'origin', 'user', 'image', 'body', 'time', 'likes']

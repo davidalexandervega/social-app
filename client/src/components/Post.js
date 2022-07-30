@@ -6,7 +6,7 @@ import jwt from 'jwt-decode';
 import DeletePostPrompt from './DeletePostPrompt';
 
 import '../assets/styles/Post.scss';
-import { ProfileCircled, Heart, Cancel } from 'iconoir-react';
+import { ProfileCircled, Heart, Cancel, ChatBubbleEmpty } from 'iconoir-react';
 
 import { likePost } from '../features/post/postSlice';
 
@@ -19,8 +19,6 @@ const Post = ({ post }) => {
     userID = jwt(user.access).user_id;
   }
 
-  const time = new Date(post.time).toString().split('GMT')[0];
-
   const postRef = useRef();
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -28,6 +26,22 @@ const Post = ({ post }) => {
     }, 10);
     return () => clearTimeout(timer);
   }, []);
+
+  const displayTime = () => {
+    // returns the time since the post rounded up to the nearest second:
+    const seconds = Math.ceil((new Date() - new Date(post.time)) / 1000);
+    if (seconds < 60) {
+      return `${seconds}s`;
+    } else if (seconds < 3600) {
+      return `${Math.floor(seconds / 60)}m`;
+    } else if (seconds < 86400) {
+      return `${Math.floor(seconds / 3600)}h`;
+    } else if (seconds < 604800) {
+      return `${Math.floor(seconds / 86400)}d`;
+    } else {
+      return new Date(post.time).toLocaleDateString();
+    }
+  };
 
   const [isLiked, setIsLiked] = useState({
     color: 'whitesmoke',
@@ -76,38 +90,47 @@ const Post = ({ post }) => {
     }
   }, [post.likes, userID]);
 
+  const onReplyPost = (post) => {};
+
   const [deleteMode, setDeleteMode] = useState('off');
 
   return (
-    <div className="post" ref={postRef}>
-      <span className="postHeader">
-        <span className="postUserPicture">
-          <ProfileCircled height="2em" width="2em" strokeWidth="1" fill="whitesmoke" />
-        </span>
-        &nbsp;
-        <span className="postUsername">@user</span>
-        &nbsp;
-        <span className="postTime">{time}</span>
-      </span>
-      <div className="postBody">{post.body}</div>
-      <div className="postActions">
-        <span className="postLike" onClick={() => onLikePost(post)}>
-          <Heart className="button postLikeButton" strokeWidth="1.1" fill={isLiked.color} />
-          &nbsp;{post.likes.length + isLiked.placeholder}
-        </span>
-        {post.user === userID ? (
-          <span className="postDelete" onClick={() => setDeleteMode('on')}>
-            <Cancel className="postDeleteButton" strokeWidth="1.1" />
+    <div className="postContainer">
+      <div className="post" ref={postRef}>
+        <span className="postHeader">
+          <span className="postUserPicture">
+            <ProfileCircled height="2em" width="2em" strokeWidth="1" fill="whitesmoke" />
           </span>
+          &nbsp;
+          <span className="postUsername">@user</span>
+          &nbsp;
+          <span className="postTime">{displayTime()}</span>
+        </span>
+        <div className="postBody">{post.body}</div>
+        <div className="postActions">
+          <span className="postLike" onClick={() => onLikePost(post)}>
+            <Heart className="button postLikeButton" strokeWidth="1.1" fill={isLiked.color} />
+            &nbsp;{post.likes.length + isLiked.placeholder}
+          </span>
+          <span className="postReply" onClick={() => onReplyPost(post)}>
+            <ChatBubbleEmpty className="button postReplyButton" strokeWidth="1.1" />
+            &nbsp;{post.replies.length}
+          </span>
+          {post.user === userID ? (
+            <span className="postDelete" onClick={() => setDeleteMode('on')}>
+              <Cancel className="postDeleteButton" strokeWidth="1.1" />
+            </span>
+          ) : (
+            ''
+          )}
+        </div>
+        {deleteMode === 'on' ? (
+          <DeletePostPrompt post={post} postRef={postRef} setDeleteMode={setDeleteMode} />
         ) : (
           ''
         )}
       </div>
-      {deleteMode === 'on' ? (
-        <DeletePostPrompt post={post} postRef={postRef} setDeleteMode={setDeleteMode} />
-      ) : (
-        ''
-      )}
+      <div className="repliesContainer"></div>
     </div>
   );
 };

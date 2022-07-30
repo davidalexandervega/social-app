@@ -10,7 +10,7 @@ import { DoubleCheck, Cancel } from 'iconoir-react';
 
 const NewPost = (props) => {
   const dispatch = useDispatch();
-  const { newPostData, setNewPost, mode, switchMode } = props;
+  const { newPostData, setNewPost, mode, setMode } = props;
 
   const { newPostBody } = newPostData;
 
@@ -30,6 +30,7 @@ const NewPost = (props) => {
         body: newPostBody,
         time: new Date(),
         likes: [],
+        replies: [],
       };
 
       setNewPost((prevState) => ({
@@ -38,7 +39,7 @@ const NewPost = (props) => {
       }));
 
       if (mode === 'expanded') {
-        switchMode();
+        setMode('collapsed');
       }
 
       dispatch(createPost(newPostData));
@@ -71,7 +72,7 @@ const NewPost = (props) => {
         {mode === 'expanded' ? (
           <span
             className="labelButton solidButton redButton cancelNewPost"
-            onClick={() => switchMode()}
+            onClick={() => setMode('collapsed')}
           >
             <Cancel />
           </span>
