@@ -25,7 +25,7 @@ const DeletePostPrompt = (props) => {
         <span className="labelButton solidButton redButton" onClick={() => onDelete(post.id)}>
           delete
         </span>
-        <span className="labelButton solidButton" onClick={() => setDeleteMode('off')}>
+        <span className="labelButton solidButton" onClick={() => setDeleteMode(false)}>
           cancel
         </span>
       </div>

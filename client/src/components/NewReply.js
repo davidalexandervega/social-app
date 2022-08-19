@@ -6,10 +6,11 @@ import { useDispatch } from 'react-redux';
 import { createReply } from '../features/reply/replySlice';
 
 import '../assets/styles/NewReply.scss';
-import { DoubleCheck } from 'iconoir-react';
+import { DoubleCheck, Cancel } from 'iconoir-react';
 
-const NewReply = () => {
+const NewReply = (props) => {
   const dispatch = useDispatch();
+  const { post, resetReplies, replyDelta } = props;
 
   const [newReplyData, setNewReply] = useState({
     newReplyBody: '',
@@ -30,6 +31,7 @@ const NewReply = () => {
     if (newReplyBody !== '') {
       const newReplyData = {
         id: uuidv4(),
+        origin: post.id,
         body: newReplyBody,
         time: new Date(),
         likes: [],
@@ -39,6 +41,8 @@ const NewReply = () => {
         ...prevState,
         newReplyBody: '',
       }));
+
+      replyDelta.current++;
 
       dispatch(createReply(newReplyData));
     }
@@ -59,7 +63,7 @@ const NewReply = () => {
         maxLength="200"
         placeholder="write your reply."
       />
-      <div className="replyActions newReplyActions">
+      <div className="postActions newReplyActions">
         <span className="labelButton solidButton" onClick={() => onSubmit()}>
           reply &nbsp;
           <DoubleCheck />
@@ -67,6 +71,12 @@ const NewReply = () => {
         &nbsp;
         <span className="charLeft" ref={charLeftRef}></span>
         &nbsp;
+        <span
+          className="labelButton solidButton redButton cancelNewPost"
+          onClick={() => dispatch(resetReplies())}
+        >
+          <Cancel />
+        </span>
       </div>
     </div>
   );

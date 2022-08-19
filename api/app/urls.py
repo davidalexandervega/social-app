@@ -1,5 +1,4 @@
 from django.urls import re_path, path
-from app.views import userApi
 from app import views
 
 from rest_framework_simplejwt.views import (
@@ -13,5 +12,6 @@ urlpatterns = [
   path('api/users/', views.userApi),
   # re_path(r'^api/users/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', views.userApi),
   # path('api/posts/', views.postApi),
-  re_path(r'^api/posts/.*', views.postApi)
+  re_path(r'^api/posts/.*', views.postApi),
+  re_path(r'^api/replies/.*', views.replyApi)
 ]

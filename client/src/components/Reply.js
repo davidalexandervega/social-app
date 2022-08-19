@@ -3,37 +3,35 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import jwt from 'jwt-decode';
 
-import DeletePostPrompt from './DeletePostPrompt';
-import NewReply from './NewReply';
-import Reply from './Reply';
+import DeleteReplyPrompt from './DeleteReplyPrompt';
 
 import '../assets/styles/Post.scss';
-import { ProfileCircled, Heart, Cancel, ChatBubbleEmpty } from 'iconoir-react';
+import '../assets/styles/Reply.scss';
+import { ProfileCircled, Heart, Cancel } from 'iconoir-react';
 
-import { likePost } from '../features/post/postSlice';
-import { fetchReplies, expandPost, reset as resetReplies } from '../features/reply/replySlice';
+import { likeReply } from '../features/reply/replySlice';
 
-const Post = ({ post }) => {
+const Reply = (props) => {
+  const { reply, replyDelta } = props;
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { replies, expandedPost } = useSelector((state) => state.reply);
 
   let userID = '';
   if (user) {
     userID = jwt(user.access).user_id;
   }
 
-  const postRef = useRef();
+  const replyRef = useRef();
   useEffect(() => {
     const timer = setTimeout(() => {
-      postRef.current.classList.add('fade', 'slide');
+      replyRef.current.classList.add('fade', 'slide');
     }, 10);
     return () => clearTimeout(timer);
   }, []);
 
   const displayTime = () => {
-    // returns the time since the post rounded up to the nearest second:
-    const seconds = Math.ceil((new Date() - new Date(post.time)) / 1000);
+    // returns the time since the reply rounded up to the nearest second:
+    const seconds = Math.ceil((new Date() - new Date(reply.time)) / 1000);
     if (seconds < 60) {
       return `${seconds}s`;
     } else if (seconds < 3600) {
@@ -43,7 +41,7 @@ const Post = ({ post }) => {
     } else if (seconds < 604800) {
       return `${Math.floor(seconds / 86400)}d`;
     } else {
-      return new Date(post.time).toLocaleDateString();
+      return new Date(reply.time).toLocaleDateString();
     }
   };
 
@@ -52,36 +50,36 @@ const Post = ({ post }) => {
     placeholder: 0,
   });
 
-  const onLikePost = (post) => {
+  const onLikeReply = (reply) => {
     // the state update allows for the like/unlike to be reflected immediately to the user.
     // the placeholder and color change the value immediately to reflect
     // the state that will be returned and reinforced by the useEffect() call below:
-    let postData = {};
-    if (post.likes.includes(userID)) {
+    let replyData = {};
+    if (reply.likes.includes(userID)) {
       setIsLiked({
         color: 'whitesmoke',
         placeholder: -1,
       });
-      postData = {
-        ...post,
-        likes: [...post.likes].filter((like) => like !== userID),
+      replyData = {
+        ...reply,
+        likes: [...reply.likes].filter((like) => like !== userID),
       };
     } else {
       setIsLiked({
         color: 'rgb(212, 196, 240)',
         placeholder: 1,
       });
-      postData = {
-        ...post,
-        likes: [...post.likes, userID],
+      replyData = {
+        ...reply,
+        likes: [...reply.likes, userID],
       };
     }
 
-    dispatch(likePost(postData));
+    dispatch(likeReply(replyData));
   };
 
   useEffect(() => {
-    if (post.likes.includes(userID)) {
+    if (reply.likes.includes(userID)) {
       setIsLiked({
         color: 'rgb(212, 196, 240)',
         placeholder: 0,
@@ -92,25 +90,13 @@ const Post = ({ post }) => {
         placeholder: 0,
       });
     }
-  }, [post.likes, userID]);
+  }, [reply.likes, userID]);
 
   const [deleteMode, setDeleteMode] = useState(false);
 
-  const replyDelta = useRef(0);
-
-  const onReplyPost = (postID) => {
-    if (expandedPost === postID) {
-      dispatch(resetReplies());
-    } else {
-      dispatch(resetReplies());
-      dispatch(fetchReplies(postID));
-      dispatch(expandPost(postID));
-    }
-  };
-
   return (
     <div className="postContainer">
-      <div className="post" ref={postRef}>
+      <div className="post reply" ref={replyRef}>
         <span className="postHeader">
           <span className="postUserPicture">
             <ProfileCircled height="2em" width="2em" strokeWidth="1" fill="whitesmoke" />
@@ -120,17 +106,13 @@ const Post = ({ post }) => {
           &nbsp;
           <span className="postTime">{displayTime()}</span>
         </span>
-        <div className="postBody">{post.body}</div>
+        <div className="postBody">{reply.body}</div>
         <div className="postActions">
-          <span className="postLike" onClick={() => onLikePost(post)}>
+          <span className="postLike" onClick={() => onLikeReply(reply)}>
             <Heart className="button postLikeButton" strokeWidth="1.1" fill={isLiked.color} />
-            &nbsp;{post.likes.length + isLiked.placeholder}
+            &nbsp;{reply.likes.length + isLiked.placeholder}
           </span>
-          <span className="postReply" onClick={() => onReplyPost(post.id)}>
-            <ChatBubbleEmpty className="button postReplyButton" strokeWidth="1.1" />
-            &nbsp;{post.replies.length + replyDelta.current}
-          </span>
-          {post.user === userID ? (
+          {reply.user === userID ? (
             <span className="postDelete" onClick={() => setDeleteMode(true)}>
               <Cancel className="postDeleteButton" strokeWidth="1.1" />
             </span>
@@ -139,23 +121,18 @@ const Post = ({ post }) => {
           )}
         </div>
         {deleteMode === true ? (
-          <DeletePostPrompt post={post} postRef={postRef} setDeleteMode={setDeleteMode} />
+          <DeleteReplyPrompt
+            reply={reply}
+            replyRef={replyRef}
+            setDeleteMode={setDeleteMode}
+            replyDelta={replyDelta}
+          />
         ) : (
           ''
         )}
       </div>
-      {expandedPost === post.id ? (
-        <div className="repliesContainer">
-          <NewReply post={post} resetReplies={resetReplies} replyDelta={replyDelta} />
-          {replies.map((reply) => (
-            <Reply key={reply.id} reply={reply} replyDelta={replyDelta} />
-          ))}
-        </div>
-      ) : (
-        ''
-      )}
     </div>
   );
 };
 
-export default Post;
+export default Reply;

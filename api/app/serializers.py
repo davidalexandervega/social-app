@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app.models import User, Post
+from app.models import User, Post, Reply
 from django.contrib.auth.hashers import make_password, check_password
 
 class UserSerializer(serializers.ModelSerializer):
@@ -18,5 +18,5 @@ class PostSerializer(serializers.ModelSerializer):
 
 class ReplySerializer(serializers.ModelSerializer):
   class Meta:
-    model = Post
+    model = Reply
     fields = ['id', 'origin', 'user', 'image', 'body', 'time', 'likes']

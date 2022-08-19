@@ -78,6 +78,19 @@
   color: rgb(255, 64, 0);
 }
 
+.repliesContainer {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5vh;
+}
+
+.reply {
+  width: 90%;
+  margin-left: 10%;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
+
 /* mobile styles */
 @media only screen and (max-width: 400px) {
   .postBody {

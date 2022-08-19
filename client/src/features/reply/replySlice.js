@@ -3,6 +3,7 @@ import replyService from './replyService';
 
 const initialState = {
   replies: [],
+  expandedPost: null,
   isError: false,
   isSuccess: false,
   message: '',
@@ -22,10 +23,10 @@ export const createReply = createAsyncThunk('replies/create', async (newReplyDat
   }
 });
 
-export const fetchReplies = createAsyncThunk('/replies/fetch', async (_, thunkAPI) => {
+export const fetchReplies = createAsyncThunk('/replies/fetch', async (postID, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.user.access;
-    return await replyService.fetchReplies(token);
+    return await replyService.fetchReplies(postID, token);
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -71,6 +72,9 @@ export const replySlice = createSlice({
     removeReply: (state, action) => {
       state.replies = state.replies.filter((reply) => reply.id !== action.payload);
     },
+    expandPost: (state, action) => {
+      state.expandedPost = action.payload;
+    },
     // in this slice the entire state may be reset to the original,
     // whereas in authSlice.js the user must be persisted if authenticated:
     reset: (state) => initialState,
@@ -104,7 +108,7 @@ export const replySlice = createSlice({
                 ...reply,
                 likes: action.payload.likes,
               }
-            : reply,
+            : reply
         );
       })
       .addCase(likeReply.rejected, (state, action) => {
@@ -124,5 +128,5 @@ export const replySlice = createSlice({
   },
 });
 
-export const { reset, removeReply } = replySlice.actions;
+export const { reset, expandPost, removeReply } = replySlice.actions;
 export default replySlice.reducer;

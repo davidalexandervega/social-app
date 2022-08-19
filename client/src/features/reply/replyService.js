@@ -14,17 +14,21 @@ const createReply = async (newReplyData, token) => {
 
   const response = await axios.post(API_URL, newReplyData, config);
 
+  console.log(response.data);
+
   return response.data;
 };
 
-const fetchReplies = async (token) => {
+const fetchReplies = async (postID, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
 
-  const response = await axios.get(API_URL, config);
+  const response = await axios.get('/api/posts/?id=' + postID + '&mode=replies', config);
+
+  console.log(response.data);
 
   return response.data;
 };
