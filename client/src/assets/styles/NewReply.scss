@@ -38,9 +38,8 @@
 
 /* mobile styles */
 @media only screen and (max-width: 400px) {
-  .newReply {
-  }
   .newReplyBody {
+    height: 75px;
   }
   .charLeft {
     text-align: center;
@@ -49,9 +48,8 @@
 
 /* tablet styles */
 @media only screen and (min-width: 401px) and (max-width: 960px) {
-  .newReply {
-  }
   .newReplyBody {
+    height: 90px;
   }
   .charLeft {
     text-align: center;
@@ -60,8 +58,6 @@
 
 /* desktop styles */
 @media only screen and (min-width: 961px) {
-  .newReply {
-  }
   .newReplyBody {
     height: 90px;
   }

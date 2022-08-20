@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import jwt from 'jwt-decode';
@@ -15,6 +16,7 @@ import { fetchReplies, expandPost, reset as resetReplies } from '../features/rep
 
 const Post = ({ post }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const { replies, expandedPost } = useSelector((state) => state.reply);
 
@@ -120,7 +122,9 @@ const Post = ({ post }) => {
           &nbsp;
           <span className="postTime">{displayTime()}</span>
         </span>
-        <div className="postBody">{post.body}</div>
+        <div className="postBody" onClick={() => navigate(`/posts/${post.id}`)}>
+          {post.body}
+        </div>
         <div className="postActions">
           <span className="postLike" onClick={() => onLikePost(post)}>
             <Heart className="button postLikeButton" strokeWidth="1.1" fill={isLiked.color} />

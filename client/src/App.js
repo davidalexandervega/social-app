@@ -7,6 +7,7 @@ import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
 import Feed from './views/Feed';
 import Login from './views/Login';
+import PostView from './views/PostView';
 
 const App = () => {
   const [newPostData, setNewPost] = useState({
@@ -20,11 +21,13 @@ const App = () => {
         <Sidebar newPostData={newPostData} setNewPost={setNewPost} />
         <Routes>
           <Route path="/" element={<Feed />} />
+          <Route path="/posts/:id" element={<PostView />} />
           <Route path="/login" element={<Login />} />
         </Routes>
       </div>
       <Routes>
         <Route path="/" element={<Footer newPostData={newPostData} setNewPost={setNewPost} />} />
+        <Route path="*" element={<></>} />
       </Routes>
     </BrowserRouter>
   );
