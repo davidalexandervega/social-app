@@ -29,6 +29,18 @@ const fetchAllPosts = async (token) => {
   return response.data;
 };
 
+const fetchPostById = async (postID, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(API_URL + '?id=' + postID + '&mode=origin', config);
+
+  return response.data;
+};
+
 const likePost = async (postData, token) => {
   const config = {
     headers: {
@@ -60,6 +72,7 @@ const deletePost = async (postID, token) => {
 const postService = {
   createPost,
   fetchAllPosts,
+  fetchPostById,
   likePost,
   deletePost,
 };

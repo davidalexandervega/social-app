@@ -35,6 +35,19 @@ export const fetchAllPosts = createAsyncThunk('/posts/fetch', async (_, thunkAPI
   }
 });
 
+export const fetchPostById = createAsyncThunk('/posts/fetch/id', async (postID, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().auth.user.access;
+    return await postService.fetchPostById(postID, token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 export const likePost = createAsyncThunk('/posts/like', async (postData, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.user.access;
@@ -104,7 +117,7 @@ export const postSlice = createSlice({
                 ...post,
                 likes: action.payload.likes,
               }
-            : post,
+            : post
         );
       })
       .addCase(likePost.rejected, (state, action) => {

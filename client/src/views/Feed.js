@@ -1,15 +1,19 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Post from '../components/Post';
 
-import { fetchAllPosts } from '../features/post/postSlice';
+import { fetchAllPosts, removePost } from '../features/post/postSlice';
 
 const Feed = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  let deletedPost = false;
+  if (location.state) deletedPost = location.state.deletedPost;
 
   const { user } = useSelector((state) => state.auth);
   const { posts } = useSelector((state) => state.post);
@@ -58,9 +62,9 @@ const Feed = () => {
     if (!user) {
       navigate('/login');
     } else {
-      dispatch(fetchAllPosts());
+      deletedPost ? dispatch(removePost(deletedPost)) : dispatch(fetchAllPosts());
     }
-  }, [user, navigate, dispatch]);
+  }, [user, navigate, dispatch, deletedPost]);
 
   return (
     <div className="feedPage">

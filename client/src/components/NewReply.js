@@ -10,7 +10,7 @@ import { DoubleCheck, Cancel } from 'iconoir-react';
 
 const NewReply = (props) => {
   const dispatch = useDispatch();
-  const { post, resetReplies, replyDelta } = props;
+  const { post, resetReplies, replyDelta, postView } = props;
 
   const [newReplyData, setNewReply] = useState({
     newReplyBody: '',
@@ -71,12 +71,16 @@ const NewReply = (props) => {
         &nbsp;
         <span className="charLeft" ref={charLeftRef}></span>
         &nbsp;
-        <span
-          className="labelButton solidButton redButton cancelNewPost"
-          onClick={() => dispatch(resetReplies())}
-        >
-          <Cancel />
-        </span>
+        {postView !== true ? (
+          <span
+            className="labelButton solidButton redButton cancelNewPost"
+            onClick={() => dispatch(resetReplies())}
+          >
+            <Cancel />
+          </span>
+        ) : (
+          ''
+        )}
       </div>
     </div>
   );

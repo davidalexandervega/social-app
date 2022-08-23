@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import '../assets/styles/DeletePostPrompt.scss';
 
@@ -7,15 +8,21 @@ import { removePost, deletePost } from '../features/post/postSlice';
 
 const DeletePostPrompt = (props) => {
   const dispatch = useDispatch();
-  const { post, postRef, setDeleteMode } = props;
+  const navigate = useNavigate();
+  const { post, postRef, setDeleteMode, postView } = props;
 
   const onDelete = async (postID) => {
-    postRef.current.classList.remove('fade');
-    const timer = setTimeout(() => {
-      dispatch(removePost(postID));
+    if (postView === true) {
       dispatch(deletePost(postID));
-    }, 1000);
-    return () => clearTimeout(timer);
+      navigate('/', { state: { deletedPost: postID } });
+    } else {
+      postRef.current.classList.remove('fade');
+      const timer = setTimeout(() => {
+        dispatch(removePost(postID));
+        dispatch(deletePost(postID));
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
   };
 
   return (

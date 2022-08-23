@@ -6,7 +6,6 @@ import jwt from 'jwt-decode';
 import DeleteReplyPrompt from './DeleteReplyPrompt';
 
 import '../assets/styles/Post.scss';
-import '../assets/styles/Reply.scss';
 import { ProfileCircled, Heart, Cancel } from 'iconoir-react';
 
 import { likeReply } from '../features/reply/replySlice';
