@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import jwt from 'jwt-decode';
@@ -11,18 +11,18 @@ import Reply from '../components/Reply';
 import '../assets/styles/Post.scss';
 import { ProfileCircled, Heart, Cancel, ChatBubbleEmpty } from 'iconoir-react';
 
-import { likePost } from '../features/post/postSlice';
-import { fetchReplies, expandPost, reset as resetReplies } from '../features/reply/replySlice';
+import { fetchPostById, likePost, reset as resetPosts } from '../features/post/postSlice';
+import { fetchReplies, reset as resetReplies } from '../features/reply/replySlice';
 
 const PostView = () => {
   const { id } = useParams();
   const { posts } = useSelector((state) => state.post);
-  const post = posts.find((post) => post.id === id);
-
+  const post = posts.length > 1 ? posts.find((post) => post.id === id) : posts[0];
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useSelector((state) => state.auth);
-  const { replies, expandedPost } = useSelector((state) => state.reply);
+  const { replies } = useSelector((state) => state.reply);
 
   let userID = '';
   if (user) {
@@ -30,18 +30,29 @@ const PostView = () => {
   }
 
   useEffect(() => {
-    dispatch(resetReplies());
-    dispatch(fetchReplies(id));
-    dispatch(expandPost(id));
+    if (!post) {
+      dispatch(fetchPostById(id));
+      dispatch(fetchReplies(id));
+      feedReplyDelta.current = 0;
+    }
     return () => {
-      dispatch(expandPost(null));
+      dispatch(resetPosts());
+      dispatch(resetReplies());
     };
-  }, [dispatch, id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const postRef = useRef();
+  const postViewRef = useRef();
   useEffect(() => {
-    postRef.current.classList.add('fade', 'slide');
-  }, []);
+    if (post) {
+      postRef.current.classList.add('fade', 'slide');
+      const timer = setTimeout(() => {
+        postViewRef.current.classList.add('fade');
+      }, 10);
+      return () => clearTimeout(timer);
+    }
+  }, [post]);
 
   const displayTime = () => {
     // returns the time since the post rounded up to the nearest second:
@@ -93,68 +104,72 @@ const PostView = () => {
   };
 
   useEffect(() => {
-    if (post.likes.includes(userID)) {
-      setIsLiked({
-        color: 'rgb(212, 196, 240)',
-        placeholder: 0,
-      });
-    } else {
-      setIsLiked({
-        color: 'whitesmoke',
-        placeholder: 0,
-      });
+    if (post) {
+      if (post.likes.includes(userID)) {
+        setIsLiked({
+          color: 'rgb(212, 196, 240)',
+          placeholder: 0,
+        });
+      } else {
+        setIsLiked({
+          color: 'whitesmoke',
+          placeholder: 0,
+        });
+      }
     }
-  }, [post.likes, userID]);
+  }, [post, userID]);
 
   const [deleteMode, setDeleteMode] = useState(false);
 
+  const feedReplyDelta = useRef(location.state ? location.state.replyDelta.current : 0);
   const replyDelta = useRef(0);
 
   return (
-    <div className="feedPage">
-      <div className="postContainer">
-        <div className="post" ref={postRef}>
-          <span className="postHeader">
-            <span className="postUserPicture">
-              <ProfileCircled height="2em" width="2em" strokeWidth="1" fill="whitesmoke" />
-            </span>
-            &nbsp;
-            <span className="postUsername">@user</span>
-            &nbsp;
-            <span className="postTime">{displayTime()}</span>
-          </span>
-          <div className="postBody" onClick={() => navigate(`/posts/${post.id}`)}>
-            {post.body}
-          </div>
-          <div className="postActions">
-            <span className="postLike" onClick={() => onLikePost(post)}>
-              <Heart className="button postLikeButton" strokeWidth="1.1" fill={isLiked.color} />
-              &nbsp;{post.likes.length + isLiked.placeholder}
-            </span>
-            <span className="postReply">
-              <ChatBubbleEmpty className="button postReplyButton" strokeWidth="1.1" />
-              &nbsp;{post.replies.length + replyDelta.current}
-            </span>
-            {post.user === userID ? (
-              <span className="postDelete" onClick={() => setDeleteMode(true)}>
-                <Cancel className="postDeleteButton" strokeWidth="1.1" />
+    <div className="postView" ref={postViewRef}>
+      {post ? (
+        <div className="postContainer">
+          <div className="post" ref={postRef}>
+            <span className="postHeader">
+              <span className="postUserPicture">
+                <ProfileCircled height="2em" width="2em" strokeWidth="1" fill="whitesmoke" />
               </span>
+              &nbsp;
+              <span className="postUsername">@user</span>
+              &nbsp;
+              <span className="postTime">{displayTime()}</span>
+            </span>
+            <div className="postBody" onClick={() => navigate(`/posts/${post.id}`)}>
+              {post.body}
+            </div>
+            <div className="postActions">
+              <span className="postLike" onClick={() => onLikePost(post)}>
+                <Heart className="button postLikeButton" strokeWidth="1.1" fill={isLiked.color} />
+                &nbsp;{post.likes.length + isLiked.placeholder}
+              </span>
+              <span className="postReply">
+                <ChatBubbleEmpty className="button postReplyButton" strokeWidth="1.1" />
+                &nbsp;{post.replies.length + feedReplyDelta.current + replyDelta.current}
+              </span>
+              {post.user === userID ? (
+                <span className="postDelete" onClick={() => setDeleteMode(true)}>
+                  <Cancel className="postDeleteButton" strokeWidth="1.1" />
+                </span>
+              ) : (
+                ''
+              )}
+            </div>
+            {deleteMode === true ? (
+              <DeletePostPrompt
+                post={post}
+                postRef={postRef}
+                setDeleteMode={setDeleteMode}
+                postView={true}
+                postViewRef={postViewRef}
+              />
             ) : (
               ''
             )}
           </div>
-          {deleteMode === true ? (
-            <DeletePostPrompt
-              post={post}
-              postRef={postRef}
-              setDeleteMode={setDeleteMode}
-              postView={true}
-            />
-          ) : (
-            ''
-          )}
-        </div>
-        {expandedPost === post.id ? (
           <div className="repliesContainer">
             <NewReply
               post={post}
@@ -166,10 +181,8 @@ const PostView = () => {
               <Reply key={reply.id} reply={reply} replyDelta={replyDelta} />
             ))}
           </div>
-        ) : (
-          ''
-        )}
-      </div>
+        </div>
+      ) : null}
     </div>
   );
 };

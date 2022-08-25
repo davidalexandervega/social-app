@@ -50,8 +50,6 @@ const likePost = async (postData, token) => {
 
   const response = await axios.put(API_URL + postData.id + '/like', postData, config);
 
-  console.log(response.data);
-
   return response.data;
 };
 
@@ -63,8 +61,6 @@ const deletePost = async (postID, token) => {
   };
 
   const response = await axios.delete(API_URL + postID, config);
-
-  console.log(response.data);
 
   return response.data;
 };

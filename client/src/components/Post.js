@@ -6,7 +6,6 @@ import jwt from 'jwt-decode';
 
 import DeletePostPrompt from './DeletePostPrompt';
 import NewReply from './NewReply';
-import Reply from './Reply';
 
 import '../assets/styles/Post.scss';
 import { ProfileCircled, Heart, Cancel, ChatBubbleEmpty } from 'iconoir-react';
@@ -18,7 +17,7 @@ const Post = ({ post }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  const { replies, expandedPost } = useSelector((state) => state.reply);
+  const { expandedPost } = useSelector((state) => state.reply);
 
   let userID = '';
   if (user) {
@@ -47,6 +46,11 @@ const Post = ({ post }) => {
     } else {
       return new Date(post.time).toLocaleDateString();
     }
+  };
+
+  const onPostView = (postID) => {
+    dispatch(fetchReplies(postID));
+    navigate(`/posts/${postID}`, { state: { replyDelta: replyDelta } });
   };
 
   const [isLiked, setIsLiked] = useState({
@@ -105,7 +109,6 @@ const Post = ({ post }) => {
       dispatch(resetReplies());
     } else {
       dispatch(resetReplies());
-      dispatch(fetchReplies(postID));
       dispatch(expandPost(postID));
     }
   };
@@ -122,7 +125,7 @@ const Post = ({ post }) => {
           &nbsp;
           <span className="postTime">{displayTime()}</span>
         </span>
-        <div className="postBody" onClick={() => navigate(`/posts/${post.id}`)}>
+        <div className="postBody" onClick={() => onPostView(post.id)}>
           {post.body}
         </div>
         <div className="postActions">
@@ -151,9 +154,6 @@ const Post = ({ post }) => {
       {expandedPost === post.id ? (
         <div className="repliesContainer">
           <NewReply post={post} resetReplies={resetReplies} replyDelta={replyDelta} />
-          {replies.map((reply) => (
-            <Reply key={reply.id} reply={reply} replyDelta={replyDelta} />
-          ))}
         </div>
       ) : (
         ''

@@ -28,8 +28,6 @@ const fetchReplies = async (postID, token) => {
 
   const response = await axios.get('/api/posts/?id=' + postID + '&mode=replies', config);
 
-  console.log(response.data);
-
   return response.data;
 };
 
@@ -42,8 +40,6 @@ const likeReply = async (replyData, token) => {
 
   const response = await axios.put(API_URL + replyData.id + '/like', replyData, config);
 
-  console.log(response.data);
-
   return response.data;
 };
 
@@ -55,8 +51,6 @@ const deleteReply = async (replyID, token) => {
   };
 
   const response = await axios.delete(API_URL + replyID, config);
-
-  console.log(response.data);
 
   return response.data;
 };

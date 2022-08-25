@@ -49,17 +49,21 @@ textarea:focus {
 
 .sidebar {
   display: none;
-  position: fixed;
   flex-direction: column;
-  margin: 2vh 2vw 0 1vw;
+  margin: 2vh 4vw 0 2vw;
   width: 200px;
 }
 
-.feedPage {
+.feedPage,
+.postView {
   display: flex;
   flex-grow: 1;
   flex-direction: column;
-  align-items: center;
+}
+
+.postView {
+  transition: opacity 0.75s ease-out;
+  opacity: 0;
 }
 
 .footer {
@@ -134,7 +138,9 @@ textarea:focus {
   .footer {
     display: flex;
   }
-  .feedPage {
+  .feedPage,
+  .postView {
+    align-items: center;
     margin-top: 4vh;
     /* this margin accounts for the height of the footer: */
     margin-bottom: 200px;
@@ -147,7 +153,9 @@ textarea:focus {
   .footer {
     display: flex;
   }
-  .feedPage {
+  .feedPage,
+  .postView {
+    align-items: center;
     margin-top: 7vh;
     /* this margin accounts for the height of the footer: */
     margin-bottom: 200px;
@@ -162,7 +170,9 @@ textarea:focus {
   .sidebar {
     display: flex;
   }
-  .feedPage {
+  .feedPage,
+  .postView {
+    margin-left: 12vw;
     margin-top: 7vh;
     margin-bottom: 7vh;
   }

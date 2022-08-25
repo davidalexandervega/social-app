@@ -9,12 +9,20 @@ import { removePost, deletePost } from '../features/post/postSlice';
 const DeletePostPrompt = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { post, postRef, setDeleteMode, postView } = props;
+  const { post, postRef, setDeleteMode, postView, postViewRef } = props;
 
   const onDelete = async (postID) => {
     if (postView === true) {
       dispatch(deletePost(postID));
-      navigate('/', { state: { deletedPost: postID } });
+      const timer = setTimeout(() => {
+        postViewRef.current.classList.remove('fade');
+      }, 10);
+      setTimeout(() => {
+        navigate('/');
+      }, 1000);
+      return () => {
+        clearTimeout(timer);
+      };
     } else {
       postRef.current.classList.remove('fade');
       const timer = setTimeout(() => {

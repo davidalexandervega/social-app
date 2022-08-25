@@ -4,9 +4,7 @@
   width: 90%;
   margin: -3vh 0 0 10%;
   border-radius: 10px;
-  z-index: 1;
-  /* this allows for Replys to slide behind the top of the new Reply textarea
-    but disappear at the bottom of the textarea: */
+  z-index: 0;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0), whitesmoke 75%);
 }
 

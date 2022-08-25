@@ -107,6 +107,14 @@ export const postSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
+      .addCase(fetchPostById.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        state.posts = [action.payload];
+      })
+      .addCase(fetchPostById.rejected, (state, action) => {
+        state.isError = true;
+        state.message = action.payload;
+      })
       .addCase(likePost.fulfilled, (state, action) => {
         state.isSuccess = true;
         // to reflect the edited change so it immediately appears
