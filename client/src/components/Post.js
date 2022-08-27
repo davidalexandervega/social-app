@@ -4,6 +4,9 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import jwt from 'jwt-decode';
 
+import { Cloudinary } from '@cloudinary/url-gen';
+import { AdvancedImage } from '@cloudinary/react';
+
 import DeletePostPrompt from './DeletePostPrompt';
 import NewReply from './NewReply';
 
@@ -23,6 +26,12 @@ const Post = ({ post }) => {
   if (user) {
     userID = jwt(user.access).user_id;
   }
+
+  const cloudinary = new Cloudinary({
+    cloud: {
+      cloudName: 'dgwf4o5mj',
+    },
+  });
 
   const postRef = useRef();
   useEffect(() => {
@@ -126,7 +135,10 @@ const Post = ({ post }) => {
           <span className="postTime">{displayTime()}</span>
         </span>
         <div className="postBody" onClick={() => onPostView(post.id)}>
-          {post.body}
+          {post.image === true ? (
+            <AdvancedImage cldImg={cloudinary.image(`/posts/${post.id}`)} className="feedImage" />
+          ) : null}
+          <div className="postText">{post.body}</div>
         </div>
         <div className="postActions">
           <span className="postLike" onClick={() => onLikePost(post)}>

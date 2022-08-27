@@ -1,8 +1,11 @@
 import React from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import jwt from 'jwt-decode';
+
+import { Cloudinary } from '@cloudinary/url-gen';
+import { AdvancedImage } from '@cloudinary/react';
 
 import DeletePostPrompt from '../components/DeletePostPrompt';
 import NewReply from '../components/NewReply';
@@ -19,7 +22,6 @@ const PostView = () => {
   const { posts } = useSelector((state) => state.post);
   const post = posts.length > 1 ? posts.find((post) => post.id === id) : posts[0];
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
   const { replies } = useSelector((state) => state.reply);
@@ -28,6 +30,12 @@ const PostView = () => {
   if (user) {
     userID = jwt(user.access).user_id;
   }
+
+  const cloudinary = new Cloudinary({
+    cloud: {
+      cloudName: 'dgwf4o5mj',
+    },
+  });
 
   useEffect(() => {
     if (!post) {
@@ -138,8 +146,11 @@ const PostView = () => {
               &nbsp;
               <span className="postTime">{displayTime()}</span>
             </span>
-            <div className="postBody" onClick={() => navigate(`/posts/${post.id}`)}>
-              {post.body}
+            <div className="postBody">
+              {post.image === true ? (
+                <AdvancedImage cldImg={cloudinary.image(`/posts/${post.id}`)} />
+              ) : null}
+              <div className="postText">{post.body}</div>
             </div>
             <div className="postActions">
               <span className="postLike" onClick={() => onLikePost(post)}>

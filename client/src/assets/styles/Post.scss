@@ -45,8 +45,18 @@
 }
 
 .postBody {
-  padding: 2px 4px 2px 4px;
   background-color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+}
+
+.feedImage {
+  max-height: 50vh;
+  object-fit: cover;
+}
+
+.postText {
+  padding: 2px 4px 2px 4px;
 }
 
 .postBody:hover {

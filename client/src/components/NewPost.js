@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import axios from 'axios';
 
 import { createPost } from '../features/post/postSlice';
 
@@ -14,6 +15,9 @@ const NewPost = (props) => {
 
   const { newPostBody } = newPostData;
 
+  const fileRef = useRef();
+  const cloudName = 'dgwf4o5mj';
+
   const onChange = (e) => {
     setNewPost((prevState) => ({
       ...prevState,
@@ -25,13 +29,26 @@ const NewPost = (props) => {
 
   const onSubmit = () => {
     if (newPostBody !== '') {
+      const postID = uuidv4();
       const newPostData = {
-        id: uuidv4(),
+        id: postID,
         body: newPostBody,
         time: new Date(),
         likes: [],
         replies: [],
+        image: fileRef.current.files.length !== 0 ? true : false,
       };
+
+      if (fileRef.current.files.length !== 0) {
+        const formData = new FormData();
+        formData.append('file', fileRef.current.files[0]);
+        formData.append('upload_preset', 'social');
+        formData.append('public_id', postID);
+        formData.append('folder', '/posts/');
+        axios
+          .post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, formData)
+          .then((response) => console.log(response));
+      }
 
       setNewPost((prevState) => ({
         ...prevState,
@@ -79,6 +96,11 @@ const NewPost = (props) => {
         ) : (
           ''
         )}
+        &nbsp;
+        <label className="fileUpload">
+          img
+          <input type="file" accept=".jpg, .jpeg, .png" className="fileInput" ref={fileRef}></input>
+        </label>
       </div>
     </div>
   );

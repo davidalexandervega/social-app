@@ -132,6 +132,14 @@ textarea:focus {
   cursor: pointer;
 }
 
+.fileUpload:hover {
+  cursor: pointer;
+}
+
+.fileInput {
+  display: none;
+}
+
 /* mobile styles */
 @media only screen and (max-width: 400px) {
   .header,

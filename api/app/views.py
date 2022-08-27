@@ -1,9 +1,18 @@
 from django.views.decorators.csrf import csrf_exempt
 import re
+import json
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 from rest_framework_simplejwt.authentication import JWTAuthentication
 JWT_authenticator = JWTAuthentication()
+
+from dotenv import load_dotenv
+load_dotenv()
+
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+config = cloudinary.config(secure=True)
 
 from app.models import User, Post, Reply
 from app.serializers import UserSerializer, PostSerializer, ReplySerializer
@@ -77,6 +86,8 @@ def postApi(request):
     elif request.method == 'DELETE':
       post_id = (request.path.split('/api/posts/'))[1]
       post = Post.objects.get(id=post_id)
+      if post.image == True:
+        cloudinary.uploader.destroy('posts/' + post_id)
       post_serializer = PostSerializer(post)
       if str(post.user_id) == userID:
         print(post_serializer.data)
