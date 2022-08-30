@@ -13,10 +13,31 @@ const NewPost = (props) => {
   const dispatch = useDispatch();
   const { newPostData, setNewPost, mode, setMode } = props;
 
-  const { newPostBody } = newPostData;
+  const { newPostBody, newPostImg } = newPostData;
 
   const fileRef = useRef();
+  const uploadButtonRef = useRef();
   const cloudName = 'dgwf4o5mj';
+
+  const onFileInput = () => {
+    if (fileRef.current.files.length !== 0) {
+      setNewPost((prevState) => ({
+        ...prevState,
+        newPostImg: fileRef.current.files[0],
+      }));
+    } else {
+      setNewPost((prevState) => ({
+        ...prevState,
+        newPostImg: null,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    newPostImg
+      ? (uploadButtonRef.current.style.color = 'cornflowerblue')
+      : (uploadButtonRef.current.style.color = 'black');
+  }, [newPostImg]);
 
   const onChange = (e) => {
     setNewPost((prevState) => ({
@@ -36,12 +57,12 @@ const NewPost = (props) => {
         time: new Date(),
         likes: [],
         replies: [],
-        image: fileRef.current.files.length !== 0 ? true : false,
+        image: newPostImg ? true : false,
       };
 
-      if (fileRef.current.files.length !== 0) {
+      if (newPostImg) {
         const formData = new FormData();
-        formData.append('file', fileRef.current.files[0]);
+        formData.append('file', newPostImg);
         formData.append('upload_preset', 'social');
         formData.append('public_id', postID);
         formData.append('folder', '/posts/');
@@ -53,6 +74,7 @@ const NewPost = (props) => {
       setNewPost((prevState) => ({
         ...prevState,
         newPostBody: '',
+        newPostImg: null,
       }));
 
       if (mode === 'expanded') {
@@ -83,9 +105,17 @@ const NewPost = (props) => {
           post &nbsp;
           <DoubleCheck />
         </span>
-        &nbsp;
         <span className="charLeft" ref={charLeftRef}></span>
-        &nbsp;
+        <label className="fileUpload" ref={uploadButtonRef}>
+          img
+          <input
+            type="file"
+            accept=".jpg, .jpeg, .png"
+            className="fileInput"
+            ref={fileRef}
+            onChange={() => onFileInput()}
+          ></input>
+        </label>
         {mode === 'expanded' ? (
           <span
             className="labelButton solidButton redButton cancelNewPost"
@@ -93,14 +123,7 @@ const NewPost = (props) => {
           >
             <Cancel />
           </span>
-        ) : (
-          ''
-        )}
-        &nbsp;
-        <label className="fileUpload">
-          img
-          <input type="file" accept=".jpg, .jpeg, .png" className="fileInput" ref={fileRef}></input>
-        </label>
+        ) : null}
       </div>
     </div>
   );

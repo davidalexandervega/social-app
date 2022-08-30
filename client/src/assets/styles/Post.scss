@@ -64,6 +64,8 @@
 }
 
 .postActions {
+  display: flex;
+  gap: 10px;
   width: 100%;
   background-color: whitesmoke;
   user-select: none;
@@ -110,6 +112,12 @@
 @media only screen and (max-width: 400px) {
   .postBody {
     font-size: 1em;
+  }
+  .post {
+    width: 90vw;
+  }
+  .reply {
+    width: 90%;
   }
 }
 

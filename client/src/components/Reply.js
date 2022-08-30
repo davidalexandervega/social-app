@@ -105,7 +105,9 @@ const Reply = (props) => {
           &nbsp;
           <span className="postTime">{displayTime()}</span>
         </span>
-        <div className="postBody">{reply.body}</div>
+        <div className="postBody">
+          <div className="postText">{reply.body}</div>
+        </div>
         <div className="postActions">
           <span className="postLike" onClick={() => onLikeReply(reply)}>
             <Heart className="button postLikeButton" strokeWidth="1.1" fill={isLiked.color} />

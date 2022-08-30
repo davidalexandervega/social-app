@@ -38,11 +38,10 @@ const PostView = () => {
   });
 
   useEffect(() => {
-    if (!post) {
-      dispatch(fetchPostById(id));
-      dispatch(fetchReplies(id));
-      feedReplyDelta.current = 0;
-    }
+    dispatch(resetPosts());
+    dispatch(fetchPostById(id));
+    dispatch(fetchReplies(id));
+    feedReplyDelta.current = 0;
     return () => {
       dispatch(resetPosts());
       dispatch(resetReplies());

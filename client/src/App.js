@@ -12,6 +12,7 @@ import PostView from './views/PostView';
 const App = () => {
   const [newPostData, setNewPost] = useState({
     newPostBody: '',
+    newPostImg: null,
   });
 
   return (

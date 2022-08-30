@@ -68,9 +68,7 @@ const NewReply = (props) => {
           reply &nbsp;
           <DoubleCheck />
         </span>
-        &nbsp;
         <span className="charLeft" ref={charLeftRef}></span>
-        &nbsp;
         {postView !== true ? (
           <span
             className="labelButton solidButton redButton cancelNewPost"

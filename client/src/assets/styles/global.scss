@@ -49,6 +49,7 @@ textarea:focus {
 
 .sidebar {
   display: none;
+  position: fixed;
   flex-direction: column;
   margin: 2vh 4vw 0 2vw;
   width: 200px;
@@ -180,7 +181,7 @@ textarea:focus {
   }
   .feedPage,
   .postView {
-    margin-left: 12vw;
+    margin-left: 35vw;
     margin-top: 7vh;
     margin-bottom: 7vh;
   }
