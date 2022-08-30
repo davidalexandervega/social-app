@@ -3,6 +3,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import jwt from 'jwt-decode';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
@@ -16,6 +17,7 @@ import { ProfileCircled, Heart, Cancel, ChatBubbleEmpty } from 'iconoir-react';
 
 import { fetchPostById, likePost, reset as resetPosts } from '../features/post/postSlice';
 import { fetchReplies, reset as resetReplies } from '../features/reply/replySlice';
+import { createNotification } from '../features/notification/notificationSlice';
 
 const PostView = () => {
   const { id } = useParams();
@@ -27,8 +29,10 @@ const PostView = () => {
   const { replies } = useSelector((state) => state.reply);
 
   let userID = '';
+  let username = '';
   if (user) {
     userID = jwt(user.access).user_id;
+    username = jwt(user.access).username;
   }
 
   const cloudinary = new Cloudinary({
@@ -105,6 +109,18 @@ const PostView = () => {
         ...post,
         likes: [...post.likes, userID],
       };
+      if (post.user !== userID) {
+        const notificationData = {
+          id: uuidv4(),
+          time: new Date(),
+          creator_id: userID,
+          creator_name: username,
+          target_id: post.user,
+          type: 'like_post',
+          object: post.id,
+        };
+        dispatch(createNotification(notificationData));
+      }
     }
 
     dispatch(likePost(postData));
@@ -186,6 +202,7 @@ const PostView = () => {
               resetReplies={resetReplies}
               replyDelta={replyDelta}
               postView={true}
+              username
             />
             {replies.map((reply) => (
               <Reply key={reply.id} reply={reply} replyDelta={replyDelta} />

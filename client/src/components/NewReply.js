@@ -4,13 +4,14 @@ import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { createReply } from '../features/reply/replySlice';
+import { createNotification } from '../features/notification/notificationSlice';
 
 import '../assets/styles/NewReply.scss';
 import { DoubleCheck, Cancel } from 'iconoir-react';
 
 const NewReply = (props) => {
   const dispatch = useDispatch();
-  const { post, resetReplies, replyDelta, postView } = props;
+  const { post, resetReplies, replyDelta, postView, username, userID } = props;
 
   const [newReplyData, setNewReply] = useState({
     newReplyBody: '',
@@ -29,8 +30,10 @@ const NewReply = (props) => {
 
   const onSubmit = () => {
     if (newReplyBody !== '') {
+      const replyID = uuidv4();
+
       const newReplyData = {
-        id: uuidv4(),
+        id: replyID,
         origin: post.id,
         body: newReplyBody,
         time: new Date(),
@@ -45,6 +48,19 @@ const NewReply = (props) => {
       replyDelta.current++;
 
       dispatch(createReply(newReplyData));
+
+      if (post.user !== userID) {
+        const notificationData = {
+          id: uuidv4(),
+          time: new Date(),
+          creator_id: userID,
+          creator_name: username,
+          target_id: post.user,
+          type: 'reply_post',
+          object: replyID,
+        };
+        dispatch(createNotification(notificationData));
+      }
     }
   };
 

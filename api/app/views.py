@@ -3,6 +3,7 @@ import re
 import json
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
+from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 JWT_authenticator = JWTAuthentication()
 
@@ -14,10 +15,13 @@ import cloudinary.uploader
 import cloudinary.api
 config = cloudinary.config(secure=True)
 
-from app.models import User, Post, Reply
-from app.serializers import UserSerializer, PostSerializer, ReplySerializer
+from app.models import User, Post, Reply, Notification
+from app.serializers import CustomTokenObtainPairSerializer ,UserSerializer, PostSerializer, ReplySerializer, NotificationSerializer
 
 # Create your views here.
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 @csrf_exempt
 def userApi(request, user_id=0):
@@ -131,3 +135,22 @@ def replyApi(request):
         return JsonResponse(reply_serializer.data, safe=False)
   else:
     return JsonResponse('no token is present in the header, or no header', safe=False)
+
+
+@csrf_exempt
+def notificationApi(request):
+  response = JWT_authenticator.authenticate(request)
+  if response is not None:
+    username , token = response
+    userID = token.payload['user_id']
+    if request.method == 'POST':
+      notification_data = JSONParser().parse(request)
+      notification_serializer = NotificationSerializer(data=notification_data)
+      if notification_serializer.is_valid():
+        notification_serializer.save()
+        return JsonResponse(notification_data, safe=False)
+    elif request.method == 'GET':
+      notifications = Notification.objects.all().filter(target_id=userID)
+      if notifications:
+        return JsonResponse(NotificationSerializer(notifications, many=True).data, safe=False)
+      return JsonResponse([], safe=False)

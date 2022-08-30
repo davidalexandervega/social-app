@@ -23,7 +23,7 @@ export const createReply = createAsyncThunk('replies/create', async (newReplyDat
   }
 });
 
-export const fetchReplies = createAsyncThunk('/replies/fetch', async (postID, thunkAPI) => {
+export const fetchReplies = createAsyncThunk('replies/fetch', async (postID, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.user.access;
     return await replyService.fetchReplies(postID, token);
@@ -36,7 +36,7 @@ export const fetchReplies = createAsyncThunk('/replies/fetch', async (postID, th
   }
 });
 
-export const likeReply = createAsyncThunk('/replies/like', async (replyData, thunkAPI) => {
+export const likeReply = createAsyncThunk('replies/like', async (replyData, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.user.access;
 

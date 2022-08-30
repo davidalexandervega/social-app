@@ -22,7 +22,7 @@ export const createPost = createAsyncThunk('posts/create', async (newPostData, t
   }
 });
 
-export const fetchAllPosts = createAsyncThunk('/posts/fetch', async (_, thunkAPI) => {
+export const fetchAllPosts = createAsyncThunk('posts/fetch', async (_, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.user.access;
     return await postService.fetchAllPosts(token);
@@ -35,7 +35,7 @@ export const fetchAllPosts = createAsyncThunk('/posts/fetch', async (_, thunkAPI
   }
 });
 
-export const fetchPostById = createAsyncThunk('/posts/fetch/id', async (postID, thunkAPI) => {
+export const fetchPostById = createAsyncThunk('posts/fetch/id', async (postID, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.user.access;
     return await postService.fetchPostById(postID, token);
@@ -48,7 +48,7 @@ export const fetchPostById = createAsyncThunk('/posts/fetch/id', async (postID, 
   }
 });
 
-export const likePost = createAsyncThunk('/posts/like', async (postData, thunkAPI) => {
+export const likePost = createAsyncThunk('posts/like', async (postData, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.user.access;
 

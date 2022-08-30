@@ -17,6 +17,7 @@ from django.contrib.auth.models import UserManager
 # the final steps in overriding the default user are in admin.py.
 class User(AbstractBaseUser, PermissionsMixin):
   id = models.UUIDField(primary_key=True)
+  created = models.DateTimeField()
   email = models.CharField(max_length=765)
   username = models.CharField(max_length=765, blank=True, unique=True)
   password = models.CharField(max_length=255)
@@ -45,4 +46,15 @@ class Reply(models.Model):
   body = models.CharField(max_length=200)
   time = models.DateTimeField()
   likes = ArrayField(base_field=models.UUIDField(), blank=True)
+
+class Notification(models.Model):
+  id = models.UUIDField(primary_key=True)
+  time = models.DateTimeField()
+  creator_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='creator')
+  creator_name = models.CharField(max_length=200)
+  target_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='target')
+  type = models.CharField(max_length=200)
+  object = models.UUIDField()
+
+
   

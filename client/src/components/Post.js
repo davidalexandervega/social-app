@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jwt-decode';
 
 import { Cloudinary } from '@cloudinary/url-gen';
@@ -15,6 +16,7 @@ import { ProfileCircled, Heart, Cancel, ChatBubbleEmpty } from 'iconoir-react';
 
 import { likePost } from '../features/post/postSlice';
 import { fetchReplies, expandPost, reset as resetReplies } from '../features/reply/replySlice';
+import { createNotification } from '../features/notification/notificationSlice';
 
 const Post = ({ post }) => {
   const dispatch = useDispatch();
@@ -23,8 +25,10 @@ const Post = ({ post }) => {
   const { expandedPost } = useSelector((state) => state.reply);
 
   let userID = '';
+  let username = '';
   if (user) {
     userID = jwt(user.access).user_id;
+    username = jwt(user.access).username;
   }
 
   const cloudinary = new Cloudinary({
@@ -68,6 +72,7 @@ const Post = ({ post }) => {
   });
 
   const onLikePost = (post) => {
+    console.log(jwt(user.access));
     // the state update allows for the like/unlike to be reflected immediately to the user.
     // the placeholder and color change the value immediately to reflect
     // the state that will be returned and reinforced by the useEffect() call below:
@@ -90,6 +95,18 @@ const Post = ({ post }) => {
         ...post,
         likes: [...post.likes, userID],
       };
+      if (post.user !== userID) {
+        const notificationData = {
+          id: uuidv4(),
+          time: new Date(),
+          creator_id: userID,
+          creator_name: username,
+          target_id: post.user,
+          type: 'like_post',
+          object: post.id,
+        };
+        dispatch(createNotification(notificationData));
+      }
     }
 
     dispatch(likePost(postData));
@@ -165,7 +182,13 @@ const Post = ({ post }) => {
       </div>
       {expandedPost === post.id ? (
         <div className="repliesContainer">
-          <NewReply post={post} resetReplies={resetReplies} replyDelta={replyDelta} />
+          <NewReply
+            post={post}
+            resetReplies={resetReplies}
+            replyDelta={replyDelta}
+            username={username}
+            userID={userID}
+          />
         </div>
       ) : (
         ''
