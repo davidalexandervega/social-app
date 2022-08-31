@@ -23,7 +23,7 @@ const Feed = () => {
   }, [user, navigate, dispatch]);
 
   return (
-    <div className="feedPage">
+    <div className="feedView">
       {posts.map((post) => (
         <Post key={post.id} post={post} />
       ))}

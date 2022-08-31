@@ -5,6 +5,7 @@ import './assets/styles/global.scss';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
+import Notifications from './views/Notifications';
 import Feed from './views/Feed';
 import Login from './views/Login';
 import PostView from './views/PostView';
@@ -21,6 +22,7 @@ const App = () => {
       <div id="page">
         <Sidebar newPostData={newPostData} setNewPost={setNewPost} />
         <Routes>
+          <Route path="/notifications" element={<Notifications />} />
           <Route path="/" element={<Feed />} />
           <Route path="/posts/:id" element={<PostView />} />
           <Route path="/login" element={<Login />} />

@@ -205,7 +205,7 @@ const PostView = () => {
               username
             />
             {replies.map((reply) => (
-              <Reply key={reply.id} reply={reply} replyDelta={replyDelta} />
+              <Reply key={reply.id} reply={reply} replyDelta={replyDelta} post={post} />
             ))}
           </div>
         </div>

@@ -1,0 +1,62 @@
+.notification {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 60px;
+  background-color: whitesmoke;
+}
+
+.notificationIcon {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 15px 0 15px;
+  background-color: rgb(232, 226, 244);
+}
+
+.notificationCreator {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-family: 'source-bold';
+}
+
+.notificationCreator:hover {
+  color: rgb(116, 43, 226);
+  cursor: pointer;
+}
+
+.notificationAction {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.notificationAction:hover {
+  cursor: pointer;
+}
+
+.notificationTime {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* mobile styles */
+@media only screen and (max-width: 400px) {
+  .notification {
+    font-size: 0.75em;
+  }
+}
+
+/* tablet styles */
+@media only screen and (min-width: 401px) and (max-width: 960px) {
+  .notification {
+    font-size: 0.9em;
+  }
+}
+
+/* desktop styles */
+@media only screen and (min-width: 961px) {
+}

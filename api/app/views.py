@@ -16,7 +16,7 @@ import cloudinary.api
 config = cloudinary.config(secure=True)
 
 from app.models import User, Post, Reply, Notification
-from app.serializers import CustomTokenObtainPairSerializer ,UserSerializer, PostSerializer, ReplySerializer, NotificationSerializer
+from app.serializers import CustomTokenObtainPairSerializer, UserSerializer, PostSerializer, ReplySerializer, NotificationSerializer
 
 # Create your views here.
 

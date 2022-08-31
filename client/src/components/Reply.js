@@ -1,23 +1,26 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jwt-decode';
-
 import DeleteReplyPrompt from './DeleteReplyPrompt';
 
 import '../assets/styles/Post.scss';
 import { ProfileCircled, Heart, Cancel } from 'iconoir-react';
 
 import { likeReply } from '../features/reply/replySlice';
+import { createNotification } from '../features/notification/notificationSlice';
 
 const Reply = (props) => {
-  const { reply, replyDelta } = props;
+  const { reply, replyDelta, post } = props;
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
   let userID = '';
+  let username = '';
   if (user) {
     userID = jwt(user.access).user_id;
+    username = jwt(user.access).username;
   }
 
   const replyRef = useRef();
@@ -72,6 +75,18 @@ const Reply = (props) => {
         ...reply,
         likes: [...reply.likes, userID],
       };
+      if (reply.user !== userID) {
+        const notificationData = {
+          id: uuidv4(),
+          time: new Date(),
+          creator_id: userID,
+          creator_name: username,
+          target_id: reply.user,
+          type: 'like_post',
+          object: post.id,
+        };
+        dispatch(createNotification(notificationData));
+      }
     }
 
     dispatch(likeReply(replyData));

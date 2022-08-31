@@ -15,7 +15,7 @@ import '../assets/styles/Post.scss';
 import { ProfileCircled, Heart, Cancel, ChatBubbleEmpty } from 'iconoir-react';
 
 import { likePost } from '../features/post/postSlice';
-import { fetchReplies, expandPost, reset as resetReplies } from '../features/reply/replySlice';
+import { expandPost, reset as resetReplies } from '../features/reply/replySlice';
 import { createNotification } from '../features/notification/notificationSlice';
 
 const Post = ({ post }) => {
@@ -62,7 +62,6 @@ const Post = ({ post }) => {
   };
 
   const onPostView = (postID) => {
-    dispatch(fetchReplies(postID));
     navigate(`/posts/${postID}`, { state: { replyDelta: replyDelta } });
   };
 

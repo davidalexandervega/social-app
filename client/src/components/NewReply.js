@@ -57,7 +57,7 @@ const NewReply = (props) => {
           creator_name: username,
           target_id: post.user,
           type: 'reply_post',
-          object: replyID,
+          object: post.id,
         };
         dispatch(createNotification(notificationData));
       }

@@ -55,8 +55,9 @@ textarea:focus {
   width: 200px;
 }
 
-.feedPage,
-.postView {
+.feedView,
+.postView,
+.notificationsView {
   display: flex;
   flex-grow: 1;
   flex-direction: column;
@@ -147,8 +148,9 @@ textarea:focus {
   .footer {
     display: flex;
   }
-  .feedPage,
-  .postView {
+  .feedView,
+  .postView,
+  .notificationsView {
     align-items: center;
     margin-top: 4vh;
     /* this margin accounts for the height of the footer: */
@@ -162,8 +164,9 @@ textarea:focus {
   .footer {
     display: flex;
   }
-  .feedPage,
-  .postView {
+  .feedView,
+  .postView,
+  .notificationsView {
     align-items: center;
     margin-top: 7vh;
     /* this margin accounts for the height of the footer: */
@@ -179,8 +182,9 @@ textarea:focus {
   .sidebar {
     display: flex;
   }
-  .feedPage,
-  .postView {
+  .feedView,
+  .postView,
+  .notificationsView {
     margin-left: 35vw;
     margin-top: 7vh;
     margin-bottom: 7vh;

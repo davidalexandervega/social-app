@@ -21,6 +21,8 @@ const fetchNotifications = async (token) => {
 
   const response = await axios.get('/api/notifications/', config);
 
+  console.log(response.data);
+
   return response.data;
 };
 
