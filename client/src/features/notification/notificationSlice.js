@@ -35,6 +35,19 @@ export const fetchNotifications = createAsyncThunk('notifications/fetch', async 
   }
 });
 
+export const checkNotifications = createAsyncThunk('notifications/check', async (_, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().auth.user.access;
+    return await notificationService.checkNotifications(_, token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 export const notificationSlice = createSlice({
   name: 'notifications',
   initialState,
@@ -43,11 +56,28 @@ export const notificationSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(createNotification.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        state.notifications.push(action.payload);
+        state.notifications.sort((a, b) => new Date(b.time) - new Date(a.time));
+      })
+      .addCase(createNotification.rejected, (state, action) => {
+        state.isError = true;
+        state.message = action.payload;
+      })
       .addCase(fetchNotifications.fulfilled, (state, action) => {
         state.isSuccess = true;
         state.notifications = action.payload;
       })
       .addCase(fetchNotifications.rejected, (state, action) => {
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(checkNotifications.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        state.notifications = action.payload;
+      })
+      .addCase(checkNotifications.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
       });

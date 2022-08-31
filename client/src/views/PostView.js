@@ -17,6 +17,7 @@ import { ProfileCircled, Heart, Cancel, ChatBubbleEmpty } from 'iconoir-react';
 
 import { fetchPostById, likePost, reset as resetPosts } from '../features/post/postSlice';
 import { fetchReplies, reset as resetReplies } from '../features/reply/replySlice';
+import { fetchNotifications } from '../features/notification/notificationSlice';
 import { createNotification } from '../features/notification/notificationSlice';
 
 const PostView = () => {
@@ -46,6 +47,7 @@ const PostView = () => {
     dispatch(fetchPostById(id));
     dispatch(fetchReplies(id));
     feedReplyDelta.current = 0;
+    dispatch(fetchNotifications());
     return () => {
       dispatch(resetPosts());
       dispatch(resetReplies());

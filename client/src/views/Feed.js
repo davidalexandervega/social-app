@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Post from '../components/Post';
 
 import { fetchAllPosts } from '../features/post/postSlice';
+import { fetchNotifications } from '../features/notification/notificationSlice';
 
 const Feed = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const Feed = () => {
       navigate('/login');
     } else {
       dispatch(fetchAllPosts());
+      dispatch(fetchNotifications());
     }
   }, [user, navigate, dispatch]);
 

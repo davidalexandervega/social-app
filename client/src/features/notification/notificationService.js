@@ -21,11 +21,26 @@ const fetchNotifications = async (token) => {
 
   const response = await axios.get('/api/notifications/', config);
 
+  return response.data;
+};
+
+const checkNotifications = async (_, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  console.log('checking notifications...');
+
+  const response = await axios.put('/api/notifications/', {}, config);
+
+  console.log('notifications checked!');
   console.log(response.data);
 
   return response.data;
 };
 
-const notificationService = { createNotification, fetchNotifications };
+const notificationService = { createNotification, fetchNotifications, checkNotifications };
 
 export default notificationService;

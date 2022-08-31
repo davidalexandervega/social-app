@@ -35,4 +35,4 @@ class ReplySerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
   class Meta:
     model = Notification
-    fields = ['id', 'time', 'creator_id', 'creator_name', 'target_id', 'type', 'object']
+    fields = ['id', 'time', 'creator_id', 'creator_name', 'target_id', 'type', 'object', 'seen']

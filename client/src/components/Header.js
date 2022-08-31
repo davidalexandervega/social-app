@@ -4,12 +4,22 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { logout, reset } from '../features/auth/authSlice';
 
-import { ProfileCircled, Bell, Globe, Settings, LogIn, LogOut } from 'iconoir-react';
+import {
+  ProfileCircled,
+  Bell,
+  BellNotification,
+  Globe,
+  Settings,
+  LogIn,
+  LogOut,
+} from 'iconoir-react';
 
-const Header = () => {
+const Header = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+
+  const { notify } = props;
 
   const loadFeed = () => {
     navigate('/');
@@ -31,13 +41,26 @@ const Header = () => {
         onClick={() => navigate('/profile')}
       />
       {user ? (
-        <Bell
-          height="3em"
-          width="3em"
-          strokeWidth="0.75"
-          className="button"
-          onClick={() => navigate('/notifications')}
-        />
+        <>
+          {notify === true ? (
+            <BellNotification
+              className="button notifyButton"
+              height="3em"
+              width="3em"
+              strokeWidth="0.75"
+              color="rgb(255, 64, 0)"
+              onClick={() => navigate('/notifications')}
+            />
+          ) : (
+            <Bell
+              className="button"
+              height="3em"
+              width="3em"
+              strokeWidth="0.75"
+              onClick={() => navigate('/notifications')}
+            />
+          )}
+        </>
       ) : (
         ''
       )}

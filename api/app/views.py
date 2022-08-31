@@ -154,3 +154,7 @@ def notificationApi(request):
       if notifications:
         return JsonResponse(NotificationSerializer(notifications, many=True).data, safe=False)
       return JsonResponse([], safe=False)
+    elif request.method == 'PUT':
+      Notification.objects.all().filter(target_id=userID).update(seen=True)
+      notifications = Notification.objects.all().filter(target_id=userID)
+      return JsonResponse(NotificationSerializer(notifications, many=True).data, safe=False)

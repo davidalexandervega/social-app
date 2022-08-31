@@ -5,10 +5,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout, reset } from '../features/auth/authSlice';
 import NewPost from './NewPost';
 
-import { ProfileCircled, Bell, Globe, Settings, LogIn, LogOut } from 'iconoir-react';
+import {
+  ProfileCircled,
+  Bell,
+  Globe,
+  Settings,
+  LogIn,
+  LogOut,
+  BellNotification,
+} from 'iconoir-react';
 
 const Sidebar = (props) => {
-  const { newPostData, setNewPost } = props;
+  const { newPostData, setNewPost, notify } = props;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,7 +40,11 @@ const Sidebar = (props) => {
       </span>
       {user ? (
         <span className="button labelButton" onClick={() => navigate('/notifications')}>
-          <Bell height="2em" width="2em" strokeWidth="1.1" />
+          {notify === true ? (
+            <BellNotification height="2em" width="2em" strokeWidth="1.1" color="rgb(255, 64, 0)" />
+          ) : (
+            <Bell height="2em" width="2em" strokeWidth="1.1" />
+          )}
           notifications
         </span>
       ) : (

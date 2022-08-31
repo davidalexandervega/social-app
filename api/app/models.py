@@ -55,6 +55,4 @@ class Notification(models.Model):
   target_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='target')
   type = models.CharField(max_length=200)
   object = models.UUIDField()
-
-
-  
+  seen = models.BooleanField(default=False)
