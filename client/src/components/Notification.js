@@ -29,8 +29,12 @@ const Notification = (props) => {
       return `${Math.floor(seconds / 3600)}h`;
     } else if (seconds < 604800) {
       return `${Math.floor(seconds / 86400)}d`;
+    } else if (seconds < 2630000 * 3) {
+      return `${Math.floor(seconds / 604800)}w`;
+    } else if (seconds < 31536000) {
+      return `${Math.floor(seconds / 2630000)}mo`;
     } else {
-      return new Date(notification.time).toLocaleDateString();
+      return `${Math.floor(seconds / 31536000)}y`;
     }
   };
 

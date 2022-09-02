@@ -7,6 +7,7 @@ import Post from '../components/Post';
 
 import { fetchAllPosts } from '../features/post/postSlice';
 import { fetchNotifications } from '../features/notification/notificationSlice';
+import { expandPost } from '../features/reply/replySlice';
 
 const Feed = () => {
   const navigate = useNavigate();
@@ -22,6 +23,9 @@ const Feed = () => {
       dispatch(fetchAllPosts());
       dispatch(fetchNotifications());
     }
+    return () => {
+      dispatch(expandPost(null));
+    };
   }, [user, navigate, dispatch]);
 
   return (

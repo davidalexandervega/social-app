@@ -13,7 +13,7 @@ const NewPost = (props) => {
   const dispatch = useDispatch();
   const { newPostData, setNewPost, mode, setMode } = props;
 
-  const { newPostBody, newPostImg } = newPostData;
+  const { newPostBody, newPostImg, disableFile } = newPostData;
 
   const fileRef = useRef();
   const uploadButtonRef = useRef();
@@ -24,12 +24,28 @@ const NewPost = (props) => {
       setNewPost((prevState) => ({
         ...prevState,
         newPostImg: fileRef.current.files[0],
+        disableFile: true,
       }));
     } else {
       setNewPost((prevState) => ({
         ...prevState,
         newPostImg: null,
       }));
+    }
+  };
+
+  const removeFile = () => {
+    if (newPostImg) {
+      setNewPost((prevState) => ({
+        ...prevState,
+        newPostImg: null,
+      }));
+      setTimeout(() => {
+        setNewPost((prevState) => ({
+          ...prevState,
+          disableFile: false,
+        }));
+      }, 1000);
     }
   };
 
@@ -75,6 +91,7 @@ const NewPost = (props) => {
         ...prevState,
         newPostBody: '',
         newPostImg: null,
+        disableFile: false,
       }));
 
       if (mode === 'expanded') {
@@ -106,7 +123,7 @@ const NewPost = (props) => {
           <DoubleCheck />
         </span>
         <span className="charLeft" ref={charLeftRef}></span>
-        <label className="fileUpload" ref={uploadButtonRef}>
+        <label className="fileUpload" ref={uploadButtonRef} onClick={() => removeFile()}>
           img
           <input
             type="file"
@@ -114,6 +131,7 @@ const NewPost = (props) => {
             className="fileInput"
             ref={fileRef}
             onChange={() => onFileInput()}
+            disabled={disableFile}
           ></input>
         </label>
         {mode === 'expanded' ? (

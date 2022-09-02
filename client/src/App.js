@@ -27,6 +27,7 @@ const App = () => {
   const [newPostData, setNewPost] = useState({
     newPostBody: '',
     newPostImg: null,
+    disableFile: false,
   });
 
   return (
