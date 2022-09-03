@@ -43,6 +43,7 @@ const Profile = () => {
   }, [profileUser]);
 
   useEffect(() => {
+    dispatch(resetPosts());
     return () => {
       console.log('reset');
       dispatch(resetPosts());
