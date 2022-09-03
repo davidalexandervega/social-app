@@ -150,7 +150,7 @@ const PostView = () => {
   const replyDelta = useRef(0);
 
   return (
-    <div className="postView" ref={postViewRef}>
+    <div className="view postView" ref={postViewRef}>
       {post ? (
         <div className="postContainer">
           <div className="post" ref={postRef}>

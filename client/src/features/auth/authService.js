@@ -18,7 +18,7 @@ const login = async (userData) => {
     localStorage.setItem('user', JSON.stringify(response.data));
   }
 
-  console.log(JSON.parse(localStorage.getItem('user')))
+  console.log(JSON.parse(localStorage.getItem('user')));
 
   return response.data;
 };
@@ -27,10 +27,25 @@ const logout = () => {
   localStorage.removeItem('user');
 };
 
+const fetchUser = async (username, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(API_URL + '?username=' + username, config);
+
+  console.log(response.data);
+
+  return response.data;
+};
+
 const authService = {
   register,
   login,
   logout,
+  fetchUser,
 };
 
 export default authService;

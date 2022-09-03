@@ -1,0 +1,60 @@
+.profile {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 400px;
+  width: 70vw;
+  max-width: 500px;
+  border: 1px solid black;
+  border-radius: 10px;
+  transition: opacity 0.75s ease-out /* , max-height 1s linear */;
+  opacity: 0;
+}
+
+.profileBanner {
+  height: 150px;
+  width: 100%;
+  background-color: rgb(232, 226, 244);
+}
+
+.profileHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profileHeaderRight {
+  text-align: right;
+  margin-right: 10px;
+}
+
+.profileCreated {
+  font-size: 0.7em;
+}
+
+.profileUsername {
+  font-family: 'source-bold';
+  font-size: 1.5em;
+}
+
+.fade {
+  opacity: 1;
+}
+
+/* mobile styles */
+@media only screen and (max-width: 400px) {
+  .profile {
+    width: 90vw;
+  }
+}
+
+/* tablet styles */
+@media only screen and (min-width: 401px) and (max-width: 960px) {
+  .profile {
+    width: 90vw;
+  }
+}
+
+/* desktop styles */
+@media only screen and (min-width: 961px) {
+}

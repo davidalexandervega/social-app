@@ -47,6 +47,7 @@ const NewPost = (props) => {
         }));
       }, 1000);
     }
+    fileRef.current.value = null;
   };
 
   useEffect(() => {

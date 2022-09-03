@@ -26,9 +26,11 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 @csrf_exempt
 def userApi(request, user_id=0):
   if request.method == 'GET':
-    user = User.objects.get(id=user_id)
-    user_serializer = UserSerializer(user)
-    return JsonResponse(user_serializer.data, safe=False)
+    user = User.objects.get(username=request.GET['username'])
+    if user:
+      user_serializer = UserSerializer(user)
+      return JsonResponse(user_serializer.data, safe=False)
+    return JsonResponse('user not found', safe=False)
   elif request.method == 'POST':
     user_data = JSONParser().parse(request)
     user_serializer = UserSerializer(data=user_data)

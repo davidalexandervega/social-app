@@ -6,6 +6,7 @@ import './assets/styles/global.scss';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
+import Profile from './views/Profile';
 import Notifications from './views/Notifications';
 import Feed from './views/Feed';
 import Login from './views/Login';
@@ -36,6 +37,7 @@ const App = () => {
       <div id="page">
         <Sidebar newPostData={newPostData} setNewPost={setNewPost} notify={notify} />
         <Routes>
+          <Route path="/users/:username" element={<Profile />} />
           <Route
             path="/notifications"
             element={<Notifications notify={notify} setNotify={setNotify} />}

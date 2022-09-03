@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import jwt from 'jwt-decode';
 
 import { logout, reset } from '../features/auth/authSlice';
 
@@ -18,6 +19,11 @@ const Header = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+
+  let username = '';
+  if (user) {
+    username = jwt(user.access).username;
+  }
 
   const { notify } = props;
 
@@ -38,7 +44,7 @@ const Header = (props) => {
         width="3em"
         strokeWidth="0.75"
         className="button"
-        onClick={() => navigate('/profile')}
+        onClick={() => navigate(`/users/` + username)}
       />
       {user ? (
         <>

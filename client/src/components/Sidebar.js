@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import jwt from 'jwt-decode';
 
 import { logout, reset } from '../features/auth/authSlice';
 import NewPost from './NewPost';
@@ -22,6 +23,11 @@ const Sidebar = (props) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
+  let username = '';
+  if (user) {
+    username = jwt(user.access).username;
+  }
+
   const loadFeed = () => {
     navigate('/');
   };
@@ -34,7 +40,7 @@ const Sidebar = (props) => {
 
   return (
     <header className="sidebar">
-      <span className="button labelButton" onClick={() => navigate('/profile')}>
+      <span className="button labelButton" onClick={() => navigate(`/users/` + username)}>
         <ProfileCircled height="2em" width="2em" strokeWidth="1.1" />
         profile
       </span>

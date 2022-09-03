@@ -22,7 +22,7 @@ const Notifications = (props) => {
   }, []);
 
   return (
-    <div className="notificationsView">
+    <div className="view">
       {notifications.map((notification) => (
         <Notification key={notification.id} notification={notification} />
       ))}
