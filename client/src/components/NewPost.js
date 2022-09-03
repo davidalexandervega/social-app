@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import jwt from 'jwt-decode';
 
 import { createPost } from '../features/post/postSlice';
 
@@ -12,8 +13,13 @@ import { DoubleCheck, Cancel } from 'iconoir-react';
 const NewPost = (props) => {
   const dispatch = useDispatch();
   const { newPostData, setNewPost, mode, setMode } = props;
-
   const { newPostBody, newPostImg, disableFile } = newPostData;
+
+  const { user } = useSelector((state) => state.auth);
+  let username = '';
+  if (user) {
+    username = jwt(user.access).username;
+  }
 
   const fileRef = useRef();
   const uploadButtonRef = useRef();
@@ -70,6 +76,7 @@ const NewPost = (props) => {
       const postID = uuidv4();
       const newPostData = {
         id: postID,
+        username: username,
         body: newPostBody,
         time: new Date(),
         likes: [],

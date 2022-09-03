@@ -29,6 +29,18 @@ const fetchAllPosts = async (token) => {
   return response.data;
 };
 
+const fetchUserPosts = async (username, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(API_URL + 'users/?username=' + username, config);
+
+  return response.data;
+};
+
 const fetchPostById = async (postID, token) => {
   const config = {
     headers: {
@@ -67,6 +79,7 @@ const deletePost = async (postID, token) => {
 
 const postService = {
   createPost,
+  fetchUserPosts,
   fetchAllPosts,
   fetchPostById,
   likePost,

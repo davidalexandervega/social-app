@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { fetchUser } from '../features/auth/authSlice';
+import { fetchUserPosts, reset as resetPosts } from '../features/post/postSlice';
+
+import Post from '../components/Post';
 
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
@@ -16,6 +19,7 @@ const Profile = () => {
   const dispatch = useDispatch();
 
   const { user, profileUser } = useSelector((state) => state.auth);
+  const { posts } = useSelector((state) => state.post);
 
   const cloudinary = new Cloudinary({
     cloud: {
@@ -25,6 +29,7 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch(fetchUser(username));
+    dispatch(fetchUserPosts(username));
   }, [dispatch, username]);
 
   const profileRef = useRef();
@@ -37,37 +42,54 @@ const Profile = () => {
     }
   }, [profileUser]);
 
+  useEffect(() => {
+    return () => {
+      console.log('reset');
+      dispatch(resetPosts());
+    };
+  }, []);
+
   return (
     <div className="view">
       {profileUser ? (
-        <div className="profile" ref={profileRef}>
-          <div className="profileBanner">
-            {profileUser.banner === true ? (
-              <AdvancedImage
-                cldImg={cloudinary.image(`/banners/${profileUser.id}`)}
-                className="bannerImage"
-              />
-            ) : null}
-          </div>
-          <div className="profileHeader">
-            <div className="profilePicture">
-              {profileUser.picture === true ? (
+        <>
+          <div className="profile" ref={profileRef}>
+            <div className="profileBanner">
+              {profileUser.banner === true ? (
                 <AdvancedImage
                   cldImg={cloudinary.image(`/banners/${profileUser.id}`)}
                   className="bannerImage"
                 />
-              ) : (
-                <ProfileCircled height="9em" width="9em" strokeWidth="0.5" fill="whitesmoke" />
-              )}
+              ) : null}
             </div>
-            <div className="profileHeaderRight">
-              <div className="profileUsername">@{profileUser.username}</div>
-              <div className="profileCreated">
-                initialized {new Date(profileUser.created).toLocaleDateString()}
+            <div className="profileHeader">
+              <div className="profilePicture">
+                {profileUser.picture === true ? (
+                  <AdvancedImage
+                    cldImg={cloudinary.image(`/banners/${profileUser.id}`)}
+                    className="bannerImage"
+                  />
+                ) : (
+                  <ProfileCircled height="9em" width="9em" strokeWidth="0.5" fill="whitesmoke" />
+                )}
+              </div>
+              <div className="profileHeaderRight">
+                <div className="profileUsername">@{profileUser.username}</div>
+                <div className="profileFollowing">{profileUser.following.length} following</div>
+                <div className="profileFollowers">{profileUser.followers.length} followers</div>
+                <div className="profilePostCount">{posts.length} posts</div>
+                <div className="profileCreated">
+                  initialized {new Date(profileUser.created).toLocaleDateString()}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+          <div className="profilePosts">
+            {posts.map((post) => (
+              <Post key={post.id} post={post} />
+            ))}
+          </div>
+        </>
       ) : null}
     </div>
   );

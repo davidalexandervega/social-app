@@ -28,7 +28,11 @@
   margin-right: 10px;
 }
 
+.profileFollowing,
+.profileFollowers,
+.profilePostCount,
 .profileCreated {
+  user-select: none;
   font-size: 0.7em;
 }
 

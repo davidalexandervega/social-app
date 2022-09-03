@@ -32,6 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Post(models.Model):
   id = models.UUIDField(primary_key=True)
   user = models.ForeignKey(User, on_delete=models.CASCADE)
+  username = models.CharField(max_length=200)
   image = models.BooleanField(default=False)
   body = models.CharField(max_length=200)
   time = models.DateTimeField()
@@ -42,6 +43,7 @@ class Reply(models.Model):
   id = models.UUIDField(primary_key=True)
   origin = models.ForeignKey(Post, on_delete=models.CASCADE)
   user = models.ForeignKey(User, on_delete=models.CASCADE)
+  username = models.CharField(max_length=200)
   image = models.BooleanField(default=False)
   body = models.CharField(max_length=200)
   time = models.DateTimeField()

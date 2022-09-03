@@ -60,8 +60,8 @@ def postApi(request):
       if posts:
         return JsonResponse(PostSerializer(posts, many=True).data, safe=False)
       return JsonResponse([], safe=False)
-    elif (request.method == 'GET') and (request.path == '/api/posts/user'):
-      posts = Post.objects.get(user=userID)
+    elif (request.method == 'GET') and (request.path == '/api/posts/users/'):
+      posts = Post.objects.all().filter(username=request.GET['username'])
       return JsonResponse(PostSerializer(posts, many=True).data, safe=False)
     elif (request.method == 'GET') and (request.GET['mode'] == 'origin'):
       post = Post.objects.get(id=request.GET['id'])

@@ -34,6 +34,7 @@ const NewReply = (props) => {
 
       const newReplyData = {
         id: replyID,
+        username: username,
         origin: post.id,
         body: newReplyBody,
         time: new Date(),

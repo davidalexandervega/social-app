@@ -35,6 +35,22 @@ export const fetchAllPosts = createAsyncThunk('posts/fetch', async (_, thunkAPI)
   }
 });
 
+export const fetchUserPosts = createAsyncThunk(
+  'posts/fetch/username',
+  async (username, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.access;
+      return await postService.fetchUserPosts(username, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const fetchPostById = createAsyncThunk('posts/fetch/id', async (postID, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.user.access;
@@ -104,6 +120,14 @@ export const postSlice = createSlice({
         state.posts = action.payload.sort((a, b) => new Date(b.time) - new Date(a.time));
       })
       .addCase(fetchAllPosts.rejected, (state, action) => {
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(fetchUserPosts.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        state.posts = action.payload;
+      })
+      .addCase(fetchUserPosts.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
       })
