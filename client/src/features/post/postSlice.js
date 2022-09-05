@@ -125,7 +125,7 @@ export const postSlice = createSlice({
       })
       .addCase(fetchUserPosts.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.posts = action.payload;
+        state.posts = action.payload.sort((a, b) => new Date(b.time) - new Date(a.time));
       })
       .addCase(fetchUserPosts.rejected, (state, action) => {
         state.isError = true;

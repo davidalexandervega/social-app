@@ -37,7 +37,7 @@ const App = () => {
       <div id="page">
         <Sidebar newPostData={newPostData} setNewPost={setNewPost} notify={notify} />
         <Routes>
-          <Route path="/users/:username" element={<Profile />} />
+          <Route path="/users/:profileUsername" element={<Profile />} />
           <Route
             path="/notifications"
             element={<Notifications notify={notify} setNotify={setNotify} />}

@@ -15,10 +15,10 @@ import { ProfileCircled } from 'iconoir-react';
 import '../assets/styles/Profile.scss';
 
 const Profile = () => {
-  const { username } = useParams();
+  const { profileUsername } = useParams();
   const dispatch = useDispatch();
 
-  const { user, profileUser } = useSelector((state) => state.auth);
+  const { userID, username, profileUser } = useSelector((state) => state.auth);
   const { posts } = useSelector((state) => state.post);
 
   const cloudinary = new Cloudinary({
@@ -28,9 +28,9 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    dispatch(fetchUser(username));
-    dispatch(fetchUserPosts(username));
-  }, [dispatch, username]);
+    dispatch(fetchUser(profileUsername));
+    dispatch(fetchUserPosts(profileUsername));
+  }, [dispatch, profileUsername]);
 
   const profileRef = useRef();
   useEffect(() => {
@@ -82,8 +82,16 @@ const Profile = () => {
                 <div className="profileCreated">
                   initialized {new Date(profileUser.created).toLocaleDateString()}
                 </div>
+                <div className="profileActions">
+                  {profileUser.id === userID ? (
+                    <div className="solidButton editProfileButton">edit profile</div>
+                  ) : (
+                    <div>follow</div>
+                  )}
+                </div>
               </div>
             </div>
+            <div className="profileBio">{profileUser.bio}living in a hydroxide world</div>
           </div>
           <div className="profilePosts">
             {posts.map((post) => (

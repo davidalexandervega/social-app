@@ -41,6 +41,24 @@
   font-size: 1.5em;
 }
 
+.profileActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+  font-size: 0.9em;
+}
+
+.editProfileButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+}
+
+.profileBio {
+  margin: 20px 10px 0 10px;
+}
+
 .fade {
   opacity: 1;
 }

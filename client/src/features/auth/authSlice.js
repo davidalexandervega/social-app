@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from './authService';
+import jwt from 'jwt-decode';
 
 // if user is in localStorage, parse the string into JSON and store it in user:
 const user = JSON.parse(localStorage.getItem('user'));
@@ -7,6 +8,8 @@ const user = JSON.parse(localStorage.getItem('user'));
 // set the initial state:
 const initialState = {
   user: user ? user : null,
+  userID: user ? jwt(user.access).user_id : null,
+  username: user ? jwt(user.access).username : null,
   profileUser: null,
   isError: false,
   isSuccess: false,
@@ -85,6 +88,8 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isSuccess = true;
         state.user = action.payload;
+        state.userID = jwt(user.access).user_id;
+        state.username = jwt(user.access).username;
       })
       .addCase(login.rejected, (state, action) => {
         state.isError = true;

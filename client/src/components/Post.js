@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import jwt from 'jwt-decode';
 
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
@@ -21,15 +20,8 @@ import { createNotification } from '../features/notification/notificationSlice';
 const Post = ({ post }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
+  const { userID, username } = useSelector((state) => state.auth);
   const { expandedPost } = useSelector((state) => state.reply);
-
-  let userID = '';
-  let username = '';
-  if (user) {
-    userID = jwt(user.access).user_id;
-    username = jwt(user.access).username;
-  }
 
   const cloudinary = new Cloudinary({
     cloud: {
@@ -71,7 +63,6 @@ const Post = ({ post }) => {
   });
 
   const onLikePost = (post) => {
-    console.log(jwt(user.access));
     // the state update allows for the like/unlike to be reflected immediately to the user.
     // the placeholder and color change the value immediately to reflect
     // the state that will be returned and reinforced by the useEffect() call below:
@@ -146,7 +137,9 @@ const Post = ({ post }) => {
             <ProfileCircled height="2em" width="2em" strokeWidth="1" fill="whitesmoke" />
           </span>
           &nbsp;
-          <span className="postUsername">@user</span>
+          <span className="postUsername" onClick={() => navigate(`/users/${post.username}`)}>
+            @{post.username}
+          </span>
           &nbsp;
           <span className="postTime">{displayTime()}</span>
         </span>

@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import jwt from 'jwt-decode';
 
 import { createPost } from '../features/post/postSlice';
 
@@ -15,11 +14,7 @@ const NewPost = (props) => {
   const { newPostData, setNewPost, mode, setMode } = props;
   const { newPostBody, newPostImg, disableFile } = newPostData;
 
-  const { user } = useSelector((state) => state.auth);
-  let username = '';
-  if (user) {
-    username = jwt(user.access).username;
-  }
+  const { username } = useSelector((state) => state.auth);
 
   const fileRef = useRef();
   const uploadButtonRef = useRef();

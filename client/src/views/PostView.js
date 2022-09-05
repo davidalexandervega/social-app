@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import jwt from 'jwt-decode';
@@ -22,19 +22,14 @@ import { createNotification } from '../features/notification/notificationSlice';
 
 const PostView = () => {
   const { id } = useParams();
+  const { userID, username } = useSelector((state) => state.auth);
   const { posts } = useSelector((state) => state.post);
   const post = posts.length > 1 ? posts.find((post) => post.id === id) : posts[0];
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const { user } = useSelector((state) => state.auth);
   const { replies } = useSelector((state) => state.reply);
 
-  let userID = '';
-  let username = '';
-  if (user) {
-    userID = jwt(user.access).user_id;
-    username = jwt(user.access).username;
-  }
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const cloudinary = new Cloudinary({
     cloud: {
@@ -159,7 +154,9 @@ const PostView = () => {
                 <ProfileCircled height="2em" width="2em" strokeWidth="1" fill="whitesmoke" />
               </span>
               &nbsp;
-              <span className="postUsername">@user</span>
+              <span className="postUsername" onClick={() => navigate(`/users/${post.username}`)}>
+                @{post.username}
+              </span>
               &nbsp;
               <span className="postTime">{displayTime()}</span>
             </span>
