@@ -2,6 +2,9 @@ import React, { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProfileCircled, Heart, ChatBubbleEmpty } from 'iconoir-react';
 
+import { Cloudinary } from '@cloudinary/url-gen';
+import { AdvancedImage } from '@cloudinary/react';
+
 import '../assets/styles/Post.scss';
 import '../assets/styles/Notification.scss';
 
@@ -9,6 +12,12 @@ const Notification = (props) => {
   const { notification } = props;
 
   const navigate = useNavigate();
+
+  const cloudinary = new Cloudinary({
+    cloud: {
+      cloudName: 'dgwf4o5mj',
+    },
+  });
 
   const notificationRef = useRef();
   useEffect(() => {
@@ -59,6 +68,16 @@ const Notification = (props) => {
           <ProfileCircled strokeWidth="1.1" fill="whitesmoke" />
         ) : null}
       </div>
+      <span className="notificationCreatorPicture">
+        {cloudinary.image(`/pictures/${notification.creator_id}`) ? (
+          <AdvancedImage
+            className="notificationCreatorImage"
+            cldImg={cloudinary.image(`/pictures/${notification.creator_id}`)}
+          />
+        ) : (
+          <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />
+        )}
+      </span>
       <div className="notificationCreator">@{notification.creator_name}</div>
       <div className="notificationAction" onClick={() => onClickAction(notification.type)}>
         {notification.type.includes('like_post') ? 'liked your post.' : null}

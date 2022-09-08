@@ -14,6 +14,21 @@
   background-color: rgb(232, 226, 244);
 }
 
+.notificationCreatorPicture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 37px;
+  width: 37px;
+  margin-left: 10px;
+}
+
+.notificationCreatorImage {
+  height: 37px;
+  width: 37px;
+  border-radius: 50%;
+}
+
 .notificationCreator {
   display: flex;
   align-items: center;
@@ -39,6 +54,7 @@
 }
 
 .notificationTime {
+  justify-self: flex-end;
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -46,7 +62,11 @@
 /* mobile styles */
 @media only screen and (max-width: 400px) {
   .notification {
-    font-size: 0.75em;
+    font-size: 0.65em;
+  }
+  .notificationIcon {
+    font-size: 1.4em;
+    padding: 0 10px 0 10px;
   }
 }
 

@@ -18,7 +18,7 @@ const Profile = () => {
   const { profileUsername } = useParams();
   const dispatch = useDispatch();
 
-  const { userID, username, profileUser } = useSelector((state) => state.auth);
+  const { userID, profileUser } = useSelector((state) => state.auth);
   const { posts } = useSelector((state) => state.post);
 
   const cloudinary = new Cloudinary({
@@ -47,7 +47,7 @@ const Profile = () => {
     return () => {
       dispatch(resetPosts());
     };
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="view">

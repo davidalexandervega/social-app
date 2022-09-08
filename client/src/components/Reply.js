@@ -3,7 +3,11 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jwt-decode';
+
 import DeleteReplyPrompt from './DeleteReplyPrompt';
+
+import { Cloudinary } from '@cloudinary/url-gen';
+import { AdvancedImage } from '@cloudinary/react';
 
 import '../assets/styles/Post.scss';
 import { ProfileCircled, Heart, Cancel } from 'iconoir-react';
@@ -22,6 +26,12 @@ const Reply = (props) => {
     userID = jwt(user.access).user_id;
     username = jwt(user.access).username;
   }
+
+  const cloudinary = new Cloudinary({
+    cloud: {
+      cloudName: 'dgwf4o5mj',
+    },
+  });
 
   const replyRef = useRef();
   useEffect(() => {
@@ -113,7 +123,14 @@ const Reply = (props) => {
       <div className="post reply" ref={replyRef}>
         <span className="postHeader">
           <span className="postUserPicture">
-            <ProfileCircled height="2em" width="2em" strokeWidth="1" fill="whitesmoke" />
+            {cloudinary.image(`/pictures/${post.user}`) ? (
+              <AdvancedImage
+                className="postUserImage"
+                cldImg={cloudinary.image(`/pictures/${post.user}`)}
+              />
+            ) : (
+              <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />
+            )}
           </span>
           &nbsp;
           <span className="postUsername">@user</span>
