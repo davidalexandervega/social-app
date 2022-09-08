@@ -29,7 +29,7 @@
 }
 
 .postHeader {
-  padding: 2px 4px 2px 4px;
+  padding: 7px 7px 7px 7px;
   display: flex;
 }
 
@@ -38,6 +38,20 @@
 .postTime {
   display: inline-flex;
   align-items: center;
+}
+
+.postUserPicture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 37px;
+  width: 37px;
+}
+
+.postUserImage {
+  height: 37px;
+  width: 37px;
+  border-radius: 50%;
 }
 
 .postUsername {

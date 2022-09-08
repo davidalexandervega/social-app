@@ -17,7 +17,28 @@
   background-color: rgb(232, 226, 244);
 }
 
+.bannerImage {
+  max-height: 150px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.profilePicture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 129px;
+  width: 129px;
+}
+
+.profileImage {
+  border-radius: 50%;
+  height: 129px;
+  width: 129px;
+}
+
 .profileHeader {
+  padding: 10px 10px 10px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -37,6 +58,7 @@
 }
 
 .profileUsername {
+  cursor: default;
   font-family: 'source-bold';
   font-size: 1.5em;
 }
@@ -49,6 +71,7 @@
 }
 
 .editProfileButton {
+  user-select: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,6 +79,7 @@
 }
 
 .profileBio {
+  cursor: default;
   margin: 20px 10px 0 10px;
 }
 

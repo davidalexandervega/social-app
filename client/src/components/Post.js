@@ -134,7 +134,14 @@ const Post = ({ post }) => {
       <div className="post" ref={postRef}>
         <span className="postHeader">
           <span className="postUserPicture">
-            <ProfileCircled height="2em" width="2em" strokeWidth="1" fill="whitesmoke" />
+            {cloudinary.image(`/pictures/${post.user}`) ? (
+              <AdvancedImage
+                className="postUserImage"
+                cldImg={cloudinary.image(`/pictures/${post.user}`)}
+              />
+            ) : (
+              <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />
+            )}
           </span>
           &nbsp;
           <span className="postUsername" onClick={() => navigate(`/users/${post.username}`)}>

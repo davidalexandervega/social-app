@@ -45,7 +45,6 @@ const Profile = () => {
   useEffect(() => {
     dispatch(resetPosts());
     return () => {
-      console.log('reset');
       dispatch(resetPosts());
     };
   }, []);
@@ -67,11 +66,16 @@ const Profile = () => {
               <div className="profilePicture">
                 {profileUser.picture === true ? (
                   <AdvancedImage
-                    cldImg={cloudinary.image(`/banners/${profileUser.id}`)}
-                    className="bannerImage"
+                    cldImg={cloudinary.image(`/pictures/${profileUser.id}`)}
+                    className="profileImage"
                   />
                 ) : (
-                  <ProfileCircled height="9em" width="9em" strokeWidth="0.5" fill="whitesmoke" />
+                  <ProfileCircled
+                    height="150px"
+                    width="150px"
+                    strokeWidth="0.5"
+                    fill="whitesmoke"
+                  />
                 )}
               </div>
               <div className="profileHeaderRight">
