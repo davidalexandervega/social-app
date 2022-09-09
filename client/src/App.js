@@ -7,6 +7,7 @@ import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
 import Profile from './views/Profile';
+import EditProfile from './views/EditProfile';
 import Notifications from './views/Notifications';
 import Feed from './views/Feed';
 import Login from './views/Login';
@@ -38,6 +39,7 @@ const App = () => {
         <Sidebar newPostData={newPostData} setNewPost={setNewPost} notify={notify} />
         <Routes>
           <Route path="/users/:profileUsername" element={<Profile />} />
+          <Route path="/users/:profileUsername/edit" element={<EditProfile />} />
           <Route
             path="/notifications"
             element={<Notifications notify={notify} setNotify={setNotify} />}

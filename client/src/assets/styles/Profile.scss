@@ -70,6 +70,11 @@
   font-size: 0.9em;
 }
 
+.profileBio {
+  cursor: default;
+  margin: 20px 10px 0 10px;
+}
+
 .editProfileButton {
   user-select: none;
   display: flex;
@@ -78,9 +83,36 @@
   width: 100px;
 }
 
-.profileBio {
+.editProfile {
+  height: 450px;
+}
+
+.editProfileHeader {
+  width: 70vw;
+  max-width: 500px;
+  font-family: 'source-bold';
+  font-size: 1.5em;
+  transition: opacity 0.75s ease-out;
+  opacity: 0;
   cursor: default;
-  margin: 20px 10px 0 10px;
+}
+
+.editProfileBody {
+  padding: 20px 20px 20px 20px;
+}
+
+.editBio {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.editBioControl {
+  display: flex;
+  flex-grow: 1;
+  height: 100px;
+  resize: none;
 }
 
 .fade {
@@ -92,11 +124,17 @@
   .profile {
     width: 90vw;
   }
+  .editProfileHeader {
+    width: 90vw;
+  }
 }
 
 /* tablet styles */
 @media only screen and (min-width: 401px) and (max-width: 960px) {
   .profile {
+    width: 90vw;
+  }
+  .editProfileHeader {
     width: 90vw;
   }
 }

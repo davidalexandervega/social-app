@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { fetchUser } from '../features/auth/authSlice';
@@ -17,6 +17,7 @@ import '../assets/styles/Profile.scss';
 const Profile = () => {
   const { profileUsername } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { userID, profileUser } = useSelector((state) => state.auth);
   const { posts } = useSelector((state) => state.post);
@@ -88,9 +89,14 @@ const Profile = () => {
                 </div>
                 <div className="profileActions">
                   {profileUser.id === userID ? (
-                    <div className="solidButton editProfileButton">edit profile</div>
+                    <div
+                      className="solidButton editProfileButton"
+                      onClick={() => navigate(`/users/${profileUser.username}/edit`)}
+                    >
+                      edit profile
+                    </div>
                   ) : (
-                    <div>follow</div>
+                    <div className="solidButton">follow</div>
                   )}
                 </div>
               </div>
