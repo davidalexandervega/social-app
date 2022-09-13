@@ -12,6 +12,8 @@
 }
 
 .profileBanner {
+  position: relative;
+  display: flex;
   height: 150px;
   width: 100%;
   background-color: rgb(232, 226, 244);
@@ -97,11 +99,38 @@
   cursor: default;
 }
 
+.editImageActions {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  height: 150px;
+  width: 100%;
+}
+
+.editImageAction:hover {
+  cursor: pointer;
+  fill: whitesmoke;
+}
+
 .editProfileBody {
-  padding: 20px 20px 20px 20px;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 20px 0px 20px;
+}
+
+.editProfileActions {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
 }
 
 .editBio {
+  padding: 0px 20px 20px 20px;
   margin-top: 20px;
   display: flex;
   align-items: center;

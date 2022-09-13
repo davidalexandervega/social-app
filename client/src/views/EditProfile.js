@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
 import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { fetchUser } from '../features/auth/authSlice';
 
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
 
-import { ProfileCircled } from 'iconoir-react';
+import { ProfileCircled, RemoveSquare, UploadSquareOutline } from 'iconoir-react';
 
 const EditProfile = () => {
   const { profileUsername } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { userID, profileUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!profileUser) dispatch(fetchUser(profileUsername));
-  }, [dispatch, profileUsername, profileUser]);
+    if (!profileUser) navigate('/');
+  }, [dispatch, navigate, profileUser]);
 
   const [formData, setFormData] = useState({
     picture: '',
@@ -103,6 +104,22 @@ const EditProfile = () => {
                 className="bannerImage"
               />
             ) : null}
+            <div className="editImageActions">
+              <UploadSquareOutline
+                className="editImageAction"
+                height="1.75em"
+                width="1.75em"
+                strokeWidth="0.9"
+                fill="rgba(245, 245, 245, 0.8)"
+              />
+              <RemoveSquare
+                className="editImageAction"
+                height="1.75em"
+                width="1.75em"
+                strokeWidth="0.9"
+                fill="rgba(245, 245, 245, 0.8)"
+              />
+            </div>
           </div>
           <div className="editProfileBody">
             <div className="profilePicture">
@@ -114,19 +131,44 @@ const EditProfile = () => {
               ) : (
                 <ProfileCircled height="150px" width="150px" strokeWidth="0.5" fill="whitesmoke" />
               )}
+              <div className="editImageActions">
+                <UploadSquareOutline
+                  className="editImageAction"
+                  height="1.75em"
+                  width="1.75em"
+                  strokeWidth="0.9"
+                  fill="rgba(245, 245, 245, 0.8)"
+                />
+                <RemoveSquare
+                  className="editImageAction"
+                  height="1.75em"
+                  width="1.75em"
+                  strokeWidth="0.9"
+                  fill="rgba(245, 245, 245, 0.8)"
+                />
+              </div>
             </div>
-            <div className="editBio">
-              <label htmlFor="bio">bio</label>
-              <textarea
-                className="editBioControl"
-                id="bio"
-                name="bio"
-                value={bio}
-                onChange={onChange}
-                maxLength="200"
-              />
-              <span className="charLeft" ref={charLeftRef}></span>
+            <div className="editProfileActions">
+              <div className="solidButton editProfileButton">save changes</div>
+              <div
+                className="solidButton redButton editProfileButton"
+                onClick={() => navigate(`/users/${profileUsername}`)}
+              >
+                cancel
+              </div>
             </div>
+          </div>
+          <div className="editBio">
+            <label htmlFor="bio">bio</label>
+            <textarea
+              className="editBioControl"
+              id="bio"
+              name="bio"
+              value={bio}
+              onChange={onChange}
+              maxLength="200"
+            />
+            <span className="charLeft" ref={charLeftRef}></span>
           </div>
         </div>
       ) : (
