@@ -41,11 +41,30 @@ const fetchUser = async (username, token) => {
   return response.data;
 };
 
+const editUser = async (profileData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.put(
+    API_URL + 'edit/?username=' + profileData.username,
+    profileData,
+    config
+  );
+
+  console.log(response.data);
+
+  return response.data;
+};
+
 const authService = {
   register,
   login,
   logout,
   fetchUser,
+  editUser,
 };
 
 export default authService;

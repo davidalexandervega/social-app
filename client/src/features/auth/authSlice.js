@@ -11,6 +11,7 @@ const initialState = {
   userID: user ? jwt(user.access).user_id : null,
   username: user ? jwt(user.access).username : null,
   profileUser: null,
+  profileUpdate: false,
   isError: false,
   isSuccess: false,
   message: '',
@@ -62,6 +63,19 @@ export const fetchUser = createAsyncThunk('auth/fetch/username', async (username
   }
 });
 
+export const editUser = createAsyncThunk('auth/edit', async (profileData, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().auth.user.access;
+    return await authService.editUser(profileData, token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -70,6 +84,9 @@ export const authSlice = createSlice({
       state.isSuccess = false;
       state.isError = false;
       state.message = '';
+    },
+    confirmUpdate: (state) => {
+      state.profileUpdate = false;
     },
   },
 
@@ -106,12 +123,22 @@ export const authSlice = createSlice({
       .addCase(fetchUser.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
+      })
+      .addCase(editUser.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        state.user.bio = action.payload.bio;
+        state.profileUser = action.payload;
+        state.profileUpdate = true;
+      })
+      .addCase(editUser.rejected, (state, action) => {
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });
 
 // export the reducer of the slice:
-export const { reset } = authSlice.actions;
+export const { reset, confirmUpdate } = authSlice.actions;
 
 // export the slice (which is a reducer of the global store):
 export default authSlice.reducer;

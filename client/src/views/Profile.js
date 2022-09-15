@@ -58,7 +58,7 @@ const Profile = () => {
             <div className="profileBanner">
               {profileUser.banner === true ? (
                 <AdvancedImage
-                  cldImg={cloudinary.image(`/banners/${profileUser.id}`)}
+                  cldImg={cloudinary.image(`/banners/${profileUser.id}`).setVersion(Date.now())}
                   className="bannerImage"
                 />
               ) : null}
@@ -67,7 +67,7 @@ const Profile = () => {
               <div className="profilePicture">
                 {profileUser.picture === true ? (
                   <AdvancedImage
-                    cldImg={cloudinary.image(`/pictures/${profileUser.id}`)}
+                    cldImg={cloudinary.image(`/pictures/${profileUser.id}`).setVersion(Date.now())}
                     className="profileImage"
                   />
                 ) : (
@@ -101,7 +101,7 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-            <div className="profileBio">{profileUser.bio}living in a hydroxide world</div>
+            <div className="profileBio">{profileUser.bio}</div>
           </div>
           <div className="profilePosts">
             {posts.map((post) => (

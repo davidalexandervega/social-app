@@ -137,7 +137,7 @@ const Post = ({ post }) => {
             {cloudinary.image(`/pictures/${post.user}`) ? (
               <AdvancedImage
                 className="postUserImage"
-                cldImg={cloudinary.image(`/pictures/${post.user}`)}
+                cldImg={cloudinary.image(`/pictures/${post.user}`).setVersion(Date.now())}
               />
             ) : (
               <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />

@@ -37,13 +37,16 @@ def userApi(request, user_id=0):
     if user_serializer.is_valid(raise_exception=True):
       user_serializer.save()
       return JsonResponse('created a user', safe=False)
-  elif request.method == 'PUT':
-    user_data = JSONParser().parse(request)
-    user = User.objects.get(id=user_data['id'])
-    user_serializer = UserSerializer(user, data=user_data)
-    if user_serializer.is_valid():
-      user_serializer.save()
-      return JsonResponse('updated a user', safe=False)
+  elif request.method == 'PUT'and ('edit' in request.path):
+    profile_data = JSONParser().parse(request)
+    user = User.objects.get(id=profile_data['id'])
+    if profile_data['deleteBanner'] == True:
+      cloudinary.uploader.destroy('banners/' + profile_data['id'])
+    if profile_data['deletePicture'] == True:
+      cloudinary.uploader.destroy('pictures/' + profile_data['id'])
+    user.bio = profile_data['bio']
+    user.save()
+    return JsonResponse(UserSerializer(user).data, safe=False)
   elif request.method == 'DELETE':
     user = User.objects.get(id=user_id)
     user.delete()
