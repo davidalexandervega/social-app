@@ -2,7 +2,6 @@ import React from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import jwt from 'jwt-decode';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Cloudinary } from '@cloudinary/url-gen';
@@ -57,7 +56,7 @@ const PostView = () => {
       postRef.current.classList.add('fade', 'slide');
       const timer = setTimeout(() => {
         postViewRef.current.classList.add('fade');
-      }, 10);
+      }, 600);
       return () => clearTimeout(timer);
     }
   }, [post]);
@@ -154,7 +153,7 @@ const PostView = () => {
                 {cloudinary.image(`/pictures/${post.user}`) ? (
                   <AdvancedImage
                     className="postUserImage"
-                    cldImg={cloudinary.image(`/pictures/${post.user}`)}
+                    cldImg={cloudinary.image(`/pictures/${post.user}`).setVersion(Date.now())}
                   />
                 ) : (
                   <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />

@@ -38,7 +38,7 @@ const Profile = () => {
     if (profileUser) {
       const timer = setTimeout(() => {
         profileRef.current.classList.add('fade', 'slide');
-      }, 100);
+      }, 700);
       return () => clearTimeout(timer);
     }
   }, [profileUser]);

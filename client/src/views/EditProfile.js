@@ -29,7 +29,7 @@ const EditProfile = () => {
       const timer = setTimeout(() => {
         editProfileRef.current.classList.add('fade');
         editProfileHeaderRef.current.classList.add('fade');
-      }, 100);
+      }, 700);
       return () => clearTimeout(timer);
     }
   }, [profileUser]);
