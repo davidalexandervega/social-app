@@ -44,8 +44,25 @@ def userApi(request, user_id=0):
       cloudinary.uploader.destroy('banners/' + profile_data['id'])
     if profile_data['deletePicture'] == True:
       cloudinary.uploader.destroy('pictures/' + profile_data['id'])
+    user.banner = profile_data['banner']
+    user.picture = profile_data['picture']
     user.bio = profile_data['bio']
     user.save()
+    posts = Post.objects.all().filter(user=profile_data['id'])
+    if posts:
+      for post in posts:
+        post.userPicture = profile_data['picture']
+        post.save()
+    replies = Reply.objects.all().filter(user=profile_data['id'])
+    if replies:
+      for reply in replies:
+        reply.userPicture = profile_data['picture']
+        reply.save()
+    notifications = Notification.objects.all().filter(creator_id=profile_data['id'])
+    if notifications:
+      for notification in notifications:
+        notification.creator_picture = profile_data['picture']
+        notification.save()
     return JsonResponse(UserSerializer(user).data, safe=False)
   elif request.method == 'DELETE':
     user = User.objects.get(id=user_id)

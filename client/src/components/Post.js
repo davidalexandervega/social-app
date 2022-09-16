@@ -20,7 +20,7 @@ import { createNotification } from '../features/notification/notificationSlice';
 const Post = ({ post }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userID, username } = useSelector((state) => state.auth);
+  const { userID, username, picture } = useSelector((state) => state.auth);
   const { expandedPost } = useSelector((state) => state.reply);
 
   const cloudinary = new Cloudinary({
@@ -134,7 +134,7 @@ const Post = ({ post }) => {
       <div className="post" ref={postRef}>
         <span className="postHeader">
           <span className="postUserPicture">
-            {cloudinary.image(`/pictures/${post.user}`) ? (
+            {post.userPicture ? (
               <AdvancedImage
                 className="postUserImage"
                 cldImg={cloudinary.image(`/pictures/${post.user}`).setVersion(Date.now())}
@@ -187,6 +187,7 @@ const Post = ({ post }) => {
             replyDelta={replyDelta}
             username={username}
             userID={userID}
+            userPicture={picture}
           />
         </div>
       ) : (

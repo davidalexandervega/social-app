@@ -69,7 +69,7 @@ const Notification = (props) => {
         ) : null}
       </div>
       <span className="notificationCreatorPicture">
-        {cloudinary.image(`/pictures/${notification.creator_id}`) ? (
+        {notification.creator_picture ? (
           <AdvancedImage
             className="notificationCreatorImage"
             cldImg={cloudinary.image(`/pictures/${notification.creator_id}`).setVersion(Date.now())}

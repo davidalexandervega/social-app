@@ -25,14 +25,14 @@ class UserSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
   class Meta:
     model = Post
-    fields = ['id', 'user', 'username', 'image', 'body', 'time', 'likes', 'replies']
+    fields = ['id', 'user', 'username', 'userPicture', 'image', 'body', 'time', 'likes', 'replies']
 
 class ReplySerializer(serializers.ModelSerializer):
   class Meta:
     model = Reply
-    fields = ['id', 'origin', 'user', 'image', 'body', 'time', 'likes']
+    fields = ['id', 'origin', 'user', 'userPicture', 'image', 'body', 'time', 'likes']
 
 class NotificationSerializer(serializers.ModelSerializer):
   class Meta:
     model = Notification
-    fields = ['id', 'time', 'creator_id', 'creator_name', 'target_id', 'type', 'object', 'seen']
+    fields = ['id', 'time', 'creator_id', 'creator_name', 'creator_picture', 'target_id', 'type', 'object', 'seen']

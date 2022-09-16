@@ -56,7 +56,7 @@ const Profile = () => {
         <>
           <div className="profile" ref={profileRef}>
             <div className="profileBanner">
-              {profileUser.banner === true ? (
+              {profileUser.banner ? (
                 <AdvancedImage
                   cldImg={cloudinary.image(`/banners/${profileUser.id}`).setVersion(Date.now())}
                   className="bannerImage"
@@ -65,7 +65,7 @@ const Profile = () => {
             </div>
             <div className="profileHeader">
               <div className="profilePicture">
-                {profileUser.picture === true ? (
+                {profileUser.picture ? (
                   <AdvancedImage
                     cldImg={cloudinary.image(`/pictures/${profileUser.id}`).setVersion(Date.now())}
                     className="profileImage"

@@ -11,7 +11,7 @@ import { DoubleCheck, Cancel } from 'iconoir-react';
 
 const NewReply = (props) => {
   const dispatch = useDispatch();
-  const { post, resetReplies, replyDelta, postView, username, userID } = props;
+  const { post, resetReplies, replyDelta, postView, username, userID, userPicture } = props;
 
   const [newReplyData, setNewReply] = useState({
     newReplyBody: '',
@@ -35,6 +35,7 @@ const NewReply = (props) => {
       const newReplyData = {
         id: replyID,
         username: username,
+        userPicture: userPicture,
         origin: post.id,
         body: newReplyBody,
         time: new Date(),
@@ -55,6 +56,7 @@ const NewReply = (props) => {
           id: uuidv4(),
           time: new Date(),
           creator_id: userID,
+          creator_picture: userPicture,
           creator_name: username,
           target_id: post.user,
           type: 'reply_post',

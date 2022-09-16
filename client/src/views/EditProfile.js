@@ -35,12 +35,14 @@ const EditProfile = () => {
   }, [profileUser, profileUpdate]);
 
   const [formData, setFormData] = useState({
-    picture: null,
-    banner: null,
+    banner: profileUser.banner,
+    deleteBanner: false,
+    picture: profileUser.picture,
+    deletePicture: false,
     bio: profileUser ? profileUser.bio : '',
   });
 
-  const { picture, banner, bio } = formData;
+  const { banner, picture, bio } = formData;
 
   const cloudName = 'dgwf4o5mj';
   const cloudinary = new Cloudinary({
@@ -48,22 +50,6 @@ const EditProfile = () => {
       cloudName: cloudName,
     },
   });
-
-  useEffect(() => {
-    if (cloudinary.image(`/banners/${profileUser.id}`)) {
-      setFormData((prevState) => ({
-        ...prevState,
-        banner: true,
-      }));
-    }
-    if (cloudinary.image(`/pictures/${profileUser.id}`)) {
-      setFormData((prevState) => ({
-        ...prevState,
-        picture: true,
-      }));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const bannerRef = useRef();
   const pictureRef = useRef();
@@ -73,11 +59,13 @@ const EditProfile = () => {
       setFormData((prevState) => ({
         ...prevState,
         banner: URL.createObjectURL(bannerRef.current.files[0]),
+        deleteBanner: true,
       }));
     } else {
       setFormData((prevState) => ({
         ...prevState,
         banner: null,
+        deleteBanner: true,
       }));
     }
   };
@@ -87,6 +75,7 @@ const EditProfile = () => {
       setFormData((prevState) => ({
         ...prevState,
         banner: null,
+        deleteBanner: true,
       }));
     }
     bannerRef.current.value = null;
@@ -97,11 +86,13 @@ const EditProfile = () => {
       setFormData((prevState) => ({
         ...prevState,
         picture: URL.createObjectURL(pictureRef.current.files[0]),
+        deletePicture: true,
       }));
     } else {
       setFormData((prevState) => ({
         ...prevState,
         picture: null,
+        deletePicture: true,
       }));
     }
   };
@@ -111,6 +102,7 @@ const EditProfile = () => {
       setFormData((prevState) => ({
         ...prevState,
         picture: null,
+        deletePicture: true,
       }));
     }
     pictureRef.current.value = null;
@@ -134,8 +126,10 @@ const EditProfile = () => {
     const profileData = {
       username: profileUsername,
       id: profileUser.id,
-      deleteBanner: formData.banner === true ? false : true,
-      deletePicture: formData.picture === true ? false : true,
+      banner: formData.banner ? true : false,
+      deleteBanner: formData.deleteBanner,
+      picture: formData.picture ? true : false,
+      deletePicture: formData.deletePicture,
       bio: formData.bio,
     };
     dispatch(editUser(profileData));
