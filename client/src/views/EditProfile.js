@@ -25,14 +25,14 @@ const EditProfile = () => {
   const editProfileHeaderRef = useRef();
   const editProfileRef = useRef();
   useEffect(() => {
-    if (profileUser) {
+    if (profileUser && profileUpdate === false) {
       const timer = setTimeout(() => {
         editProfileRef.current.classList.add('fade');
         editProfileHeaderRef.current.classList.add('fade');
       }, 700);
       return () => clearTimeout(timer);
     }
-  }, [profileUser]);
+  }, [profileUser, profileUpdate]);
 
   const [formData, setFormData] = useState({
     picture: null,
@@ -116,10 +116,6 @@ const EditProfile = () => {
     pictureRef.current.value = null;
   };
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
-
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -143,6 +139,10 @@ const EditProfile = () => {
       bio: formData.bio,
     };
     dispatch(editUser(profileData));
+    setTimeout(() => {
+      editProfileRef.current.classList.remove('fade');
+      editProfileHeaderRef.current.classList.remove('fade');
+    }, 10);
   };
 
   useEffect(() => {
@@ -167,12 +167,8 @@ const EditProfile = () => {
           .post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, pictureData)
           .then((response) => console.log(response));
       }
-      dispatch(confirmUpdate());
       setTimeout(() => {
-        editProfileRef.current.classList.remove('fade');
-        editProfileHeaderRef.current.classList.remove('fade');
-      }, 10);
-      setTimeout(() => {
+        dispatch(confirmUpdate());
         navigate(`/users/${profileUsername}`);
       }, 1000);
     }

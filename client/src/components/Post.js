@@ -33,7 +33,7 @@ const Post = ({ post }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       postRef.current.classList.add('fade', 'slide');
-    }, 600);
+    }, 500);
     return () => clearTimeout(timer);
   }, []);
 

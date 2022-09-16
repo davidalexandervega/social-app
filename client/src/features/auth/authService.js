@@ -36,8 +36,6 @@ const fetchUser = async (username, token) => {
 
   const response = await axios.get(API_URL + '?username=' + username, config);
 
-  console.log(response.data);
-
   return response.data;
 };
 
@@ -53,8 +51,6 @@ const editUser = async (profileData, token) => {
     profileData,
     config
   );
-
-  console.log(response.data);
 
   return response.data;
 };

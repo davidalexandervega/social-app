@@ -19,7 +19,7 @@ const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { userID, profileUser } = useSelector((state) => state.auth);
+  const { username, userID, profileUser } = useSelector((state) => state.auth);
   const { posts } = useSelector((state) => state.post);
 
   const cloudinary = new Cloudinary({
@@ -31,7 +31,7 @@ const Profile = () => {
   useEffect(() => {
     dispatch(fetchUser(profileUsername));
     dispatch(fetchUserPosts(profileUsername));
-  }, [dispatch, profileUsername]);
+  }, [dispatch, username, profileUsername]);
 
   const profileRef = useRef();
   useEffect(() => {

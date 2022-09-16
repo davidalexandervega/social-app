@@ -127,7 +127,7 @@ export const authSlice = createSlice({
       .addCase(editUser.fulfilled, (state, action) => {
         state.isSuccess = true;
         state.user.bio = action.payload.bio;
-        state.profileUser = action.payload;
+        state.profileUser.bio = action.payload.bio;
         state.profileUpdate = true;
       })
       .addCase(editUser.rejected, (state, action) => {
