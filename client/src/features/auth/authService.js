@@ -68,7 +68,21 @@ const editUser = async (userData, token) => {
     config
   );
 
-  console.log(response.data);
+  return response.data;
+};
+
+const changePassword = async (passwordData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.put(
+    API_URL + 'change-password/?username=' + passwordData.username,
+    passwordData,
+    config
+  );
 
   return response.data;
 };
@@ -80,6 +94,7 @@ const authService = {
   fetchUser,
   editProfile,
   editUser,
+  changePassword,
 };
 
 export default authService;

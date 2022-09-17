@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { login, editUser, toggleUpdate } from '../features/auth/authSlice';
+import { login, editUser, changePassword, toggleUpdate } from '../features/auth/authSlice';
 
 import '../assets/styles/Settings.scss';
 
@@ -45,20 +45,20 @@ const Settings = () => {
   };
 
   const onSaveChanges = () => {
-    //if (username !== newUsername && userEmail !== newEmail) {
-    const userData = {
-      userID,
-      username,
-      newUsername,
-      newEmail,
-      password,
-    };
-    dispatch(editUser(userData));
-    setTimeout(() => {
-      settingsHeaderRef.current.classList.remove('fade');
-      settingsRef.current.classList.remove('fade');
-    }, 10);
-    //}
+    if (username !== newUsername || userEmail !== newEmail) {
+      const userData = {
+        userID,
+        username,
+        newUsername,
+        newEmail,
+        password,
+      };
+      dispatch(editUser(userData));
+      setTimeout(() => {
+        settingsHeaderRef.current.classList.remove('fade');
+        settingsRef.current.classList.remove('fade');
+      }, 10);
+    }
   };
 
   useEffect(() => {
@@ -72,6 +72,25 @@ const Settings = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updating]);
+
+  const onChangePassword = () => {
+    if (currentPassword !== newPassword && newPassword === confirmNewPassword) {
+      const passwordData = {
+        userID,
+        username,
+        currentPassword,
+        newPassword,
+      };
+      dispatch(changePassword(passwordData));
+      setTimeout(() => {
+        settingsHeaderRef.current.classList.remove('fade');
+        settingsRef.current.classList.remove('fade');
+      }, 10);
+      setTimeout(() => {
+        navigate(`/users/${username}`);
+      }, 1000);
+    }
+  };
 
   return (
     <div className="view">
@@ -109,7 +128,7 @@ const Settings = () => {
           <div className="formItem">
             <label htmlFor="password">password </label>
             <input
-              type="text"
+              type="password"
               className="formControl"
               id="password"
               name="password"
@@ -127,7 +146,7 @@ const Settings = () => {
           <div className="formItem">
             <label htmlFor="currentPassword">current password </label>
             <input
-              type="text"
+              type="password"
               className="formControl"
               id="currentPassword"
               name="currentPassword"
@@ -139,7 +158,7 @@ const Settings = () => {
           <div className="formItem">
             <label htmlFor="newPassword">new password </label>
             <input
-              type="text"
+              type="password"
               className="formControl"
               id="newPassword"
               name="newPassword"
@@ -151,7 +170,7 @@ const Settings = () => {
           <div className="formItem">
             <label htmlFor="confirmNewPassword">confirm password </label>
             <input
-              type="text"
+              type="password"
               className="formControl"
               id="confirmNewPassword"
               name="confirmNewPassword"
@@ -160,7 +179,10 @@ const Settings = () => {
               size="20"
             />
           </div>
-          <div className="solidButton longButton changePassword settingsButton">
+          <div
+            className="solidButton longButton changePassword settingsButton"
+            onClick={() => onChangePassword()}
+          >
             change password
           </div>
         </form>

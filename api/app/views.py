@@ -90,10 +90,19 @@ def userApi(request, user_id=0):
             notification.save()
       user.save()
     return JsonResponse(UserSerializer(user).data, safe=False)
+  elif request.method == 'PUT' and ('change-password' in request.path):
+    password_data = JSONParser().parse(request)
+    user = User.objects.get(id=password_data['userID'])
+    if check_password(password_data['currentPassword'], user.password):
+      print(password_data['currentPassword'], password_data['newPassword'])
+      user.password = make_password(password_data['newPassword'])
+      user.save()
+      return JsonResponse('password updated', safe=False)
+    return JsonResponse('password update failed', safe=False)
   elif request.method == 'DELETE':
     user = User.objects.get(id=user_id)
     user.delete()
-    return JsonResponse('deleted a user')
+    return JsonResponse('deleted a user', safe=False)
 
 @csrf_exempt
 def postApi(request):

@@ -14,8 +14,8 @@ const initialState = {
   userPicture: user ? jwt(user.access).userPicture : null,
   profileUser: null,
   updating: false,
-  isError: false,
   isSuccess: false,
+  isError: false,
   message: '',
 };
 
@@ -91,11 +91,28 @@ export const editUser = createAsyncThunk('auth/editUser', async (userData, thunk
   }
 });
 
+export const changePassword = createAsyncThunk(
+  'auth/changePassword',
+  async (passwordData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.access;
+      return await authService.changePassword(passwordData, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     reset: (state) => {
+      state.updating = false;
       state.isSuccess = false;
       state.isError = false;
       state.message = '';
@@ -157,6 +174,13 @@ export const authSlice = createSlice({
         state.updating = true;
       })
       .addCase(editUser.rejected, (state, action) => {
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.isSuccess = true;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
       });
