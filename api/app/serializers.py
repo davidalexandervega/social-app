@@ -10,6 +10,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
         token['username'] = user.username
+        token['email'] = User.objects.get(username=user.username).email
+        token['userPicture'] = User.objects.get(username=user.username).picture
 
         return token
 
@@ -30,7 +32,7 @@ class PostSerializer(serializers.ModelSerializer):
 class ReplySerializer(serializers.ModelSerializer):
   class Meta:
     model = Reply
-    fields = ['id', 'origin', 'user', 'userPicture', 'image', 'body', 'time', 'likes']
+    fields = ['id', 'origin', 'user', 'username', 'userPicture', 'image', 'body', 'time', 'likes']
 
 class NotificationSerializer(serializers.ModelSerializer):
   class Meta:

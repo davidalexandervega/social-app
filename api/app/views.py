@@ -3,6 +3,7 @@ import re
 import json
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
+from django.contrib.auth.hashers import check_password, make_password
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 JWT_authenticator = JWTAuthentication()
@@ -37,7 +38,7 @@ def userApi(request, user_id=0):
     if user_serializer.is_valid(raise_exception=True):
       user_serializer.save()
       return JsonResponse('created a user', safe=False)
-  elif request.method == 'PUT'and ('edit' in request.path):
+  elif request.method == 'PUT' and ('edit-profile' in request.path):
     profile_data = JSONParser().parse(request)
     user = User.objects.get(id=profile_data['id'])
     if profile_data['deleteBanner'] == True:
@@ -63,6 +64,31 @@ def userApi(request, user_id=0):
       for notification in notifications:
         notification.creator_picture = profile_data['picture']
         notification.save()
+    return JsonResponse(UserSerializer(user).data, safe=False)
+  elif request.method == 'PUT' and ('edit-user' in request.path):
+    user_data = JSONParser().parse(request)
+    user = User.objects.get(id=user_data['userID'])
+    if check_password(user_data['password'], user.password):
+      if user_data['newEmail'] != user.email:
+        user.email = user_data['newEmail']
+      if user_data['newUsername'] != user.username:
+        user.username = user_data['newUsername']
+        posts = Post.objects.all().filter(user=user_data['userID'])
+        if posts:
+          for post in posts:
+            post.username = user_data['newUsername']
+            post.save()
+        replies = Reply.objects.all().filter(user=user_data['userID'])
+        if replies:
+          for reply in replies:
+            reply.username = user_data['newUsername']
+            reply.save()
+        notifications = Notification.objects.all().filter(creator_id=user_data['userID'])
+        if notifications:
+          for notification in notifications:
+            notification.creator_name = user_data['newUsername']
+            notification.save()
+      user.save()
     return JsonResponse(UserSerializer(user).data, safe=False)
   elif request.method == 'DELETE':
     user = User.objects.get(id=user_id)

@@ -78,7 +78,12 @@ const Notification = (props) => {
           <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />
         )}
       </span>
-      <div className="notificationCreator">@{notification.creator_name}</div>
+      <div
+        className="notificationCreator"
+        onClick={() => navigate(`/users/${notification.creator_name}`)}
+      >
+        @{notification.creator_name}
+      </div>
       <div className="notificationAction" onClick={() => onClickAction(notification.type)}>
         {notification.type.includes('like_post') ? 'liked your post.' : null}
         {notification.type.includes('reply_post') ? 'replied to your post.' : null}

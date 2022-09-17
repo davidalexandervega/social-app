@@ -10,8 +10,10 @@ const initialState = {
   user: user ? user : null,
   userID: user ? jwt(user.access).user_id : null,
   username: user ? jwt(user.access).username : null,
+  userEmail: user ? jwt(user.access).email : null,
+  userPicture: user ? jwt(user.access).userPicture : null,
   profileUser: null,
-  profileUpdate: false,
+  updating: false,
   isError: false,
   isSuccess: false,
   message: '',
@@ -63,10 +65,23 @@ export const fetchUser = createAsyncThunk('auth/fetch/username', async (username
   }
 });
 
-export const editUser = createAsyncThunk('auth/edit', async (profileData, thunkAPI) => {
+export const editProfile = createAsyncThunk('auth/editProfile', async (profileData, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.user.access;
-    return await authService.editUser(profileData, token);
+    return await authService.editProfile(profileData, token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const editUser = createAsyncThunk('auth/editUser', async (userData, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().auth.user.access;
+    return await authService.editUser(userData, token);
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -85,8 +100,8 @@ export const authSlice = createSlice({
       state.isError = false;
       state.message = '';
     },
-    confirmUpdate: (state) => {
-      state.profileUpdate = false;
+    toggleUpdate: (state) => {
+      state.updating === false ? (state.updating = true) : (state.updating = false);
     },
   },
 
@@ -105,8 +120,9 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isSuccess = true;
         state.user = action.payload;
-        state.userID = jwt(user.access).user_id;
-        state.username = jwt(user.access).username;
+        state.userID = jwt(state.user.access).user_id;
+        state.username = jwt(state.user.access).username;
+        state.userEmail = jwt(state.user.access).email;
       })
       .addCase(login.rejected, (state, action) => {
         state.isError = true;
@@ -124,11 +140,21 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(editUser.fulfilled, (state, action) => {
+      .addCase(editProfile.fulfilled, (state, action) => {
         state.isSuccess = true;
         state.user.bio = action.payload.bio;
         state.profileUser.bio = action.payload.bio;
-        state.profileUpdate = true;
+        state.updating = true;
+      })
+      .addCase(editProfile.rejected, (state, action) => {
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(editUser.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        state.username = action.payload.username;
+        state.userEmail = action.payload.userEmail;
+        state.updating = true;
       })
       .addCase(editUser.rejected, (state, action) => {
         state.isError = true;
@@ -138,7 +164,7 @@ export const authSlice = createSlice({
 });
 
 // export the reducer of the slice:
-export const { reset, confirmUpdate } = authSlice.actions;
+export const { reset, toggleUpdate } = authSlice.actions;
 
 // export the slice (which is a reducer of the global store):
 export default authSlice.reducer;

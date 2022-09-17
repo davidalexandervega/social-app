@@ -123,17 +123,17 @@ const Reply = (props) => {
       <div className="post reply" ref={replyRef}>
         <span className="postHeader">
           <span className="postUserPicture">
-            {post.userPicture ? (
+            {reply.userPicture ? (
               <AdvancedImage
                 className="postUserImage"
-                cldImg={cloudinary.image(`/pictures/${post.user}`).setVersion(Date.now())}
+                cldImg={cloudinary.image(`/pictures/${reply.user}`).setVersion(Date.now())}
               />
             ) : (
               <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />
             )}
           </span>
           &nbsp;
-          <span className="postUsername">@user</span>
+          <span className="postUsername">@{reply.username}</span>
           &nbsp;
           <span className="postTime">{displayTime()}</span>
         </span>

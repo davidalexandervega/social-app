@@ -21,7 +21,7 @@ import { createNotification } from '../features/notification/notificationSlice';
 
 const PostView = () => {
   const { id } = useParams();
-  const { userID, username } = useSelector((state) => state.auth);
+  const { userID, username, userPicture } = useSelector((state) => state.auth);
   const { posts } = useSelector((state) => state.post);
   const post = posts.length > 1 ? posts.find((post) => post.id === id) : posts[0];
   const { replies } = useSelector((state) => state.reply);
@@ -207,7 +207,9 @@ const PostView = () => {
               resetReplies={resetReplies}
               replyDelta={replyDelta}
               postView={true}
-              username
+              username={username}
+              userID={userID}
+              userPicture={userPicture}
             />
             {replies.map((reply) => (
               <Reply key={reply.id} reply={reply} replyDelta={replyDelta} post={post} />

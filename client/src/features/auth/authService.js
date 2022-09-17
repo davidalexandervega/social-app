@@ -39,7 +39,7 @@ const fetchUser = async (username, token) => {
   return response.data;
 };
 
-const editUser = async (profileData, token) => {
+const editProfile = async (profileData, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -47,10 +47,28 @@ const editUser = async (profileData, token) => {
   };
 
   const response = await axios.put(
-    API_URL + 'edit/?username=' + profileData.username,
+    API_URL + 'edit-profile/?username=' + profileData.username,
     profileData,
     config
   );
+
+  return response.data;
+};
+
+const editUser = async (userData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.put(
+    API_URL + 'edit-user/?username=' + userData.username,
+    userData,
+    config
+  );
+
+  console.log(response.data);
 
   return response.data;
 };
@@ -60,6 +78,7 @@ const authService = {
   login,
   logout,
   fetchUser,
+  editProfile,
   editUser,
 };
 

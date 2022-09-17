@@ -48,12 +48,12 @@ const Login = () => {
   };
 
   const onSubmit = () => {
-    const userData = {
+    const loginData = {
       username,
       password,
     };
 
-    dispatch(login(userData));
+    dispatch(login(loginData));
   };
 
   return (

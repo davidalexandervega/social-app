@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import jwt from 'jwt-decode';
 
 import { logout, reset } from '../features/auth/authSlice';
 import NewPost from './NewPost';
@@ -21,12 +20,7 @@ const Sidebar = (props) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
-
-  let username = '';
-  if (user) {
-    username = jwt(user.access).username;
-  }
+  const { user, username } = useSelector((state) => state.auth);
 
   const loadFeed = () => {
     navigate('/');

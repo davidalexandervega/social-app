@@ -65,9 +65,36 @@ textarea:focus {
   flex-direction: column;
 }
 
+.viewBox {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: auto;
+  width: 70vw;
+  max-width: 500px;
+  border: 1px solid black;
+  border-radius: 10px;
+  transition: opacity 0.75s ease-out /* , max-height 1s linear */;
+  opacity: 0;
+}
+
+.fade {
+  opacity: 1;
+}
+
 .postView {
   transition: opacity 0.75s ease-out;
   opacity: 0;
+}
+
+.editViewHeader {
+  width: 70vw;
+  max-width: 500px;
+  font-family: 'source-bold';
+  font-size: 1.5em;
+  transition: opacity 0.75s ease-out;
+  opacity: 0;
+  cursor: default;
 }
 
 .footer {
@@ -111,6 +138,14 @@ textarea:focus {
   border: 1px solid black;
   border-radius: 10px;
   background-color: rgb(232, 226, 244);
+}
+
+.longButton {
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
 }
 
 .solidButton:hover {
@@ -160,6 +195,10 @@ textarea:focus {
     /* this margin accounts for the height of the footer: */
     margin-bottom: 200px;
   }
+  .viewBox,
+  .editViewHeader {
+    width: 90vw;
+  }
 }
 
 /* tablet styles */
@@ -173,6 +212,10 @@ textarea:focus {
     margin-top: 7vh;
     /* this margin accounts for the height of the footer: */
     margin-bottom: 200px;
+  }
+  .viewBox,
+  .editViewHeader {
+    width: 90vw;
   }
 }
 

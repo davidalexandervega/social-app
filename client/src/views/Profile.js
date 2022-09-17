@@ -54,7 +54,7 @@ const Profile = () => {
     <div className="view">
       {profileUser ? (
         <>
-          <div className="profile" ref={profileRef}>
+          <div className="viewBox" ref={profileRef}>
             <div className="profileBanner">
               {profileUser.banner ? (
                 <AdvancedImage
@@ -90,7 +90,7 @@ const Profile = () => {
                 <div className="profileActions">
                   {profileUser.id === userID ? (
                     <div
-                      className="solidButton editProfileButton"
+                      className="solidButton longButton"
                       onClick={() => navigate(`/users/${profileUser.username}/edit`)}
                     >
                       edit profile

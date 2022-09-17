@@ -10,6 +10,7 @@ import Profile from './views/Profile';
 import EditProfile from './views/EditProfile';
 import Notifications from './views/Notifications';
 import Feed from './views/Feed';
+import Settings from './views/Settings';
 import Login from './views/Login';
 import PostView from './views/PostView';
 
@@ -46,6 +47,7 @@ const App = () => {
           />
           <Route path="/" element={<Feed />} />
           <Route path="/posts/:id" element={<PostView />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/login" element={<Login />} />
         </Routes>
       </div>

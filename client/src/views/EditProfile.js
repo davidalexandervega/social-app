@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-import { editUser, confirmUpdate } from '../features/auth/authSlice';
+import { editProfile, toggleUpdate } from '../features/auth/authSlice';
 
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
@@ -16,7 +16,7 @@ const EditProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { userID, profileUser, profileUpdate } = useSelector((state) => state.auth);
+  const { userID, profileUser, updating } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (!profileUser) navigate('/');
@@ -25,14 +25,14 @@ const EditProfile = () => {
   const editProfileHeaderRef = useRef();
   const editProfileRef = useRef();
   useEffect(() => {
-    if (profileUser && profileUpdate === false) {
+    if (profileUser && updating === false) {
       const timer = setTimeout(() => {
         editProfileRef.current.classList.add('fade');
         editProfileHeaderRef.current.classList.add('fade');
       }, 700);
       return () => clearTimeout(timer);
     }
-  }, [profileUser, profileUpdate]);
+  }, [profileUser, updating]);
 
   const [formData, setFormData] = useState({
     banner: profileUser.banner,
@@ -132,7 +132,7 @@ const EditProfile = () => {
       deletePicture: formData.deletePicture,
       bio: formData.bio,
     };
-    dispatch(editUser(profileData));
+    dispatch(editProfile(profileData));
     setTimeout(() => {
       editProfileRef.current.classList.remove('fade');
       editProfileHeaderRef.current.classList.remove('fade');
@@ -140,7 +140,7 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-    if (profileUpdate === true) {
+    if (updating === true) {
       if (formData.banner && formData.banner !== true) {
         const bannerData = new FormData();
         bannerData.append('file', bannerRef.current.files[0]);
@@ -162,20 +162,20 @@ const EditProfile = () => {
           .then((response) => console.log(response));
       }
       setTimeout(() => {
-        dispatch(confirmUpdate());
+        dispatch(toggleUpdate());
         navigate(`/users/${profileUsername}`);
       }, 1000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profileUpdate]);
+  }, [updating]);
 
   return (
     <div className="view">
-      <div className="editProfileHeader" ref={editProfileHeaderRef}>
+      <div className="editViewHeader" ref={editProfileHeaderRef}>
         edit profile
       </div>
       {profileUser && profileUser.id === userID ? (
-        <div className="profile editProfile" ref={editProfileRef}>
+        <div className="viewBox editProfile" ref={editProfileRef}>
           <div className="profileBanner">
             {formData.banner ? (
               <>
@@ -240,11 +240,11 @@ const EditProfile = () => {
               </div>
             </div>
             <div className="editProfileActions">
-              <div className="solidButton editProfileButton" onClick={() => onSubmit()}>
+              <div className="solidButton longButton" onClick={() => onSubmit()}>
                 save changes
               </div>
               <div
-                className="solidButton redButton editProfileButton"
+                className="solidButton redButton longButton"
                 onClick={() => navigate(`/users/${profileUsername}`)}
               >
                 cancel
