@@ -12,6 +12,7 @@ import Notifications from './views/Notifications';
 import Feed from './views/Feed';
 import Settings from './views/Settings';
 import Login from './views/Login';
+import Register from './views/Register';
 import PostView from './views/PostView';
 
 const App = () => {
@@ -49,6 +50,7 @@ const App = () => {
           <Route path="/posts/:id" element={<PostView />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </div>
       <Routes>
