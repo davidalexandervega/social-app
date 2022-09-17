@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
 import { createPost } from '../features/post/postSlice';
 
 import '../assets/styles/NewPost.scss';
-import { DoubleCheck, Cancel } from 'iconoir-react';
+import { DoubleCheck, Cancel, Check } from 'iconoir-react';
 
 const NewPost = (props) => {
   const dispatch = useDispatch();
@@ -52,9 +52,11 @@ const NewPost = (props) => {
   };
 
   useEffect(() => {
-    newPostImg
-      ? (uploadButtonRef.current.style.color = 'cornflowerblue')
-      : (uploadButtonRef.current.style.color = 'black');
+    if (newPostImg) {
+      uploadButtonRef.current.className = 'fileUpload fileLoaded';
+    } else {
+      uploadButtonRef.current.className = 'fileUpload';
+    }
   }, [newPostImg]);
 
   const onChange = (e) => {
@@ -111,6 +113,8 @@ const NewPost = (props) => {
     charLeftRef.current.innerHTML = 200 - newPostBody.length;
   }, [newPostBody]);
 
+  const [isHovering, setHovering] = useState(false);
+
   return (
     <div className="newPost">
       <textarea
@@ -127,8 +131,23 @@ const NewPost = (props) => {
           <DoubleCheck />
         </span>
         <span className="charLeft" ref={charLeftRef}></span>
-        <label className="fileUpload" ref={uploadButtonRef} onClick={() => removeFile()}>
+        <label
+          className="fileUpload"
+          ref={uploadButtonRef}
+          onMouseOver={() => setHovering(true)}
+          onMouseOut={() => setHovering(false)}
+          onClick={() => removeFile()}
+        >
           img
+          {newPostImg ? (
+            <div className="fileIndicator">
+              {isHovering ? (
+                <Cancel height="0.9em" width="0.9em" />
+              ) : (
+                <Check height="0.9em" width="0.9em" />
+              )}
+            </div>
+          ) : null}
           <input
             type="file"
             accept=".jpg, .jpeg, .png"

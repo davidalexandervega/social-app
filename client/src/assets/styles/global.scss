@@ -74,6 +74,7 @@ textarea:focus {
   max-width: 500px;
   border: 1px solid black;
   border-radius: 10px;
+  margin-bottom: 5vh;
   transition: opacity 0.75s ease-out /* , max-height 1s linear */;
   opacity: 0;
 }
@@ -120,6 +121,8 @@ textarea:focus {
 
 .formItem {
   margin-top: 1vh;
+  display: flex;
+  gap: 10px;
 }
 
 .labelButton {
@@ -175,8 +178,26 @@ textarea:focus {
   color: rgb(255, 64, 0);
 }
 
+.fileUpload {
+  display: flex;
+  align-items: center;
+}
+
 .fileUpload:hover {
   cursor: pointer;
+}
+
+.fileLoaded {
+  color: cornflowerblue !important;
+}
+
+.fileLoaded:hover {
+  color: rgb(255, 64, 0) !important;
+}
+
+.fileIndicator {
+  margin-top: 6px;
+  margin-left: 2px;
 }
 
 .fileInput {
@@ -199,6 +220,9 @@ textarea:focus {
   .editViewHeader {
     width: 90vw;
   }
+  .formItem {
+    flex-direction: column;
+  }
 }
 
 /* tablet styles */
@@ -216,6 +240,9 @@ textarea:focus {
   .viewBox,
   .editViewHeader {
     width: 90vw;
+  }
+  .formItem {
+    flex-direction: column;
   }
 }
 

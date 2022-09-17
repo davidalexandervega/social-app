@@ -3,11 +3,11 @@
   display: flex;
   flex-direction: column;
   height: auto;
-  max-height: 0;
   width: 70vw;
   max-width: 500px;
   border: 1px solid black;
   border-radius: 10px;
+  margin-bottom: 5vh;
   overflow: hidden;
   cursor: default;
   background-color: rgb(232, 226, 244);
@@ -19,13 +19,6 @@
 
 .fade {
   opacity: 1;
-}
-
-.slide {
-  /* transitioning the max-height instead of height
-  is a workaround due to the use of height: auto. */
-  max-height: 1000px;
-  margin-bottom: 5vh;
 }
 
 .postHeader {

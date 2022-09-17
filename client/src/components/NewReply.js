@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { createReply } from '../features/reply/replySlice';
+import { expandPost, createReply } from '../features/reply/replySlice';
 import { createNotification } from '../features/notification/notificationSlice';
 
 import '../assets/styles/NewReply.scss';
@@ -65,6 +65,8 @@ const NewReply = (props) => {
         dispatch(createNotification(notificationData));
       }
     }
+
+    dispatch(expandPost(null));
   };
 
   const charLeftRef = useRef();
