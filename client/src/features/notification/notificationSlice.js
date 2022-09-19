@@ -58,8 +58,9 @@ export const notificationSlice = createSlice({
     builder
       .addCase(createNotification.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.notifications.push(action.payload);
-        state.notifications.sort((a, b) => new Date(b.time) - new Date(a.time));
+        state.notifications
+          .push(action.payload)
+          .sort((a, b) => new Date(b.time) - new Date(a.time));
       })
       .addCase(createNotification.rejected, (state, action) => {
         state.isError = true;
@@ -67,7 +68,7 @@ export const notificationSlice = createSlice({
       })
       .addCase(fetchNotifications.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.notifications = action.payload;
+        state.notifications = action.payload.sort((a, b) => new Date(b.time) - new Date(a.time));
       })
       .addCase(fetchNotifications.rejected, (state, action) => {
         state.isError = true;

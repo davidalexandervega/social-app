@@ -11,7 +11,7 @@ const initialState = {
   userID: user ? jwt(user.access).user_id : null,
   username: user ? jwt(user.access).username : null,
   userEmail: user ? jwt(user.access).email : null,
-  userPicture: user ? jwt(user.access).userPicture : null,
+  userPicture: user ? jwt(user.access).userPicture : false,
   profileUser: null,
   updating: false,
   isSuccess: false,
@@ -159,8 +159,9 @@ export const authSlice = createSlice({
       })
       .addCase(editProfile.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.user.bio = action.payload.bio;
         state.profileUser.bio = action.payload.bio;
+        state.userPicture = action.payload.picture;
+        state.profileUser.userPicture = action.payload.picture;
         state.updating = true;
       })
       .addCase(editProfile.rejected, (state, action) => {

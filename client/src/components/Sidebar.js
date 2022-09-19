@@ -31,7 +31,6 @@ const Sidebar = (props) => {
     dispatch(reset());
     navigate('/');
   };
-
   return (
     <header className="sidebar">
       <span className="button labelButton" onClick={() => navigate(`/users/` + username)}>

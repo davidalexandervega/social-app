@@ -2,6 +2,9 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+
+import { register } from '../features/auth/authSlice';
 
 import '../assets/styles/Register.scss';
 
@@ -39,6 +42,27 @@ const Register = () => {
     }));
   };
 
+  const onRegister = () => {
+    if (email && username && password && password === confirmPassword) {
+      const userData = {
+        email,
+        username,
+        password,
+        id: uuidv4(),
+        created: new Date(),
+        picture: false,
+        banner: false,
+        bio: '',
+        following: [],
+        followers: [],
+      };
+      dispatch(register(userData));
+      setTimeout(() => {
+        navigate('/login');
+      }, 1000);
+    }
+  };
+
   return (
     <div className="loginPage">
       <div className="viewBox register" ref={registerRef}>
@@ -65,8 +89,8 @@ const Register = () => {
             <input
               type="text"
               className="formControl"
-              id="newUsername"
-              name="newUsername"
+              id="username"
+              name="username"
               value={username}
               onChange={onChange}
               size="20"
@@ -102,7 +126,7 @@ const Register = () => {
               size="20"
             />
           </div>
-          <div className="solidButton longButton registerButton" onClick={() => ''}>
+          <div className="solidButton longButton registerButton" onClick={() => onRegister()}>
             register
           </div>
         </form>

@@ -36,6 +36,7 @@ const Profile = () => {
   const profileRef = useRef();
   useEffect(() => {
     if (profileUser) {
+      console.log(profileUser);
       const timer = setTimeout(() => {
         profileRef.current.classList.add('fade', 'slide');
       }, 700);

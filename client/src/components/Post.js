@@ -91,6 +91,7 @@ const Post = ({ post }) => {
           time: new Date(),
           creator_id: userID,
           creator_name: username,
+          creator_picture: userPicture,
           target_id: post.user,
           type: 'like_post',
           object: post.id,
