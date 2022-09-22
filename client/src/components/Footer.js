@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { Plus } from 'iconoir-react';
 
 const Footer = (props) => {
-  const { newPostData, setNewPost, feedRef, pageBottomRef } = props;
+  const { newPostData, setNewPost } = props;
   const { user } = useSelector((state) => state.auth);
 
   const [mode, setMode] = useState('collapsed');
@@ -37,8 +37,6 @@ const Footer = (props) => {
               setNewPost={setNewPost}
               mode={mode}
               setMode={setMode}
-              feedRef={feedRef}
-              pageBottomRef={pageBottomRef}
             />
           )}
         </footer>

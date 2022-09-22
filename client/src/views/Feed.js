@@ -9,14 +9,12 @@ import { fetchAllPosts } from '../features/post/postSlice';
 import { fetchNotifications } from '../features/notification/notificationSlice';
 import { expandPost } from '../features/reply/replySlice';
 
-const Feed = (props) => {
+const Feed = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
   const { posts } = useSelector((state) => state.post);
-
-  const { feedRef, pageBottomRef } = props;
 
   useEffect(() => {
     if (!user) {
@@ -31,11 +29,10 @@ const Feed = (props) => {
   }, [user, navigate, dispatch]);
 
   return (
-    <div className="view" ref={feedRef}>
+    <div className="view">
       {posts.map((post) => (
         <Post key={post.id} post={post} />
       ))}
-      <div className="pageBottom" ref={pageBottomRef}></div>
     </div>
   );
 };
