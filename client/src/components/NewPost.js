@@ -14,7 +14,7 @@ const NewPost = (props) => {
   const { newPostData, setNewPost, mode, setMode } = props;
   const { newPostBody, newPostImg, disableFile } = newPostData;
 
-  const { username, userPicture } = useSelector((state) => state.auth);
+  const { username, hasPicture } = useSelector((state) => state.auth);
 
   const fileRef = useRef();
   const uploadButtonRef = useRef();
@@ -74,7 +74,7 @@ const NewPost = (props) => {
       const newPostData = {
         id: postID,
         username: username,
-        userPicture: userPicture,
+        userHasPicture: hasPicture,
         body: newPostBody,
         time: new Date(),
         likes: [],

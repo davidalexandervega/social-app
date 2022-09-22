@@ -22,9 +22,10 @@ const Profile = () => {
   const { username, userID, profileUser } = useSelector((state) => state.auth);
   const { posts } = useSelector((state) => state.post);
 
+  const cloudName = 'dgwf4o5mj';
   const cloudinary = new Cloudinary({
     cloud: {
-      cloudName: 'dgwf4o5mj',
+      cloudName,
     },
   });
 
@@ -36,10 +37,9 @@ const Profile = () => {
   const profileRef = useRef();
   useEffect(() => {
     if (profileUser) {
-      console.log(profileUser);
       const timer = setTimeout(() => {
-        profileRef.current.classList.add('fade', 'slide');
-      }, 700);
+        profileRef.current.classList.add('fade');
+      }, 500);
       return () => clearTimeout(timer);
     }
   }, [profileUser]);
@@ -57,7 +57,7 @@ const Profile = () => {
         <>
           <div className="viewBox" ref={profileRef}>
             <div className="profileBanner">
-              {profileUser.banner ? (
+              {profileUser.hasBanner ? (
                 <AdvancedImage
                   cldImg={cloudinary.image(`/banners/${profileUser.id}`).setVersion(Date.now())}
                   className="bannerImage"
@@ -66,7 +66,7 @@ const Profile = () => {
             </div>
             <div className="profileHeader">
               <div className="profilePicture">
-                {profileUser.picture ? (
+                {profileUser.hasPicture ? (
                   <AdvancedImage
                     cldImg={cloudinary.image(`/pictures/${profileUser.id}`).setVersion(Date.now())}
                     className="profileImage"
@@ -97,7 +97,7 @@ const Profile = () => {
                       edit profile
                     </div>
                   ) : (
-                    <div className="solidButton">follow</div>
+                    <div className="solidButton longButton">following</div>
                   )}
                 </div>
               </div>

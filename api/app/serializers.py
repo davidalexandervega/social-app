@@ -11,14 +11,14 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add custom claims
         token['username'] = user.username
         token['email'] = User.objects.get(username=user.username).email
-        token['userPicture'] = User.objects.get(username=user.username).picture
+        token['hasPicture'] = User.objects.get(username=user.username).hasPicture
 
         return token
 
 class UserSerializer(serializers.ModelSerializer):
   class Meta:
     model = User
-    fields = ['id', 'created', 'email', 'username', 'password', 'picture', 'banner', 'bio', 'following', 'followers']
+    fields = ['id', 'created', 'email', 'username', 'password', 'hasPicture', 'hasBanner', 'bio', 'following', 'followers']
 
   def create(self, validated_data):
       validated_data['password'] = make_password(validated_data.get('password'))
@@ -27,14 +27,14 @@ class UserSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
   class Meta:
     model = Post
-    fields = ['id', 'user', 'username', 'userPicture', 'image', 'body', 'time', 'likes', 'replies']
+    fields = ['id', 'user', 'username', 'userHasPicture', 'image', 'body', 'time', 'likes', 'replies']
 
 class ReplySerializer(serializers.ModelSerializer):
   class Meta:
     model = Reply
-    fields = ['id', 'origin', 'user', 'username', 'userPicture', 'image', 'body', 'time', 'likes']
+    fields = ['id', 'origin', 'user', 'username', 'userHasPicture', 'image', 'body', 'time', 'likes']
 
 class NotificationSerializer(serializers.ModelSerializer):
   class Meta:
     model = Notification
-    fields = ['id', 'time', 'creator_id', 'creator_name', 'creator_picture', 'target_id', 'type', 'object', 'seen']
+    fields = ['id', 'time', 'creatorID', 'creatorUsername', 'creatorHasPicture', 'recipientID', 'type', 'object', 'seen']

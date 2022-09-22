@@ -21,8 +21,9 @@ const Notification = (props) => {
 
   const notificationRef = useRef();
   useEffect(() => {
+    console.log(notification);
     const timer = setTimeout(() => {
-      notificationRef.current.classList.add('fade', 'slide');
+      notificationRef.current.classList.add('fade');
     }, 500);
     return () => clearTimeout(timer);
   }, []);
@@ -69,10 +70,10 @@ const Notification = (props) => {
         ) : null}
       </div>
       <span className="notificationCreatorPicture">
-        {notification.creator_picture ? (
+        {notification.creatorHasPicture ? (
           <AdvancedImage
             className="notificationCreatorImage"
-            cldImg={cloudinary.image(`/pictures/${notification.creator_id}`).setVersion(Date.now())}
+            cldImg={cloudinary.image(`/pictures/${notification.creatorID}`).setVersion(Date.now())}
           />
         ) : (
           <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />
@@ -80,9 +81,9 @@ const Notification = (props) => {
       </span>
       <div
         className="notificationCreator"
-        onClick={() => navigate(`/users/${notification.creator_name}`)}
+        onClick={() => navigate(`/users/${notification.creatorUsername}`)}
       >
-        @{notification.creator_name}
+        @{notification.creatorUsername}
       </div>
       <div className="notificationAction" onClick={() => onClickAction(notification.type)}>
         {notification.type.includes('like_post') ? 'liked your post.' : null}

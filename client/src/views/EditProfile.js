@@ -35,9 +35,9 @@ const EditProfile = () => {
   }, [profileUser, updating]);
 
   const [formData, setFormData] = useState({
-    banner: profileUser.banner,
+    banner: profileUser.hasBanner,
     deleteBanner: false,
-    picture: profileUser.picture,
+    picture: profileUser.hasPicture,
     deletePicture: false,
     bio: profileUser ? profileUser.bio : '',
   });
@@ -126,9 +126,9 @@ const EditProfile = () => {
     const profileData = {
       username: profileUsername,
       id: profileUser.id,
-      banner: formData.banner ? true : false,
+      hasBanner: formData.banner ? true : false,
       deleteBanner: formData.deleteBanner,
-      picture: formData.picture ? true : false,
+      hasPicture: formData.picture ? true : false,
       deletePicture: formData.deletePicture,
       bio: formData.bio,
     };

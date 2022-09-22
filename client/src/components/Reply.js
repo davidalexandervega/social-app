@@ -89,9 +89,9 @@ const Reply = (props) => {
         const notificationData = {
           id: uuidv4(),
           time: new Date(),
-          creator_id: userID,
-          creator_name: username,
-          target_id: reply.user,
+          creatorID: userID,
+          creatorUsername: username,
+          recipientID: reply.user,
           type: 'like_post',
           object: post.id,
         };
@@ -123,7 +123,7 @@ const Reply = (props) => {
       <div className="post reply" ref={replyRef}>
         <span className="postHeader">
           <span className="postUserPicture">
-            {reply.userPicture ? (
+            {reply.userHasPicture ? (
               <AdvancedImage
                 className="postUserImage"
                 cldImg={cloudinary.image(`/pictures/${reply.user}`).setVersion(Date.now())}

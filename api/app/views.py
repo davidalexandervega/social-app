@@ -45,24 +45,24 @@ def userApi(request, user_id=0):
       cloudinary.uploader.destroy('banners/' + profile_data['id'])
     if profile_data['deletePicture'] == True:
       cloudinary.uploader.destroy('pictures/' + profile_data['id'])
-    user.banner = profile_data['banner']
-    user.picture = profile_data['picture']
+    user.hasBanner = profile_data['hasBanner']
+    user.hasPicture = profile_data['hasPicture']
     user.bio = profile_data['bio']
     user.save()
     posts = Post.objects.all().filter(user=profile_data['id'])
     if posts:
       for post in posts:
-        post.userPicture = profile_data['picture']
+        post.userHasPicture = profile_data['hasPicture']
         post.save()
     replies = Reply.objects.all().filter(user=profile_data['id'])
     if replies:
       for reply in replies:
-        reply.userPicture = profile_data['picture']
+        reply.userHasPicture = profile_data['hasPicture']
         reply.save()
-    notifications = Notification.objects.all().filter(creator_id=profile_data['id'])
+    notifications = Notification.objects.all().filter(creatorID=profile_data['id'])
     if notifications:
       for notification in notifications:
-        notification.creator_picture = profile_data['picture']
+        notification.creatorHasPicture = profile_data['hasPicture']
         notification.save()
     return JsonResponse(UserSerializer(user).data, safe=False)
   elif request.method == 'PUT' and ('edit-user' in request.path):
@@ -83,10 +83,10 @@ def userApi(request, user_id=0):
           for reply in replies:
             reply.username = user_data['newUsername']
             reply.save()
-        notifications = Notification.objects.all().filter(creator_id=user_data['userID'])
+        notifications = Notification.objects.all().filter(creatorID=user_data['userID'])
         if notifications:
           for notification in notifications:
-            notification.creator_name = user_data['newUsername']
+            notification.creatorUsername = user_data['newUsername']
             notification.save()
       user.save()
     return JsonResponse(UserSerializer(user).data, safe=False)
@@ -207,11 +207,11 @@ def notificationApi(request):
         notification_serializer.save()
         return JsonResponse(notification_data, safe=False)
     elif request.method == 'GET':
-      notifications = Notification.objects.all().filter(target_id=userID)
+      notifications = Notification.objects.all().filter(recipientID=userID)
       if notifications:
         return JsonResponse(NotificationSerializer(notifications, many=True).data, safe=False)
       return JsonResponse([], safe=False)
     elif request.method == 'PUT':
-      Notification.objects.all().filter(target_id=userID).update(seen=True)
-      notifications = Notification.objects.all().filter(target_id=userID)
+      Notification.objects.all().filter(recipientID=userID).update(seen=True)
+      notifications = Notification.objects.all().filter(recipientID=userID)
       return JsonResponse(NotificationSerializer(notifications, many=True).data, safe=False)

@@ -21,7 +21,7 @@ import { createNotification } from '../features/notification/notificationSlice';
 
 const PostView = () => {
   const { id } = useParams();
-  const { userID, username, userPicture } = useSelector((state) => state.auth);
+  const { userID, username, hasPicture } = useSelector((state) => state.auth);
   const { posts } = useSelector((state) => state.post);
   const post = posts.length > 1 ? posts.find((post) => post.id === id) : posts[0];
   const { replies } = useSelector((state) => state.reply);
@@ -109,9 +109,9 @@ const PostView = () => {
         const notificationData = {
           id: uuidv4(),
           time: new Date(),
-          creator_id: userID,
-          creator_name: username,
-          target_id: post.user,
+          creatorID: userID,
+          creatorUsername: username,
+          recipientID: post.user,
           type: 'like_post',
           object: post.id,
         };
@@ -150,7 +150,7 @@ const PostView = () => {
           <div className="post" ref={postRef}>
             <span className="postHeader">
               <span className="postUserPicture">
-                {post.userPicture ? (
+                {post.userHasPicture ? (
                   <AdvancedImage
                     className="postUserImage"
                     cldImg={cloudinary.image(`/pictures/${post.user}`).setVersion(Date.now())}
@@ -209,7 +209,7 @@ const PostView = () => {
               postView={true}
               username={username}
               userID={userID}
-              userPicture={userPicture}
+              userHasPicture={hasPicture}
             />
             {replies.map((reply) => (
               <Reply key={reply.id} reply={reply} replyDelta={replyDelta} post={post} />
