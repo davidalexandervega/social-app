@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import jwt from 'jwt-decode';
 
 import { logout, reset } from '../features/auth/authSlice';
 
@@ -18,12 +17,7 @@ import {
 const Header = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
-
-  let username = '';
-  if (user) {
-    username = jwt(user.access).username;
-  }
+  const { token, username } = useSelector((state) => state.auth);
 
   const { notify } = props;
 
@@ -46,7 +40,7 @@ const Header = (props) => {
         className="button"
         onClick={() => navigate(`/users/` + username)}
       />
-      {user ? (
+      {token ? (
         <>
           {notify === true ? (
             <BellNotification
@@ -77,7 +71,7 @@ const Header = (props) => {
         className="button"
         onClick={() => loadFeed()}
       />
-      {user ? (
+      {token ? (
         <Settings
           height="3em"
           width="3em"
@@ -88,7 +82,7 @@ const Header = (props) => {
       ) : (
         ''
       )}
-      {user ? (
+      {token ? (
         <LogOut
           height="3em"
           width="3em"

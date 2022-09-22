@@ -13,11 +13,11 @@ const Feed = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { user } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
   const { posts } = useSelector((state) => state.post);
 
   useEffect(() => {
-    if (!user) {
+    if (!token) {
       navigate('/login');
     } else {
       dispatch(fetchAllPosts());
@@ -26,7 +26,7 @@ const Feed = () => {
     return () => {
       dispatch(expandPost(null));
     };
-  }, [user, navigate, dispatch]);
+  }, [token, navigate, dispatch]);
 
   return (
     <div className="view">

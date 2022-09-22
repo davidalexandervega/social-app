@@ -2,7 +2,6 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import jwt from 'jwt-decode';
 
 import DeleteReplyPrompt from './DeleteReplyPrompt';
 
@@ -18,14 +17,7 @@ import { createNotification } from '../features/notification/notificationSlice';
 const Reply = (props) => {
   const { reply, replyDelta, post } = props;
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
-
-  let userID = '';
-  let username = '';
-  if (user) {
-    userID = jwt(user.access).user_id;
-    username = jwt(user.access).username;
-  }
+  const { userID, username } = useSelector((state) => state.auth);
 
   const cloudinary = new Cloudinary({
     cloud: {

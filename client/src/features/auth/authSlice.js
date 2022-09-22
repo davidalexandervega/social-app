@@ -2,16 +2,16 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from './authService';
 import jwt from 'jwt-decode';
 
-// if user is in localStorage, parse the string into JSON and store it in user:
-const user = JSON.parse(localStorage.getItem('user'));
+// if token is in localStorage, parse the string into JSON and store it in token:
+const token = JSON.parse(localStorage.getItem('token'));
 
 // set the initial state:
 const initialState = {
-  user: user ? user : null,
-  userID: user ? jwt(user.access).user_id : null,
-  username: user ? jwt(user.access).username : null,
-  userEmail: user ? jwt(user.access).email : null,
-  hasPicture: user ? jwt(user.access).hasPicture : false,
+  token: token ? token : null,
+  userID: token ? jwt(token.access).user_id : null,
+  username: token ? jwt(token.access).username : null,
+  userEmail: token ? jwt(token.access).email : null,
+  hasPicture: token ? jwt(token.access).hasPicture : false,
   profileUser: null,
   updating: false,
   isSuccess: false,
@@ -54,7 +54,7 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 
 export const fetchUser = createAsyncThunk('auth/fetch/username', async (username, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.user.access;
+    const token = thunkAPI.getState().auth.token.access;
     return await authService.fetchUser(username, token);
   } catch (error) {
     const message =
@@ -67,7 +67,7 @@ export const fetchUser = createAsyncThunk('auth/fetch/username', async (username
 
 export const editProfile = createAsyncThunk('auth/editProfile', async (profileData, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.user.access;
+    const token = thunkAPI.getState().auth.token.access;
     return await authService.editProfile(profileData, token);
   } catch (error) {
     const message =
@@ -80,7 +80,7 @@ export const editProfile = createAsyncThunk('auth/editProfile', async (profileDa
 
 export const editUser = createAsyncThunk('auth/editUser', async (userData, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.user.access;
+    const token = thunkAPI.getState().auth.token.access;
     return await authService.editUser(userData, token);
   } catch (error) {
     const message =
@@ -95,7 +95,7 @@ export const changePassword = createAsyncThunk(
   'auth/changePassword',
   async (passwordData, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.access;
+      const token = thunkAPI.getState().auth.token.access;
       return await authService.changePassword(passwordData, token);
     } catch (error) {
       const message =
@@ -139,18 +139,18 @@ export const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.user = action.payload;
-        state.userID = jwt(state.user.access).user_id;
-        state.username = jwt(state.user.access).username;
-        state.userEmail = jwt(state.user.access).email;
+        state.token = action.payload;
+        state.userID = jwt(state.token.access).user_id;
+        state.username = jwt(state.token.access).username;
+        state.userEmail = jwt(state.token.access).email;
       })
       .addCase(login.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
-        state.user = null;
+        state.token = null;
       })
       .addCase(logout.fulfilled, (state) => {
-        state.user = null;
+        state.token = null;
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.isSuccess = true;

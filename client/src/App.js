@@ -55,6 +55,10 @@ const App = () => {
       </div>
       <Routes>
         <Route path="/" element={<Footer newPostData={newPostData} setNewPost={setNewPost} />} />
+        <Route
+          path="/users/:profileUsername"
+          element={<Footer newPostData={newPostData} setNewPost={setNewPost} />}
+        />
         <Route path="*" element={<></>} />
       </Routes>
     </BrowserRouter>

@@ -9,7 +9,7 @@ export const createNotification = createAsyncThunk(
   'notifications/create',
   async (notificationData, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.access;
+      const token = thunkAPI.getState().auth.token.access;
       return await notificationService.createNotification(notificationData, token);
     } catch (error) {
       // check if any errors, and using the message as the payload if so:
@@ -24,7 +24,7 @@ export const createNotification = createAsyncThunk(
 
 export const fetchNotifications = createAsyncThunk('notifications/fetch', async (_, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.user.access;
+    const token = thunkAPI.getState().auth.token.access;
     return await notificationService.fetchNotifications(token);
   } catch (error) {
     const message =
@@ -37,7 +37,7 @@ export const fetchNotifications = createAsyncThunk('notifications/fetch', async 
 
 export const checkNotifications = createAsyncThunk('notifications/check', async (_, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.user.access;
+    const token = thunkAPI.getState().auth.token.access;
     return await notificationService.checkNotifications(_, token);
   } catch (error) {
     const message =
@@ -58,9 +58,6 @@ export const notificationSlice = createSlice({
     builder
       .addCase(createNotification.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.notifications
-          .push(action.payload)
-          .sort((a, b) => new Date(b.time) - new Date(a.time));
       })
       .addCase(createNotification.rejected, (state, action) => {
         state.isError = true;

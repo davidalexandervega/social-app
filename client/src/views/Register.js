@@ -12,11 +12,11 @@ const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
 
   const registerRef = useRef();
   useEffect(() => {
-    if (!user) {
+    if (!token) {
       const timer = setTimeout(() => {
         registerRef.current.classList.add('fade');
       }, 700);
@@ -24,7 +24,7 @@ const Register = () => {
     } else {
       navigate('/');
     }
-  }, [navigate, user]);
+  }, [navigate, token]);
 
   const [formData, setFormData] = useState({
     email: '',

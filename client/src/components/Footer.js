@@ -7,7 +7,7 @@ import { Plus } from 'iconoir-react';
 
 const Footer = (props) => {
   const { newPostData, setNewPost } = props;
-  const { user } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
 
   const [mode, setMode] = useState('collapsed');
 
@@ -21,7 +21,7 @@ const Footer = (props) => {
 
   return (
     <div>
-      {user ? (
+      {token ? (
         <footer className="footer">
           {mode === 'collapsed' ? (
             <span

@@ -20,7 +20,7 @@ const Sidebar = (props) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, username } = useSelector((state) => state.auth);
+  const { token, username } = useSelector((state) => state.auth);
 
   const loadFeed = () => {
     navigate('/');
@@ -37,7 +37,7 @@ const Sidebar = (props) => {
         <ProfileCircled height="2em" width="2em" strokeWidth="1.1" />
         profile
       </span>
-      {user ? (
+      {token ? (
         <span className="button labelButton" onClick={() => navigate('/notifications')}>
           {notify === true ? (
             <BellNotification height="2em" width="2em" strokeWidth="1.1" color="rgb(255, 64, 0)" />
@@ -46,22 +46,18 @@ const Sidebar = (props) => {
           )}
           notifications
         </span>
-      ) : (
-        ''
-      )}
+      ) : null}
       <span className="button labelButton" onClick={() => loadFeed()}>
         <Globe height="2em" width="2em" strokeWidth="1.1" />
         feed
       </span>
-      {user ? (
+      {token ? (
         <span className="button labelButton" onClick={() => navigate('/settings')}>
           <Settings height="2em" width="2em" strokeWidth="1.1" />
           settings
         </span>
-      ) : (
-        ''
-      )}
-      {user ? (
+      ) : null}
+      {token ? (
         <span className="button labelButton" onClick={() => onLogout()}>
           <LogOut height="2em" width="2em" strokeWidth="1.1" />
           logout
@@ -72,7 +68,7 @@ const Sidebar = (props) => {
           login
         </span>
       )}
-      {user ? <NewPost newPostData={newPostData} setNewPost={setNewPost} /> : ''}
+      {token ? <NewPost newPostData={newPostData} setNewPost={setNewPost} /> : ''}
     </header>
   );
 };

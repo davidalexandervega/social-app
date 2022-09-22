@@ -20,7 +20,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { user, isError, isSuccess, message } = useSelector((state) => state.auth);
+  const { token, isError, isSuccess, message } = useSelector((state) => state.auth);
 
   const errorRef = useRef();
 
@@ -36,7 +36,7 @@ const Login = () => {
     }
 
     dispatch(reset());
-  }, [user, isError, isSuccess, message, navigate, dispatch]);
+  }, [token, isError, isSuccess, message, navigate, dispatch]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({

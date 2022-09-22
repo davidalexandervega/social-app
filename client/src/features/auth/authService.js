@@ -15,16 +15,16 @@ const login = async (userData) => {
 
   // save the user data in localStorage, including the token:
   if (response.data) {
-    localStorage.setItem('user', JSON.stringify(response.data));
+    localStorage.setItem('token', JSON.stringify(response.data));
   }
 
-  console.log(JSON.parse(localStorage.getItem('user')));
+  console.log(JSON.parse(localStorage.getItem('token')));
 
   return response.data;
 };
 
 const logout = () => {
-  localStorage.removeItem('user');
+  localStorage.removeItem('token');
 };
 
 const fetchUser = async (username, token) => {
