@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
@@ -34,6 +34,9 @@ const App = () => {
     disableFile: false,
   });
 
+  const feedRef = useRef();
+  const pageBottomRef = useRef();
+
   return (
     <BrowserRouter>
       <Header notify={notify} />
@@ -46,7 +49,7 @@ const App = () => {
             path="/notifications"
             element={<Notifications notify={notify} setNotify={setNotify} />}
           />
-          <Route path="/" element={<Feed />} />
+          <Route path="/" element={<Feed feedRef={feedRef} pageBottomRef={pageBottomRef} />} />
           <Route path="/posts/:id" element={<PostView />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/login" element={<Login />} />
@@ -54,7 +57,17 @@ const App = () => {
         </Routes>
       </div>
       <Routes>
-        <Route path="/" element={<Footer newPostData={newPostData} setNewPost={setNewPost} />} />
+        <Route
+          path="/"
+          element={
+            <Footer
+              newPostData={newPostData}
+              setNewPost={setNewPost}
+              feedRef={feedRef}
+              pageBottomRef={pageBottomRef}
+            />
+          }
+        />
         <Route path="*" element={<></>} />
       </Routes>
     </BrowserRouter>

@@ -26,6 +26,7 @@ const EditProfile = () => {
   const editProfileRef = useRef();
   useEffect(() => {
     if (profileUser && updating === false) {
+      console.log(profileUser);
       const timer = setTimeout(() => {
         editProfileRef.current.classList.add('fade');
         editProfileHeaderRef.current.classList.add('fade');

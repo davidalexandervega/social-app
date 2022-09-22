@@ -48,7 +48,6 @@ const Profile = () => {
   useEffect(() => {
     dispatch(resetPosts());
     return () => {
-      dispatch(ejectProfile());
       dispatch(resetPosts());
     };
   }, [dispatch]);

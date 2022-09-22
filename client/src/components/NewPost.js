@@ -11,7 +11,7 @@ import { DoubleCheck, Cancel, Check } from 'iconoir-react';
 
 const NewPost = (props) => {
   const dispatch = useDispatch();
-  const { newPostData, setNewPost, mode, setMode } = props;
+  const { newPostData, setNewPost, mode, setMode, feedRef, pageBottomRef } = props;
   const { newPostBody, newPostImg, disableFile } = newPostData;
 
   const { username, hasPicture } = useSelector((state) => state.auth);
@@ -50,6 +50,17 @@ const NewPost = (props) => {
     }
     fileRef.current.value = null;
   };
+
+  useEffect(() => {
+    if (mode === 'expanded') {
+      feedRef.current.style.marginBottom = '175px';
+      if (250 + window.innerHeight + window.pageYOffset >= document.body.scrollHeight) {
+        // the additional 250px here is derived from the margin-bottom being set,
+        // and includes some extra room found necessary through testing.
+        pageBottomRef.current.scrollIntoView();
+      }
+    }
+  }, [mode, feedRef, pageBottomRef]);
 
   useEffect(() => {
     if (newPostImg) {
@@ -100,11 +111,16 @@ const NewPost = (props) => {
         disableFile: false,
       }));
 
-      if (mode === 'expanded') {
-        setMode('collapsed');
-      }
+      collapse();
 
       dispatch(createPost(newPostData));
+    }
+  };
+
+  const collapse = () => {
+    if (mode === 'expanded') {
+      feedRef.current.style.marginBottom = '0px';
+      setMode('collapsed');
     }
   };
 
@@ -160,7 +176,7 @@ const NewPost = (props) => {
         {mode === 'expanded' ? (
           <span
             className="labelButton solidButton redButton cancelNewPost"
-            onClick={() => setMode('collapsed')}
+            onClick={() => collapse()}
           >
             <Cancel />
           </span>
