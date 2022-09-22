@@ -120,6 +120,9 @@ export const authSlice = createSlice({
     toggleUpdate: (state) => {
       state.updating === false ? (state.updating = true) : (state.updating = false);
     },
+    ejectProfile: (state) => {
+      state.profileUser = null;
+    },
   },
 
   // extraReducers watch for actions and update the state of the slice according
@@ -189,7 +192,7 @@ export const authSlice = createSlice({
 });
 
 // export the reducer of the slice:
-export const { reset, toggleUpdate } = authSlice.actions;
+export const { reset, toggleUpdate, ejectProfile } = authSlice.actions;
 
 // export the slice (which is a reducer of the global store):
 export default authSlice.reducer;

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { fetchUser } from '../features/auth/authSlice';
+import { fetchUser, ejectProfile } from '../features/auth/authSlice';
 import { fetchUserPosts, reset as resetPosts } from '../features/post/postSlice';
 
 import Post from '../components/Post';
@@ -30,6 +30,7 @@ const Profile = () => {
   });
 
   useEffect(() => {
+    dispatch(ejectProfile());
     dispatch(fetchUser(profileUsername));
     dispatch(fetchUserPosts(profileUsername));
   }, [dispatch, username, profileUsername]);
@@ -47,6 +48,7 @@ const Profile = () => {
   useEffect(() => {
     dispatch(resetPosts());
     return () => {
+      dispatch(ejectProfile());
       dispatch(resetPosts());
     };
   }, [dispatch]);

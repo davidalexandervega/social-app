@@ -21,7 +21,6 @@ const Notification = (props) => {
 
   const notificationRef = useRef();
   useEffect(() => {
-    console.log(notification);
     const timer = setTimeout(() => {
       notificationRef.current.classList.add('fade');
     }, 500);
