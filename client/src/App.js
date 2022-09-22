@@ -5,6 +5,7 @@ import { useState } from 'react';
 import './assets/styles/global.scss';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
+import UpdateBar from './components/UpdateBar';
 import Footer from './components/Footer';
 import Profile from './views/Profile';
 import EditProfile from './views/EditProfile';
@@ -52,6 +53,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
+        <UpdateBar />
       </div>
       <Routes>
         <Route path="/" element={<Footer newPostData={newPostData} setNewPost={setNewPost} />} />
