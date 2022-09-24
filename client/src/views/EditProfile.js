@@ -4,7 +4,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-import { editProfile, toggleUpdate } from '../features/auth/authSlice';
+import {
+  fetchUser,
+  editProfile,
+  toggleUpdate,
+  removeUserPicture,
+} from '../features/auth/authSlice';
 
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
@@ -26,7 +31,6 @@ const EditProfile = () => {
   const editProfileRef = useRef();
   useEffect(() => {
     if (profileUser && updating === false) {
-      console.log(profileUser);
       const timer = setTimeout(() => {
         editProfileRef.current.classList.add('fade');
         editProfileHeaderRef.current.classList.add('fade');
@@ -142,6 +146,9 @@ const EditProfile = () => {
 
   useEffect(() => {
     if (updating === true) {
+      if (!formData.picture) {
+        dispatch(removeUserPicture());
+      }
       if (formData.banner && formData.banner !== true) {
         const bannerData = new FormData();
         bannerData.append('file', bannerRef.current.files[0]);
@@ -164,6 +171,7 @@ const EditProfile = () => {
       }
       setTimeout(() => {
         dispatch(toggleUpdate());
+        dispatch(fetchUser(profileUsername));
         navigate(`/users/${profileUsername}`);
       }, 1000);
     }

@@ -12,6 +12,7 @@ const initialState = {
   username: token ? jwt(token.access).username : null,
   userEmail: token ? jwt(token.access).email : null,
   hasPicture: token ? jwt(token.access).hasPicture : false,
+  user: null,
   profileUser: null,
   updating: false,
   isSuccess: false,
@@ -52,7 +53,20 @@ export const logout = createAsyncThunk('auth/logout', async () => {
   await authService.logout();
 });
 
-export const fetchUser = createAsyncThunk('auth/fetch/username', async (username, thunkAPI) => {
+export const fetchUser = createAsyncThunk('auth/fetch/user', async (username, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().auth.token.access;
+    return await authService.fetchUser(username, token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const fetchProfile = createAsyncThunk('auth/fetch/profile', async (username, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.token.access;
     return await authService.fetchUser(username, token);
@@ -120,6 +134,9 @@ export const authSlice = createSlice({
     toggleUpdate: (state) => {
       state.updating === false ? (state.updating = true) : (state.updating = false);
     },
+    removeUserPicture: (state) => {
+      state.user.hasPicture = false;
+    },
     ejectProfile: (state) => {
       state.profileUser = null;
     },
@@ -154,9 +171,17 @@ export const authSlice = createSlice({
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.profileUser = action.payload;
+        state.user = action.payload;
       })
       .addCase(fetchUser.rejected, (state, action) => {
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(fetchProfile.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        state.profileUser = action.payload;
+      })
+      .addCase(fetchProfile.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
       })
@@ -192,7 +217,7 @@ export const authSlice = createSlice({
 });
 
 // export the reducer of the slice:
-export const { reset, toggleUpdate, ejectProfile } = authSlice.actions;
+export const { reset, toggleUpdate, removeUserPicture, ejectProfile } = authSlice.actions;
 
 // export the slice (which is a reducer of the global store):
 export default authSlice.reducer;

@@ -37,17 +37,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 37px;
+  height: 32px;
   width: 37px;
 }
 
 .postUserImage {
-  height: 37px;
-  width: 37px;
+  height: 30px;
+  width: 30px;
   border-radius: 50%;
 }
 
 .postUsername {
+  margin-left: 5px;
   font-family: 'source-bold';
 }
 

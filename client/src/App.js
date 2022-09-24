@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import './assets/styles/global.scss';
 import Header from './components/Header';
@@ -16,8 +16,12 @@ import Login from './views/Login';
 import Register from './views/Register';
 import PostView from './views/PostView';
 
+import { fetchUser } from './features/auth/authSlice';
+
 const App = () => {
+  const { token, username } = useSelector((state) => state.auth);
   const { notifications } = useSelector((state) => state.notification);
+  const dispatch = useDispatch();
 
   const [notify, setNotify] = useState(false);
 
@@ -34,6 +38,12 @@ const App = () => {
     newPostImg: null,
     disableFile: false,
   });
+
+  useEffect(() => {
+    if (username) {
+      dispatch(fetchUser(username));
+    }
+  }, [dispatch, token, username]);
 
   return (
     <BrowserRouter>
@@ -52,6 +62,7 @@ const App = () => {
           <Route path="/settings" element={<Settings />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="*" exact={true} element={<div className="view">404: page not found.</div>} />
         </Routes>
         <UpdateBar />
       </div>

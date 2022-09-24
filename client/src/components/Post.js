@@ -144,7 +144,6 @@ const Post = ({ post }) => {
               <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />
             )}
           </span>
-          &nbsp;
           <span className="postUsername" onClick={() => navigate(`/users/${post.username}`)}>
             @{post.username}
           </span>
