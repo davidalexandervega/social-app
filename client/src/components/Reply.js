@@ -29,7 +29,7 @@ const Reply = (props) => {
   const replyRef = useRef();
   useEffect(() => {
     const timer = setTimeout(() => {
-      replyRef.current.classList.add('fade', 'slide');
+      replyRef.current.classList.add('fade');
     }, 500);
     return () => clearTimeout(timer);
   }, []);

@@ -7,7 +7,7 @@
   max-width: 500px;
   border: 1px solid black;
   border-radius: 10px;
-  margin-bottom: 5vh;
+  margin-bottom: 1vh;
   overflow: hidden;
   cursor: default;
   background-color: rgb(232, 226, 244);
@@ -114,8 +114,21 @@
 .repliesContainer {
   display: flex;
   flex-direction: column;
-  margin-bottom: 5vh;
+  overflow: hidden;
   max-width: 500px;
+  height: 0;
+  margin-bottom: 4vh;
+  transition: height 0.1s linear;
+}
+
+.postViewRepliesContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+}
+
+.slide {
+  height: 130px;
 }
 
 .reply {

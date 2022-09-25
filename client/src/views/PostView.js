@@ -54,7 +54,7 @@ const PostView = () => {
   const postViewRef = useRef();
   useEffect(() => {
     if (post) {
-      postRef.current.classList.add('fade', 'slide');
+      postRef.current.classList.add('fade');
       const timer = setTimeout(() => {
         postViewRef.current.classList.add('fade');
       }, 600);
@@ -141,6 +141,10 @@ const PostView = () => {
 
   const [deleteMode, setDeleteMode] = useState(false);
 
+  const [newReplyData, setNewReply] = useState({
+    newReplyBody: '',
+  });
+
   const feedReplyDelta = useRef(location.state ? location.state.replyDelta.current : 0);
   const replyDelta = useRef(0);
 
@@ -196,13 +200,15 @@ const PostView = () => {
               />
             ) : null}
           </div>
-          <div className="repliesContainer">
+          <div className="postViewRepliesContainer">
             <NewReply
               post={post}
               resetReplies={resetReplies}
               replyDelta={replyDelta}
               postView={true}
               user={user}
+              newReplyData={newReplyData}
+              setNewReply={setNewReply}
             />
             {replies.map((reply) => (
               <Reply key={reply.id} reply={reply} replyDelta={replyDelta} post={post} />

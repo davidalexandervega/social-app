@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
@@ -11,12 +11,8 @@ import { DoubleCheck, Cancel } from 'iconoir-react';
 
 const NewReply = (props) => {
   const dispatch = useDispatch();
-  const { post, resetReplies, replyDelta, postView, user } = props;
+  const { post, resetReplies, replyDelta, postView, user, newReplyData, setNewReply } = props;
   const { username } = user;
-
-  const [newReplyData, setNewReply] = useState({
-    newReplyBody: '',
-  });
 
   const { newReplyBody } = newReplyData;
 
@@ -42,13 +38,6 @@ const NewReply = (props) => {
         time: new Date(),
         likes: [],
       };
-
-      console.log(newReplyData);
-
-      setNewReply((prevState) => ({
-        ...prevState,
-        newReplyBody: '',
-      }));
 
       replyDelta.current++;
 
@@ -100,9 +89,7 @@ const NewReply = (props) => {
           >
             <Cancel />
           </span>
-        ) : (
-          ''
-        )}
+        ) : null}
       </div>
     </div>
   );

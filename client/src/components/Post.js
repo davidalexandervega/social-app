@@ -122,6 +122,10 @@ const Post = ({ post }) => {
 
   const replyDelta = useRef(0);
 
+  const [newReplyData, setNewReply] = useState({
+    newReplyBody: '',
+  });
+
   const onReplyPost = (postID) => {
     if (expandedPost === postID) {
       dispatch(resetReplies());
@@ -130,6 +134,27 @@ const Post = ({ post }) => {
       dispatch(expandPost(postID));
     }
   };
+
+  const repliesContainerRef = useRef();
+  useEffect(() => {
+    if (expandedPost === post.id) {
+      setTimeout(() => {
+        repliesContainerRef.current.style.overflow = 'visible';
+        repliesContainerRef.current.classList.add('slide');
+      }, 10);
+    } else {
+      setTimeout(() => {
+        repliesContainerRef.current.style.overflow = 'hidden';
+        repliesContainerRef.current.classList.remove('slide');
+      }, 10);
+      setTimeout(() => {
+        setNewReply((prevState) => ({
+          ...prevState,
+          newReplyBody: '',
+        }));
+      }, 100);
+    }
+  }, [expandedPost, post.id]);
 
   return (
     <div className="postContainer">
@@ -175,11 +200,16 @@ const Post = ({ post }) => {
           <DeletePostPrompt post={post} postRef={postRef} setDeleteMode={setDeleteMode} />
         ) : null}
       </div>
-      {expandedPost === post.id ? (
-        <div className="repliesContainer">
-          <NewReply post={post} resetReplies={resetReplies} replyDelta={replyDelta} user={user} />
-        </div>
-      ) : null}
+      <div className="repliesContainer" ref={repliesContainerRef}>
+        <NewReply
+          post={post}
+          resetReplies={resetReplies}
+          replyDelta={replyDelta}
+          user={user}
+          newReplyData={newReplyData}
+          setNewReply={setNewReply}
+        />
+      </div>
     </div>
   );
 };
