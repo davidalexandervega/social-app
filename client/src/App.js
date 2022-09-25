@@ -41,6 +41,8 @@ const App = () => {
 
   useEffect(() => {
     if (username) {
+      // this is causing there to be an error message on the login page upon logout.
+      // the reason is because the username is still present in the global state upon logout.
       dispatch(fetchUser(username));
     }
   }, [dispatch, token, username]);

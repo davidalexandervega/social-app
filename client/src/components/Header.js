@@ -2,6 +2,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { Cloudinary } from '@cloudinary/url-gen';
+import { AdvancedImage } from '@cloudinary/react';
+
 import { logout, reset } from '../features/auth/authSlice';
 
 import {
@@ -17,9 +20,16 @@ import {
 const Header = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { token, username } = useSelector((state) => state.auth);
+  const { token, user, userID, username } = useSelector((state) => state.auth);
 
   const { notify } = props;
+
+  const cloudName = 'dgwf4o5mj';
+  const cloudinary = new Cloudinary({
+    cloud: {
+      cloudName,
+    },
+  });
 
   const loadFeed = () => {
     navigate('/');
@@ -33,20 +43,32 @@ const Header = (props) => {
 
   return (
     <header className="header">
-      <ProfileCircled
-        height="3em"
-        width="3em"
-        strokeWidth="0.75"
-        className="button"
-        onClick={() => navigate(`/users/` + username)}
-      />
+      {token ? (
+        <span className="button" onClick={() => navigate(`/users/` + username)}>
+          <div className="headerPicture">
+            {!user && user.hasPicture ? (
+              <AdvancedImage
+                cldImg={cloudinary.image(`/pictures/${userID}`).setVersion(Date.now())}
+                className="headerImage"
+              />
+            ) : (
+              <ProfileCircled className="button" height="48px" width="48px" strokeWidth="0.75" />
+            )}
+          </div>
+        </span>
+      ) : (
+        <span className="button labelButton sidebarButton" onClick={() => navigate('/login')}>
+          <ProfileCircled className="button" height="48px" width="48px" strokeWidth="0.75" />
+          profile
+        </span>
+      )}
       {token ? (
         <>
           {notify === true ? (
             <BellNotification
               className="button notifyButton"
-              height="3em"
-              width="3em"
+              height="48px"
+              width="48px"
               strokeWidth="0.75"
               color="rgb(255, 64, 0)"
               onClick={() => navigate('/notifications')}
@@ -54,46 +76,42 @@ const Header = (props) => {
           ) : (
             <Bell
               className="button"
-              height="3em"
-              width="3em"
+              height="48px"
+              width="48px"
               strokeWidth="0.75"
               onClick={() => navigate('/notifications')}
             />
           )}
         </>
-      ) : (
-        ''
-      )}
+      ) : null}
       <Globe
-        height="3em"
-        width="3em"
+        height="48px"
+        width="48px"
         strokeWidth="0.75"
         className="button"
         onClick={() => loadFeed()}
       />
       {token ? (
         <Settings
-          height="3em"
-          width="3em"
+          height="48px"
+          width="48px"
           strokeWidth="0.75"
           className="button"
           onClick={() => navigate('/settings')}
         />
-      ) : (
-        ''
-      )}
+      ) : null}
       {token ? (
         <LogOut
-          height="3em"
-          width="3em"
+          height="48px"
+          width="48px"
           strokeWidth="0.75"
           className="button"
           onClick={() => onLogout()}
         />
       ) : (
         <LogIn
-          height="3em"
-          width="3em"
+          height="48px"
+          width="48px"
           strokeWidth="0.75"
           className="button"
           onClick={() => navigate('/login')}

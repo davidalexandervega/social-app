@@ -64,7 +64,7 @@ const Sidebar = (props) => {
         </span>
       ) : (
         <span className="button labelButton sidebarButton" onClick={() => navigate('/login')}>
-          <ProfileCircled height="42px" width="42px" strokeWidth="1.1" />
+          <ProfileCircled height="2em" width="2em" strokeWidth="1.1" />
           profile
         </span>
       )}
