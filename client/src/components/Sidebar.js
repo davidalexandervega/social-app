@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -26,7 +26,7 @@ const Sidebar = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { token, user } = useSelector((state) => state.auth);
-  const { username } = user;
+  const username = user ? user.username : null;
 
   const cloudName = 'dgwf4o5mj';
   const cloudinary = new Cloudinary({
@@ -34,6 +34,29 @@ const Sidebar = (props) => {
       cloudName,
     },
   });
+
+  const sidebarRef = useRef();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      sidebarRef.current.classList.add('fade');
+    }, 200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // handle the transition from the login page sidebar to the fully expanded one:
+  useEffect(() => {
+    if (token) {
+      sidebarRef.current.style.display = 'none';
+      sidebarRef.current.classList.remove('fade');
+      setTimeout(() => {
+        sidebarRef.current.style.display = 'flex';
+      }, 10);
+      const timer = setTimeout(() => {
+        sidebarRef.current.classList.add('fade');
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [token]);
 
   const loadFeed = () => {
     navigate('/');
@@ -44,8 +67,9 @@ const Sidebar = (props) => {
     dispatch(reset());
     navigate('/');
   };
+
   return (
-    <header className="sidebar">
+    <header className="sidebar" ref={sidebarRef}>
       {token ? (
         <span
           className="button labelButton sidebarProfile"

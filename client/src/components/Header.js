@@ -21,7 +21,7 @@ const Header = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { token, user } = useSelector((state) => state.auth);
-  const { username } = user;
+  const username = user ? user.username : null;
 
   const { notify } = props;
 

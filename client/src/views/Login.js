@@ -22,8 +22,15 @@ const Login = () => {
 
   const { token, isError, isSuccess, message } = useSelector((state) => state.auth);
 
-  const errorRef = useRef();
+  const loginRef = useRef();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      loginRef.current.classList.add('fade');
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
+  const errorRef = useRef();
   useEffect(() => {
     if (isError) {
       console.log(message);
@@ -57,7 +64,7 @@ const Login = () => {
   };
 
   return (
-    <div className="loginPage">
+    <div className="loginPage" ref={loginRef}>
       <span className="siteBanner">social</span>
       <LoginBanner />
       <div className="formContainer">

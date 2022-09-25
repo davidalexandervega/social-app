@@ -4,6 +4,12 @@
   flex-direction: column;
   margin: 2vh 4vw 0 2vw;
   width: 220px;
+  transition: opacity 0.75s ease-out;
+  opacity: 0;
+}
+
+.fade {
+  opacity: 1;
 }
 
 .sidebarProfile {

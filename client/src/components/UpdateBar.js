@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 
 import '../assets/styles/UpdateBar.scss';
 
 const UpdateBar = () => {
+  const updateBarRef = useRef();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      updateBarRef.current.classList.add('fade');
+    }, 200);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="updateBar">
+    <div className="updateBar" ref={updateBarRef}>
       <div className="updateHeader">announcements</div>
       <div className="updateBody">
         thank you for exploring. you're free to either use the demo account or register your own.

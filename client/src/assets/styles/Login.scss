@@ -8,6 +8,12 @@
   flex-direction: column;
   margin-top: 7vh;
   align-items: center;
+  transition: opacity 0.75s ease-out;
+  opacity: 0;
+}
+
+.fade {
+  opacity: 1;
 }
 
 .loginButton {

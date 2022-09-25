@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import './assets/styles/global.scss';
@@ -87,6 +87,20 @@ const App = () => {
             />
             <Route path="*" element={<></>} />
           </Routes>
+        </>
+      ) : null}
+      {!token ? (
+        <>
+          <Header notify={notify} />
+          <div id="page">
+            <Sidebar newPostData={newPostData} setNewPost={setNewPost} notify={notify} />
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="*" exact={true} element={<Navigate to="/login" />} />
+            </Routes>
+            <UpdateBar />
+          </div>
         </>
       ) : null}
     </BrowserRouter>

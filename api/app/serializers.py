@@ -10,8 +10,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
         token['username'] = user.username
-        token['email'] = User.objects.get(username=user.username).email
-        token['hasPicture'] = User.objects.get(username=user.username).hasPicture
 
         return token
 
