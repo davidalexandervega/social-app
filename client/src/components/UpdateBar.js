@@ -1,8 +1,11 @@
 import React, { useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import '../assets/styles/UpdateBar.scss';
 
 const UpdateBar = () => {
+  const { token, user } = useSelector((state) => state.auth);
+
   const updateBarRef = useRef();
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -10,6 +13,21 @@ const UpdateBar = () => {
     }, 200);
     return () => clearTimeout(timer);
   }, []);
+
+  // transition in unison with the sidebar:
+  useEffect(() => {
+    if (token && !user) {
+      updateBarRef.current.style.display = 'none';
+      updateBarRef.current.classList.remove('fade');
+      setTimeout(() => {
+        updateBarRef.current.style.display = 'flex';
+      }, 10);
+      const timer = setTimeout(() => {
+        updateBarRef.current.classList.add('fade');
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [token, user]);
 
   return (
     <div className="updateBar" ref={updateBarRef}>
