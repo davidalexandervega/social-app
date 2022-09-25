@@ -17,7 +17,8 @@ import { createNotification } from '../features/notification/notificationSlice';
 const Reply = (props) => {
   const { reply, replyDelta, post } = props;
   const dispatch = useDispatch();
-  const { userID, username } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
+  const { username } = user;
 
   const cloudinary = new Cloudinary({
     cloud: {
@@ -59,14 +60,14 @@ const Reply = (props) => {
     // the placeholder and color change the value immediately to reflect
     // the state that will be returned and reinforced by the useEffect() call below:
     let replyData = {};
-    if (reply.likes.includes(userID)) {
+    if (reply.likes.includes(user.id)) {
       setIsLiked({
         color: 'whitesmoke',
         placeholder: -1,
       });
       replyData = {
         ...reply,
-        likes: [...reply.likes].filter((like) => like !== userID),
+        likes: [...reply.likes].filter((like) => like !== user.id),
       };
     } else {
       setIsLiked({
@@ -75,13 +76,13 @@ const Reply = (props) => {
       });
       replyData = {
         ...reply,
-        likes: [...reply.likes, userID],
+        likes: [...reply.likes, user.id],
       };
-      if (reply.user !== userID) {
+      if (reply.user !== user.id) {
         const notificationData = {
           id: uuidv4(),
           time: new Date(),
-          creatorID: userID,
+          creatorID: user.id,
           creatorUsername: username,
           recipientID: reply.user,
           type: 'like_post',
@@ -95,7 +96,7 @@ const Reply = (props) => {
   };
 
   useEffect(() => {
-    if (reply.likes.includes(userID)) {
+    if (reply.likes.includes(user.id)) {
       setIsLiked({
         color: 'rgb(212, 196, 240)',
         placeholder: 0,
@@ -106,7 +107,7 @@ const Reply = (props) => {
         placeholder: 0,
       });
     }
-  }, [reply.likes, userID]);
+  }, [reply.likes, user.id]);
 
   const [deleteMode, setDeleteMode] = useState(false);
 
@@ -124,9 +125,7 @@ const Reply = (props) => {
               <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />
             )}
           </span>
-          &nbsp;
           <span className="postUsername">@{reply.username}</span>
-          &nbsp;
           <span className="postTime">{displayTime()}</span>
         </span>
         <div className="postBody">
@@ -137,13 +136,11 @@ const Reply = (props) => {
             <Heart className="button postLikeButton" strokeWidth="1.1" fill={isLiked.color} />
             &nbsp;{reply.likes.length + isLiked.placeholder}
           </span>
-          {reply.user === userID ? (
+          {reply.user === user.id ? (
             <span className="postDelete" onClick={() => setDeleteMode(true)}>
               <Cancel className="postDeleteButton" strokeWidth="1.1" />
             </span>
-          ) : (
-            ''
-          )}
+          ) : null}
         </div>
         {deleteMode === true ? (
           <DeleteReplyPrompt
@@ -152,9 +149,7 @@ const Reply = (props) => {
             setDeleteMode={setDeleteMode}
             replyDelta={replyDelta}
           />
-        ) : (
-          ''
-        )}
+        ) : null}
       </div>
     </div>
   );

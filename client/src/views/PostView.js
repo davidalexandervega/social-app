@@ -21,7 +21,8 @@ import { createNotification } from '../features/notification/notificationSlice';
 
 const PostView = () => {
   const { id } = useParams();
-  const { userID, username, hasPicture } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
+  const { username } = user;
   const { posts } = useSelector((state) => state.post);
   const post = posts.length > 1 ? posts.find((post) => post.id === id) : posts[0];
   const { replies } = useSelector((state) => state.reply);
@@ -87,14 +88,14 @@ const PostView = () => {
     // the placeholder and color change the value immediately to reflect
     // the state that will be returned and reinforced by the useEffect() call below:
     let postData = {};
-    if (post.likes.includes(userID)) {
+    if (post.likes.includes(user.id)) {
       setIsLiked({
         color: 'whitesmoke',
         placeholder: -1,
       });
       postData = {
         ...post,
-        likes: [...post.likes].filter((like) => like !== userID),
+        likes: [...post.likes].filter((like) => like !== user.id),
       };
     } else {
       setIsLiked({
@@ -103,13 +104,13 @@ const PostView = () => {
       });
       postData = {
         ...post,
-        likes: [...post.likes, userID],
+        likes: [...post.likes, user.id],
       };
-      if (post.user !== userID) {
+      if (post.user !== user.id) {
         const notificationData = {
           id: uuidv4(),
           time: new Date(),
-          creatorID: userID,
+          creatorID: user.id,
           creatorUsername: username,
           recipientID: post.user,
           type: 'like_post',
@@ -124,7 +125,7 @@ const PostView = () => {
 
   useEffect(() => {
     if (post) {
-      if (post.likes.includes(userID)) {
+      if (post.likes.includes(user.id)) {
         setIsLiked({
           color: 'rgb(212, 196, 240)',
           placeholder: 0,
@@ -136,7 +137,7 @@ const PostView = () => {
         });
       }
     }
-  }, [post, userID]);
+  }, [post, user.id]);
 
   const [deleteMode, setDeleteMode] = useState(false);
 
@@ -159,11 +160,9 @@ const PostView = () => {
                   <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />
                 )}
               </span>
-              &nbsp;
               <span className="postUsername" onClick={() => navigate(`/users/${post.username}`)}>
                 @{post.username}
               </span>
-              &nbsp;
               <span className="postTime">{displayTime()}</span>
             </span>
             <div className="postBody">
@@ -181,13 +180,11 @@ const PostView = () => {
                 <ChatBubbleEmpty className="button postReplyButton" strokeWidth="1.1" />
                 &nbsp;{post.replies.length + feedReplyDelta.current + replyDelta.current}
               </span>
-              {post.user === userID ? (
+              {post.user === user.id ? (
                 <span className="postDelete" onClick={() => setDeleteMode(true)}>
                   <Cancel className="postDeleteButton" strokeWidth="1.1" />
                 </span>
-              ) : (
-                ''
-              )}
+              ) : null}
             </div>
             {deleteMode === true ? (
               <DeletePostPrompt
@@ -197,9 +194,7 @@ const PostView = () => {
                 postView={true}
                 postViewRef={postViewRef}
               />
-            ) : (
-              ''
-            )}
+            ) : null}
           </div>
           <div className="repliesContainer">
             <NewReply
@@ -207,9 +202,7 @@ const PostView = () => {
               resetReplies={resetReplies}
               replyDelta={replyDelta}
               postView={true}
-              username={username}
-              userID={userID}
-              userHasPicture={hasPicture}
+              user={user}
             />
             {replies.map((reply) => (
               <Reply key={reply.id} reply={reply} replyDelta={replyDelta} post={post} />

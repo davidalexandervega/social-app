@@ -19,7 +19,7 @@ const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { username, userID, profileUser } = useSelector((state) => state.auth);
+  const { user, profileUser } = useSelector((state) => state.auth);
   const { posts } = useSelector((state) => state.post);
 
   const cloudName = 'dgwf4o5mj';
@@ -33,7 +33,7 @@ const Profile = () => {
     dispatch(ejectProfile());
     dispatch(fetchProfile(profileUsername));
     dispatch(fetchUserPosts(profileUsername));
-  }, [dispatch, username, profileUsername]);
+  }, [dispatch, profileUsername]);
 
   const profileRef = useRef();
   useEffect(() => {
@@ -90,7 +90,7 @@ const Profile = () => {
                   initialized {new Date(profileUser.created).toLocaleDateString()}
                 </div>
                 <div className="profileActions">
-                  {profileUser.id === userID ? (
+                  {profileUser.id === user.id ? (
                     <div
                       className="solidButton longButton"
                       onClick={() => navigate(`/users/${profileUser.username}/edit`)}

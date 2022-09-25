@@ -20,7 +20,8 @@ import { createNotification } from '../features/notification/notificationSlice';
 const Post = ({ post }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userID, username, hasPicture } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
+  const { username } = user;
   const { expandedPost } = useSelector((state) => state.reply);
 
   const cloudinary = new Cloudinary({
@@ -67,14 +68,14 @@ const Post = ({ post }) => {
     // the placeholder and color change the value immediately to reflect
     // the state that will be returned and reinforced by the useEffect() call below:
     let postData = {};
-    if (post.likes.includes(userID)) {
+    if (post.likes.includes(user.id)) {
       setIsLiked({
         color: 'whitesmoke',
         placeholder: -1,
       });
       postData = {
         ...post,
-        likes: [...post.likes].filter((like) => like !== userID),
+        likes: [...post.likes].filter((like) => like !== user.id),
       };
     } else {
       setIsLiked({
@@ -83,15 +84,15 @@ const Post = ({ post }) => {
       });
       postData = {
         ...post,
-        likes: [...post.likes, userID],
+        likes: [...post.likes, user.id],
       };
-      if (post.user !== userID) {
+      if (post.user !== user.id) {
         const notificationData = {
           id: uuidv4(),
           time: new Date(),
-          creatorID: userID,
+          creatorID: user.id,
           creatorUsername: username,
-          creatorHasPicture: hasPicture,
+          creatorHasPicture: user.hasPicture,
           recipientID: post.user,
           type: 'like_post',
           object: post.id,
@@ -104,7 +105,7 @@ const Post = ({ post }) => {
   };
 
   useEffect(() => {
-    if (post.likes.includes(userID)) {
+    if (post.likes.includes(user.id)) {
       setIsLiked({
         color: 'rgb(212, 196, 240)',
         placeholder: 0,
@@ -115,7 +116,7 @@ const Post = ({ post }) => {
         placeholder: 0,
       });
     }
-  }, [post.likes, userID]);
+  }, [post.likes, user.id]);
 
   const [deleteMode, setDeleteMode] = useState(false);
 
@@ -147,7 +148,6 @@ const Post = ({ post }) => {
           <span className="postUsername" onClick={() => navigate(`/users/${post.username}`)}>
             @{post.username}
           </span>
-          &nbsp;
           <span className="postTime">{displayTime()}</span>
         </span>
         <div className="postBody" onClick={() => onPostView(post.id)}>
@@ -165,34 +165,21 @@ const Post = ({ post }) => {
             <ChatBubbleEmpty className="button postReplyButton" strokeWidth="1.1" />
             &nbsp;{post.replies.length + replyDelta.current}
           </span>
-          {post.user === userID ? (
+          {post.user === user.id ? (
             <span className="postDelete" onClick={() => setDeleteMode(true)}>
               <Cancel className="postDeleteButton" strokeWidth="1.1" />
             </span>
-          ) : (
-            ''
-          )}
+          ) : null}
         </div>
         {deleteMode === true ? (
           <DeletePostPrompt post={post} postRef={postRef} setDeleteMode={setDeleteMode} />
-        ) : (
-          ''
-        )}
+        ) : null}
       </div>
       {expandedPost === post.id ? (
         <div className="repliesContainer">
-          <NewReply
-            post={post}
-            resetReplies={resetReplies}
-            replyDelta={replyDelta}
-            username={username}
-            userID={userID}
-            userHasPicture={hasPicture}
-          />
+          <NewReply post={post} resetReplies={resetReplies} replyDelta={replyDelta} user={user} />
         </div>
-      ) : (
-        ''
-      )}
+      ) : null}
     </div>
   );
 };

@@ -3,7 +3,13 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { login, editUser, changePassword, toggleUpdate } from '../features/auth/authSlice';
+import {
+  login,
+  editUser,
+  changePassword,
+  toggleUpdate,
+  fetchUser,
+} from '../features/auth/authSlice';
 
 import '../assets/styles/Settings.scss';
 
@@ -11,23 +17,25 @@ const Settings = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { userID, username, userEmail, updating } = useSelector((state) => state.auth);
+  const { user, updating } = useSelector((state) => state.auth);
+
+  const { username } = user;
 
   const settingsRef = useRef();
   const settingsHeaderRef = useRef();
   useEffect(() => {
-    if (userID) {
+    if (user.id) {
       const timer = setTimeout(() => {
         settingsHeaderRef.current.classList.add('fade');
         settingsRef.current.classList.add('fade');
       }, 700);
       return () => clearTimeout(timer);
     }
-  }, [userID]);
+  }, [user.id]);
 
   const [formData, setFormData] = useState({
     newUsername: username,
-    newEmail: userEmail,
+    newEmail: user.email,
     password: '',
     currentPassword: '',
     newPassword: '',
@@ -45,9 +53,9 @@ const Settings = () => {
   };
 
   const onSaveChanges = () => {
-    if (username !== newUsername || userEmail !== newEmail) {
+    if (username !== newUsername || user.email !== newEmail) {
       const userData = {
-        userID,
+        userID: user.id,
         username,
         newUsername,
         newEmail,
@@ -63,11 +71,15 @@ const Settings = () => {
 
   useEffect(() => {
     if (updating === true) {
-      const loginData = { username, password };
+      const loginData = {
+        username: newUsername ? newUsername : username,
+        password,
+      };
       dispatch(login(loginData));
+      dispatch(fetchUser(user.id));
       dispatch(toggleUpdate());
       setTimeout(() => {
-        navigate(`/users/${username}`);
+        navigate(`/users/${loginData.username}`);
       }, 1000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,7 +88,7 @@ const Settings = () => {
   const onChangePassword = () => {
     if (currentPassword !== newPassword && newPassword === confirmNewPassword) {
       const passwordData = {
-        userID,
+        userID: user.id,
         username,
         currentPassword,
         newPassword,

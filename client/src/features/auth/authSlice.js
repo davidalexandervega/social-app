@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from './authService';
-import jwt from 'jwt-decode';
 
 // if token is in localStorage, parse the string into JSON and store it in token:
 const token = JSON.parse(localStorage.getItem('token'));
@@ -8,10 +7,6 @@ const token = JSON.parse(localStorage.getItem('token'));
 // set the initial state:
 const initialState = {
   token: token ? token : null,
-  userID: token ? jwt(token.access).user_id : null,
-  username: token ? jwt(token.access).username : null,
-  userEmail: token ? jwt(token.access).email : null,
-  hasPicture: token ? jwt(token.access).hasPicture : false,
   user: null,
   profileUser: null,
   updating: false,
@@ -53,10 +48,10 @@ export const logout = createAsyncThunk('auth/logout', async () => {
   await authService.logout();
 });
 
-export const fetchUser = createAsyncThunk('auth/fetch/user', async (username, thunkAPI) => {
+export const fetchUser = createAsyncThunk('auth/fetch/user', async (userID, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.token.access;
-    return await authService.fetchUser(username, token);
+    return await authService.fetchUser(userID, token);
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -69,7 +64,7 @@ export const fetchUser = createAsyncThunk('auth/fetch/user', async (username, th
 export const fetchProfile = createAsyncThunk('auth/fetch/profile', async (username, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.token.access;
-    return await authService.fetchUser(username, token);
+    return await authService.fetchProfile(username, token);
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -157,9 +152,6 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isSuccess = true;
         state.token = action.payload;
-        state.userID = jwt(state.token.access).user_id;
-        state.username = jwt(state.token.access).username;
-        state.userEmail = jwt(state.token.access).email;
       })
       .addCase(login.rejected, (state, action) => {
         state.isError = true;
@@ -187,9 +179,6 @@ export const authSlice = createSlice({
       })
       .addCase(editProfile.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.profileUser.bio = action.payload.bio;
-        state.hasPicture = action.payload.hasPicture;
-        state.profileUser.hasPicture = action.payload.hasPicture;
         state.updating = true;
       })
       .addCase(editProfile.rejected, (state, action) => {
@@ -198,8 +187,6 @@ export const authSlice = createSlice({
       })
       .addCase(editUser.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.username = action.payload.username;
-        state.userEmail = action.payload.userEmail;
         state.updating = true;
       })
       .addCase(editUser.rejected, (state, action) => {

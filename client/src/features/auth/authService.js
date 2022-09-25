@@ -27,14 +27,14 @@ const logout = () => {
   localStorage.removeItem('token');
 };
 
-const fetchUser = async (username, token) => {
+const fetchUser = async (userID, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
 
-  const response = await axios.get(API_URL + '?username=' + username, config);
+  const response = await axios.get(API_URL + '?userID=' + userID, config);
 
   return response.data;
 };

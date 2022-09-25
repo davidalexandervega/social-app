@@ -22,7 +22,7 @@
 }
 
 .postHeader {
-  padding: 7px 7px 7px 7px;
+  padding: 7px 7px 7px 4px;
   display: flex;
 }
 
@@ -54,6 +54,10 @@
 
 .postUsername:hover {
   cursor: pointer;
+}
+
+.postTime {
+  margin-left: 10px;
 }
 
 .postBody {

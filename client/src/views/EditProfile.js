@@ -21,30 +21,31 @@ const EditProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { userID, profileUser, updating } = useSelector((state) => state.auth);
+  const { user, updating } = useSelector((state) => state.auth);
+  const { username } = user;
 
   useEffect(() => {
-    if (!profileUser) navigate('/');
-  }, [dispatch, navigate, profileUser]);
+    if (!user) navigate('/');
+  }, [dispatch, navigate, user]);
 
   const editProfileHeaderRef = useRef();
   const editProfileRef = useRef();
   useEffect(() => {
-    if (profileUser && updating === false) {
+    if (user && updating === false) {
       const timer = setTimeout(() => {
         editProfileRef.current.classList.add('fade');
         editProfileHeaderRef.current.classList.add('fade');
       }, 700);
       return () => clearTimeout(timer);
     }
-  }, [profileUser, updating]);
+  }, [user, updating]);
 
   const [formData, setFormData] = useState({
-    banner: profileUser.hasBanner,
+    banner: user ? user.hasBanner : null,
     deleteBanner: false,
-    picture: profileUser.hasPicture,
+    picture: user ? user.hasPicture : null,
     deletePicture: false,
-    bio: profileUser ? profileUser.bio : '',
+    bio: user ? user.bio : '',
   });
 
   const { banner, picture, bio } = formData;
@@ -129,8 +130,8 @@ const EditProfile = () => {
 
   const onSubmit = () => {
     const profileData = {
-      username: profileUsername,
-      id: profileUser.id,
+      username,
+      id: user.id,
       hasBanner: formData.banner ? true : false,
       deleteBanner: formData.deleteBanner,
       hasPicture: formData.picture ? true : false,
@@ -153,7 +154,7 @@ const EditProfile = () => {
         const bannerData = new FormData();
         bannerData.append('file', bannerRef.current.files[0]);
         bannerData.append('upload_preset', 'social');
-        bannerData.append('public_id', profileUser.id);
+        bannerData.append('public_id', user.id);
         bannerData.append('folder', '/banners/');
         axios
           .post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, bannerData)
@@ -163,7 +164,7 @@ const EditProfile = () => {
         const pictureData = new FormData();
         pictureData.append('file', pictureRef.current.files[0]);
         pictureData.append('upload_preset', 'social');
-        pictureData.append('public_id', profileUser.id);
+        pictureData.append('public_id', user.id);
         pictureData.append('folder', '/pictures/');
         axios
           .post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, pictureData)
@@ -171,8 +172,8 @@ const EditProfile = () => {
       }
       setTimeout(() => {
         dispatch(toggleUpdate());
-        dispatch(fetchUser(profileUsername));
-        navigate(`/users/${profileUsername}`);
+        dispatch(fetchUser(user.id));
+        navigate(`/users/${username}`);
       }, 1000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -183,14 +184,14 @@ const EditProfile = () => {
       <div className="editViewHeader" ref={editProfileHeaderRef}>
         edit profile
       </div>
-      {profileUser && profileUser.id === userID ? (
+      {user && username === profileUsername ? (
         <div className="viewBox editProfile" ref={editProfileRef}>
           <div className="profileBanner">
             {formData.banner ? (
               <>
                 {formData.banner === true ? (
                   <AdvancedImage
-                    cldImg={cloudinary.image(`/banners/${profileUser.id}`).setVersion(Date.now())}
+                    cldImg={cloudinary.image(`/banners/${user.id}`).setVersion(Date.now())}
                     className="bannerImage"
                   />
                 ) : (
@@ -220,9 +221,7 @@ const EditProfile = () => {
                 <>
                   {formData.picture === true ? (
                     <AdvancedImage
-                      cldImg={cloudinary
-                        .image(`/pictures/${profileUser.id}`)
-                        .setVersion(Date.now())}
+                      cldImg={cloudinary.image(`/pictures/${user.id}`).setVersion(Date.now())}
                       className="profileImage"
                     />
                   ) : (
@@ -254,7 +253,7 @@ const EditProfile = () => {
               </div>
               <div
                 className="solidButton redButton longButton"
-                onClick={() => navigate(`/users/${profileUsername}`)}
+                onClick={() => navigate(`/users/${username}`)}
               >
                 cancel
               </div>

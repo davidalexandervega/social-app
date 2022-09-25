@@ -25,7 +25,8 @@ const Sidebar = (props) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { token, userID, username, user } = useSelector((state) => state.auth);
+  const { token, user } = useSelector((state) => state.auth);
+  const { username } = user;
 
   const cloudName = 'dgwf4o5mj';
   const cloudinary = new Cloudinary({
@@ -53,7 +54,7 @@ const Sidebar = (props) => {
           <div className="sidebarPicture">
             {user && user.hasPicture ? (
               <AdvancedImage
-                cldImg={cloudinary.image(`/pictures/${userID}`).setVersion(Date.now())}
+                cldImg={cloudinary.image(`/pictures/${user.id}`).setVersion(Date.now())}
                 className="sidebarImage"
               />
             ) : (

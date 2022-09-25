@@ -20,7 +20,8 @@ import {
 const Header = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { token, user, userID, username } = useSelector((state) => state.auth);
+  const { token, user } = useSelector((state) => state.auth);
+  const { username } = user;
 
   const { notify } = props;
 
@@ -46,9 +47,9 @@ const Header = (props) => {
       {token ? (
         <span className="button" onClick={() => navigate(`/users/` + username)}>
           <div className="headerPicture">
-            {!user && user.hasPicture ? (
+            {user && user.hasPicture ? (
               <AdvancedImage
-                cldImg={cloudinary.image(`/pictures/${userID}`).setVersion(Date.now())}
+                cldImg={cloudinary.image(`/pictures/${user.id}`).setVersion(Date.now())}
                 className="headerImage"
               />
             ) : (
