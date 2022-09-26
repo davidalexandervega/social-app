@@ -48,7 +48,7 @@ export const logout = createAsyncThunk('auth/logout', async () => {
   await authService.logout();
 });
 
-export const fetchUser = createAsyncThunk('auth/fetch/user', async (userID, thunkAPI) => {
+export const fetchUser = createAsyncThunk('auth/user/fetch-user', async (userID, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.token.access;
     return await authService.fetchUser(userID, token);
@@ -61,33 +61,39 @@ export const fetchUser = createAsyncThunk('auth/fetch/user', async (userID, thun
   }
 });
 
-export const fetchProfile = createAsyncThunk('auth/fetch/profile', async (username, thunkAPI) => {
-  try {
-    const token = thunkAPI.getState().auth.token.access;
-    return await authService.fetchProfile(username, token);
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
-    return thunkAPI.rejectWithValue(message);
+export const fetchProfile = createAsyncThunk(
+  'auth/user/fetch-profile',
+  async (username, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.token.access;
+      return await authService.fetchProfile(username, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
   }
-});
+);
 
-export const editProfile = createAsyncThunk('auth/editProfile', async (profileData, thunkAPI) => {
-  try {
-    const token = thunkAPI.getState().auth.token.access;
-    return await authService.editProfile(profileData, token);
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
-    return thunkAPI.rejectWithValue(message);
+export const editProfile = createAsyncThunk(
+  'auth/user/edit-profile',
+  async (profileData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.token.access;
+      return await authService.editProfile(profileData, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
   }
-});
+);
 
-export const editUser = createAsyncThunk('auth/editUser', async (userData, thunkAPI) => {
+export const editUser = createAsyncThunk('auth/user/edit-user', async (userData, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.token.access;
     return await authService.editUser(userData, token);
@@ -116,6 +122,19 @@ export const changePassword = createAsyncThunk(
   }
 );
 
+export const followUser = createAsyncThunk('auth/user/follow', async (followData, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().auth.token.access;
+    return await authService.followUser(followData, token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -134,6 +153,15 @@ export const authSlice = createSlice({
     },
     ejectProfile: (state) => {
       state.profileUser = null;
+    },
+    updateFollowing: (state) => {
+      if (state.profileUser.followers.includes(state.user.id)) {
+        state.profileUser.followers.splice(state.profileUser.followers.indexOf(state.user.id), 1);
+        state.user.following.splice(state.user.following.indexOf(state.profileUser.id), 1);
+      } else {
+        state.profileUser.followers.push(state.user.id);
+        state.user.following.push(state.profileUser.id);
+      }
     },
   },
 
@@ -199,12 +227,20 @@ export const authSlice = createSlice({
       .addCase(changePassword.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
+      })
+      .addCase(followUser.fulfilled, (state, action) => {
+        state.isSuccess = true;
+      })
+      .addCase(followUser.rejected, (state, action) => {
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });
 
 // export the reducer of the slice:
-export const { reset, toggleUpdate, removeUserPicture, ejectProfile } = authSlice.actions;
+export const { reset, toggleUpdate, removeUserPicture, ejectProfile, updateFollowing } =
+  authSlice.actions;
 
 // export the slice (which is a reducer of the global store):
 export default authSlice.reducer;

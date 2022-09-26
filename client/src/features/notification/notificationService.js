@@ -31,12 +31,7 @@ const checkNotifications = async (_, token) => {
     },
   };
 
-  console.log('checking notifications...');
-
   const response = await axios.put('/api/notifications/', {}, config);
-
-  console.log('notifications checked!');
-  console.log(response.data);
 
   return response.data;
 };

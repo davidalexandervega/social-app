@@ -73,7 +73,7 @@ export const notificationSlice = createSlice({
       })
       .addCase(checkNotifications.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.notifications = action.payload;
+        state.notifications = action.payload.sort((a, b) => new Date(b.time) - new Date(a.time));
       })
       .addCase(checkNotifications.rejected, (state, action) => {
         state.isError = true;

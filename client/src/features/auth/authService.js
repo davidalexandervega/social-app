@@ -101,6 +101,22 @@ const changePassword = async (passwordData, token) => {
   return response.data;
 };
 
+const followUser = async (followData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.put(
+    API_URL + 'follow-user/?userID=' + followData.targetID,
+    followData,
+    config
+  );
+
+  return response.data;
+};
+
 const authService = {
   register,
   login,
@@ -110,6 +126,7 @@ const authService = {
   editProfile,
   editUser,
   changePassword,
+  followUser,
 };
 
 export default authService;

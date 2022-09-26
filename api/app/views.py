@@ -103,6 +103,19 @@ def userApi(request, user_id=0):
       user.save()
       return JsonResponse('password updated', safe=False)
     return JsonResponse('password update failed', safe=False)
+  elif request.method == 'PUT' and ('follow-user' in request.path):
+    follow_data = JSONParser().parse(request)
+    creator = User.objects.get(id=follow_data['creatorID'])
+    target = User.objects.get(id=follow_data['targetID'])
+    if creator.id not in target.followers:
+      target.followers.append(creator.id)
+      creator.following.append(target.id)
+    elif creator.id in target.followers:
+      target.followers.remove(creator.id)
+      creator.following.remove(target.id)
+    creator.save()
+    target.save()
+    return JsonResponse(UserSerializer(target).data, safe=False)
   elif request.method == 'DELETE':
     user = User.objects.get(id=user_id)
     user.delete()

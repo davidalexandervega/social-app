@@ -2,7 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { fetchProfile, ejectProfile } from '../features/auth/authSlice';
+import {
+  fetchProfile,
+  ejectProfile,
+  followUser,
+  updateFollowing,
+} from '../features/auth/authSlice';
 import { fetchUserPosts, reset as resetPosts } from '../features/post/postSlice';
 
 import Post from '../components/Post';
@@ -52,6 +57,16 @@ const Profile = () => {
     };
   }, [dispatch]);
 
+  const onFollowUser = () => {
+    const followData = {
+      targetID: profileUser.id,
+      creatorID: user.id,
+    };
+
+    dispatch(followUser(followData));
+    dispatch(updateFollowing());
+  };
+
   return (
     <div className="view">
       {profileUser ? (
@@ -98,7 +113,9 @@ const Profile = () => {
                       edit profile
                     </div>
                   ) : (
-                    <div className="solidButton longButton">following</div>
+                    <div className="solidButton longButton" onClick={() => onFollowUser()}>
+                      {profileUser.followers.includes(user.id) ? 'following' : 'follow'}
+                    </div>
                   )}
                 </div>
               </div>
