@@ -58,6 +58,13 @@ const NewReply = (props) => {
       }
     }
 
+    if (postView) {
+      setNewReply((prevState) => ({
+        ...prevState,
+        newReplyBody: '',
+      }));
+    }
+
     dispatch(expandPost(null));
   };
 
