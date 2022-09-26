@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ProfileCircled, Heart, ChatBubbleEmpty } from 'iconoir-react';
+import { ProfileCircled, Heart, ChatBubbleEmpty, VerifiedUser } from 'iconoir-react';
 
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
@@ -54,6 +54,8 @@ const Notification = (props) => {
       notification.type === 'like_reply'
     ) {
       navigate(`/posts/${notification.object}`);
+    } else if (notification.type === 'follow_user') {
+      navigate(`/users/${notification.creatorUsername}`);
     }
   };
 
@@ -65,7 +67,7 @@ const Notification = (props) => {
           <ChatBubbleEmpty strokeWidth="1.1" fill="whitesmoke" />
         ) : null}
         {notification.type.includes('follow') ? (
-          <ProfileCircled strokeWidth="1.1" fill="whitesmoke" />
+          <VerifiedUser strokeWidth="1.1" fill="whitesmoke" />
         ) : null}
       </div>
       <span className="notificationCreatorPicture">
@@ -88,7 +90,7 @@ const Notification = (props) => {
         {notification.type.includes('like_post') ? 'liked your post.' : null}
         {notification.type.includes('reply_post') ? 'replied to your post.' : null}
         {notification.type.includes('like_reply') ? 'liked your reply.' : null}
-        {notification.type.includes('follow_user') ? 'started following you.' : null}
+        {notification.type.includes('follow_user') ? 'followed you.' : null}
       </div>
       <div className="notificationTime">{displayTime()}</div>
     </div>

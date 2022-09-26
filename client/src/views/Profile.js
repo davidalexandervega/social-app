@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   fetchProfile,
@@ -9,13 +10,14 @@ import {
   updateFollowing,
 } from '../features/auth/authSlice';
 import { fetchUserPosts, reset as resetPosts } from '../features/post/postSlice';
+import { createNotification } from '../features/notification/notificationSlice';
 
 import Post from '../components/Post';
 
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
 
-import { ProfileCircled } from 'iconoir-react';
+import { Check, Plus, ProfileCircled } from 'iconoir-react';
 
 import '../assets/styles/Profile.scss';
 
@@ -25,6 +27,7 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const { user, profileUser } = useSelector((state) => state.auth);
+  const { username } = user;
   const { posts } = useSelector((state) => state.post);
 
   const cloudName = 'dgwf4o5mj';
@@ -58,6 +61,20 @@ const Profile = () => {
   }, [dispatch]);
 
   const onFollowUser = () => {
+    if (!profileUser.followers.includes(user.id)) {
+      const notificationData = {
+        id: uuidv4(),
+        time: new Date(),
+        creatorID: user.id,
+        creatorHasPicture: user.hasPicture,
+        creatorUsername: username,
+        recipientID: profileUser.id,
+        type: 'follow_user',
+        object: profileUser.id,
+      };
+      dispatch(createNotification(notificationData));
+    }
+
     const followData = {
       targetID: profileUser.id,
       creatorID: user.id,
@@ -114,7 +131,17 @@ const Profile = () => {
                     </div>
                   ) : (
                     <div className="solidButton longButton" onClick={() => onFollowUser()}>
-                      {profileUser.followers.includes(user.id) ? 'following' : 'follow'}
+                      {profileUser.followers.includes(user.id) ? (
+                        <>
+                          following &nbsp;
+                          <Check />
+                        </>
+                      ) : (
+                        <>
+                          follow &nbsp;
+                          <Plus />
+                        </>
+                      )}
                     </div>
                   )}
                 </div>
