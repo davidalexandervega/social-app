@@ -144,8 +144,10 @@ const Post = ({ post }) => {
       }, 10);
     } else {
       setTimeout(() => {
-        repliesContainerRef.current.style.overflow = 'hidden';
-        repliesContainerRef.current.classList.remove('slide');
+        if (repliesContainerRef.current) {
+          repliesContainerRef.current.style.overflow = 'hidden';
+          repliesContainerRef.current.classList.remove('slide');
+        }
       }, 10);
       setTimeout(() => {
         setNewReply((prevState) => ({
