@@ -72,7 +72,7 @@ const Settings = () => {
       }, 10);
     } else {
       if (!reUsername.test(newUsername)) {
-        errorRef.current.innerHTML = 'usernames are alphanumeric and may contain underscores';
+        errorRef.current.innerHTML = 'usernames must be alphanumeric & may contain underscores';
       }
       if (!reEmail.test(newEmail)) {
         errorRef.current.innerHTML = 'invalid email';

@@ -60,7 +60,6 @@ const Header = (props) => {
       ) : (
         <span className="button labelButton sidebarButton" onClick={() => navigate('/login')}>
           <ProfileCircled className="button" height="48px" width="48px" strokeWidth="0.75" />
-          profile
         </span>
       )}
       {token ? (

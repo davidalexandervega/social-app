@@ -183,6 +183,7 @@ export const authSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.token = null;
+        state.user = null;
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.user = action.payload;

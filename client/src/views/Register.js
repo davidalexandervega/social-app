@@ -76,7 +76,7 @@ const Register = () => {
       }, 1000);
     } else {
       if (!reUsername.test(username)) {
-        errorRef.current.innerHTML = 'usernames are alphanumeric and may contain underscores';
+        errorRef.current.innerHTML = 'usernames must be alphanumeric & may contain underscores';
       }
       if (!reEmail.test(email)) {
         errorRef.current.innerHTML = 'invalid email';
