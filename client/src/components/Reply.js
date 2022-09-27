@@ -116,7 +116,7 @@ const Reply = (props) => {
       <div className="post reply" ref={replyRef}>
         <span className="postHeader">
           <span className="postUserPicture">
-            {reply.userHasPicture ? (
+            {reply.userPictureID ? (
               <AdvancedImage
                 className="postUserImage"
                 cldImg={cloudinary.image(`/pictures/${reply.user}`).setVersion(Date.now())}

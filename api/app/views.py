@@ -28,7 +28,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 def userApi(request, user_id=0):
   if request.method == 'GET':
     if request.GET.get('username'):
-      print('request by username')
       user = User.objects.get(username=request.GET['username'])
     if request.GET.get('userID'):
       user = User.objects.get(id=request.GET['userID'])
@@ -36,37 +35,46 @@ def userApi(request, user_id=0):
       user_serializer = UserSerializer(user)
       return JsonResponse(user_serializer.data, safe=False)
     return JsonResponse('user not found', safe=False)
-  elif request.method == 'POST':
+  elif request.method == 'POST' and ('edit-profile' not in request.path):
     user_data = JSONParser().parse(request)
     user_serializer = UserSerializer(data=user_data)
     if user_serializer.is_valid(raise_exception=True):
       user_serializer.save()
       return JsonResponse('created a user', safe=False)
-  elif request.method == 'PUT' and ('edit-profile' in request.path):
-    profile_data = JSONParser().parse(request)
-    user = User.objects.get(id=profile_data['id'])
-    if profile_data['deleteBanner'] == True:
-      cloudinary.uploader.destroy('banners/' + profile_data['id'])
-    if profile_data['deletePicture'] == True:
-      cloudinary.uploader.destroy('pictures/' + profile_data['id'])
-    user.hasBanner = profile_data['hasBanner']
-    user.hasPicture = profile_data['hasPicture']
-    user.bio = profile_data['bio']
+  elif request.method == 'POST' and ('edit-profile' in request.path):
+    print(request.POST)
+    print(request.FILES)
+    user = User.objects.get(id=request.POST['id'])
+    if request.POST.get('banner') and request.POST.get('banner') != user.bannerID:
+      cloudinary.uploader.destroy('banners/' + request.POST['id'])
+      user.bannerID = ''
+    if request.FILES.get('banner'):
+      cloudinary.uploader.destroy('banners/' + request.POST['id'])
+      cloudinary.uploader.upload(file=request.FILES.get('banner'), folder='/banners/', public_id = request.POST['id'])
+      user.bannerID = cloudinary.api.resource('banners/' + request.POST['id'])['version']
+    if request.POST.get('picture') and request.POST.get('picture') != user.pictureID:
+      cloudinary.uploader.destroy('pictures/' + request.POST['id'])
+      user.pictureID = ''
+    if request.FILES.get('picture'):
+      cloudinary.uploader.destroy('pictures/' + request.POST['id'])
+      cloudinary.uploader.upload(file=request.FILES.get('picture'), folder='/pictures/', public_id = request.POST['id'])
+      user.pictureID = cloudinary.api.resource('pictures/' + request.POST['id'])['version']
+    user.bio = request.POST['bio']
     user.save()
-    posts = Post.objects.all().filter(user=profile_data['id'])
+    posts = Post.objects.all().filter(user=request.POST['id'])
     if posts:
       for post in posts:
-        post.userHasPicture = profile_data['hasPicture']
+        post.userPictureID = user.pictureID
         post.save()
-    replies = Reply.objects.all().filter(user=profile_data['id'])
+    replies = Reply.objects.all().filter(user=request.POST['id'])
     if replies:
       for reply in replies:
-        reply.userHasPicture = profile_data['hasPicture']
+        reply.userPictureID = user.pictureID
         reply.save()
-    notifications = Notification.objects.all().filter(creatorID=profile_data['id'])
+    notifications = Notification.objects.all().filter(creatorID=request.POST['id'])
     if notifications:
       for notification in notifications:
-        notification.creatorHasPicture = profile_data['hasPicture']
+        notification.creatorPictureID = user.pictureID
         notification.save()
     return JsonResponse(UserSerializer(user).data, safe=False)
   elif request.method == 'PUT' and ('edit-user' in request.path):
@@ -99,7 +107,6 @@ def userApi(request, user_id=0):
     password_data = JSONParser().parse(request)
     user = User.objects.get(id=password_data['userID'])
     if check_password(password_data['currentPassword'], user.password):
-      print(password_data['currentPassword'], password_data['newPassword'])
       user.password = make_password(password_data['newPassword'])
       user.save()
       return JsonResponse('password updated', safe=False)
@@ -169,7 +176,6 @@ def postApi(request):
         cloudinary.uploader.destroy('posts/' + post_id)
       post_serializer = PostSerializer(post)
       if str(post.user_id) == userID:
-        print(post_serializer.data)
         post.delete()
         return JsonResponse(post_serializer.data, safe=False)
   else:
@@ -203,7 +209,6 @@ def replyApi(request):
       reply_serializer = ReplySerializer(reply)
       if str(reply.user_id) == userID:
         origin = Post.objects.get(id=reply_serializer.data['origin'])
-        print('*** origin ', origin)
         origin.replies.remove(reply.id)
         origin.save()
         reply.delete()

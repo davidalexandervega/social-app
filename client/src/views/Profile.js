@@ -64,7 +64,7 @@ const Profile = () => {
         id: uuidv4(),
         time: new Date(),
         creatorID: user.id,
-        creatorHasPicture: user.hasPicture,
+        creatorPictureID: user.pictureID,
         creatorUsername: username,
         recipientID: profileUser.id,
         type: 'follow_user',
@@ -88,7 +88,7 @@ const Profile = () => {
         <>
           <div className="viewBox" ref={profileRef}>
             <div className="profileBanner">
-              {profileUser.hasBanner ? (
+              {profileUser.bannerID ? (
                 <AdvancedImage
                   cldImg={cloudinary.image(`/banners/${profileUser.id}`).setVersion(Date.now())}
                   className="bannerImage"
@@ -97,7 +97,7 @@ const Profile = () => {
             </div>
             <div className="profileHeader">
               <div className="profilePicture">
-                {profileUser.hasPicture ? (
+                {profileUser.pictureID ? (
                   <AdvancedImage
                     cldImg={cloudinary.image(`/pictures/${profileUser.id}`).setVersion(Date.now())}
                     className="profileImage"

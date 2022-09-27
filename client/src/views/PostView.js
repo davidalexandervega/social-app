@@ -157,7 +157,7 @@ const PostView = () => {
           <div className="post" ref={postRef}>
             <span className="postHeader">
               <span className="postUserPicture">
-                {post.userHasPicture ? (
+                {post.userPictureID ? (
                   <AdvancedImage
                     className="postUserImage"
                     cldImg={cloudinary.image(`/pictures/${post.user}`).setVersion(Date.now())}

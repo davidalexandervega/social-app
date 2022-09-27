@@ -92,7 +92,7 @@ const Post = ({ post }) => {
           time: new Date(),
           creatorID: user.id,
           creatorUsername: username,
-          creatorHasPicture: user.hasPicture,
+          creatorPictureID: user.pictureID,
           recipientID: post.user,
           type: 'like_post',
           object: post.id,
@@ -163,7 +163,7 @@ const Post = ({ post }) => {
       <div className="post" ref={postRef}>
         <span className="postHeader">
           <span className="postUserPicture">
-            {post.userHasPicture ? (
+            {post.userPictureID ? (
               <AdvancedImage
                 className="postUserImage"
                 cldImg={cloudinary.image(`/pictures/${post.user}`).setVersion(Date.now())}

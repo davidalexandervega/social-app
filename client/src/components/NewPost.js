@@ -90,7 +90,7 @@ const NewPost = (props) => {
       const newPostData = {
         id: postID,
         username: username,
-        userHasPicture: user.hasPicture,
+        userPictureID: user.pictureID,
         body: newPostBody,
         time: new Date(),
         likes: [],

@@ -32,7 +32,7 @@ const NewReply = (props) => {
       const newReplyData = {
         id: replyID,
         username,
-        userHasPicture: user.hasPicture,
+        userPictureID: user.pictureID,
         origin: post.id,
         body: newReplyBody,
         time: new Date(),
@@ -48,7 +48,7 @@ const NewReply = (props) => {
           id: uuidv4(),
           time: new Date(),
           creatorID: user.id,
-          creatorHasPicture: user.hasPicture,
+          creatorPictureID: user.pictureID,
           creatorUsername: username,
           recipientID: post.user,
           type: 'reply_post',

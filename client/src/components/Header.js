@@ -47,7 +47,7 @@ const Header = (props) => {
       {token ? (
         <span className="button" onClick={() => navigate(`/users/` + username)}>
           <div className="headerPicture">
-            {user && user.hasPicture ? (
+            {user && user.pictureID ? (
               <AdvancedImage
                 cldImg={cloudinary.image(`/pictures/${user.id}`).setVersion(Date.now())}
                 className="headerImage"

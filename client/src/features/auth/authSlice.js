@@ -145,9 +145,6 @@ export const authSlice = createSlice({
       state.isError = false;
       state.message = '';
     },
-    removeUserPicture: (state) => {
-      state.user.hasPicture = false;
-    },
     ejectProfile: (state) => {
       state.profileUser = null;
     },
@@ -230,7 +227,7 @@ export const authSlice = createSlice({
 });
 
 // export the reducer of the slice:
-export const { reset, removeUserPicture, ejectProfile, updateFollowing } = authSlice.actions;
+export const { reset, ejectProfile, updateFollowing } = authSlice.actions;
 
 // export the slice (which is a reducer of the global store):
 export default authSlice.reducer;

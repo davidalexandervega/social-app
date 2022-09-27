@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 
-import { fetchUser, editProfile, removeUserPicture, reset } from '../features/auth/authSlice';
+import { fetchUser, editProfile, reset } from '../features/auth/authSlice';
 import { disablePost, enablePost } from '../features/post/postSlice';
 
 import { Cloudinary } from '@cloudinary/url-gen';
@@ -20,7 +18,12 @@ const EditProfile = () => {
   const { user, isSuccess } = useSelector((state) => state.auth);
   const { username } = user;
 
-  useEffect(() => {}, [dispatch, navigate, user]);
+  const cloudName = 'dgwf4o5mj';
+  const cloudinary = new Cloudinary({
+    cloud: {
+      cloudName: cloudName,
+    },
+  });
 
   const editProfileHeaderRef = useRef();
   const editProfileRef = useRef();
@@ -39,48 +42,34 @@ const EditProfile = () => {
     };
   }, [dispatch, navigate, user]);
 
-  const [formData, setFormData] = useState({
-    banner: user ? user.hasBanner : null,
-    deleteBanner: false,
-    picture: user ? user.hasPicture : null,
-    deletePicture: false,
+  const [profileData, setProfileData] = useState({
+    banner: user ? user.bannerID : null,
+    picture: user ? user.pictureID : null,
     bio: user ? user.bio : '',
   });
-
-  const { banner, picture, bio } = formData;
-
-  const cloudName = 'dgwf4o5mj';
-  const cloudinary = new Cloudinary({
-    cloud: {
-      cloudName: cloudName,
-    },
-  });
+  const { banner, picture, bio } = profileData;
 
   const bannerRef = useRef();
   const pictureRef = useRef();
 
   const onBannerInput = () => {
     if (bannerRef.current.files.length !== 0) {
-      setFormData((prevState) => ({
+      setProfileData((prevState) => ({
         ...prevState,
         banner: URL.createObjectURL(bannerRef.current.files[0]),
-        deleteBanner: true,
       }));
     } else {
-      setFormData((prevState) => ({
+      setProfileData((prevState) => ({
         ...prevState,
-        banner: null,
-        deleteBanner: true,
+        banner: '',
       }));
     }
   };
-
   const removeBanner = () => {
     if (banner) {
-      setFormData((prevState) => ({
+      setProfileData((prevState) => ({
         ...prevState,
-        banner: null,
-        deleteBanner: true,
+        banner: '',
       }));
     }
     bannerRef.current.value = null;
@@ -88,36 +77,30 @@ const EditProfile = () => {
 
   const onPictureInput = () => {
     if (pictureRef.current.files.length !== 0) {
-      setFormData((prevState) => ({
+      setProfileData((prevState) => ({
         ...prevState,
         picture: URL.createObjectURL(pictureRef.current.files[0]),
-        deletePicture: true,
       }));
     } else {
-      setFormData((prevState) => ({
+      setProfileData((prevState) => ({
         ...prevState,
-        picture: null,
-        deletePicture: true,
+        picture: '',
       }));
     }
   };
-
   const removePicture = () => {
     if (picture) {
-      setFormData((prevState) => ({
+      setProfileData((prevState) => ({
         ...prevState,
-        picture: null,
-        deletePicture: true,
+        picture: '',
       }));
     }
     pictureRef.current.value = null;
   };
 
   const onChange = (e) => {
-    setFormData((prevState) => ({
+    setProfileData((prevState) => ({
       ...prevState,
-      // this refers to the form control as e.target,
-      // as each has a 'name' and 'value' attribute:
       [e.target.name]: e.target.value,
     }));
   };
@@ -128,55 +111,26 @@ const EditProfile = () => {
   }, [bio]);
 
   const onSubmit = () => {
-    const profileData = {
-      username,
-      id: user.id,
-      hasBanner: formData.banner ? true : false,
-      deleteBanner: formData.deleteBanner,
-      hasPicture: formData.picture ? true : false,
-      deletePicture: formData.deletePicture,
-      bio: formData.bio,
-    };
-    dispatch(editProfile(profileData));
-    setTimeout(() => {
-      editProfileRef.current.classList.remove('fade');
-      editProfileHeaderRef.current.classList.remove('fade');
-    }, 10);
-  };
+    const newProfileData = new FormData();
+    newProfileData.append('username', username);
+    newProfileData.append('id', user.id);
+    isNaN(banner) && banner !== ''
+      ? newProfileData.append('banner', bannerRef.current.files[0])
+      : newProfileData.append('banner', banner);
+    isNaN(picture) && picture !== ''
+      ? newProfileData.append('picture', pictureRef.current.files[0])
+      : newProfileData.append('picture', banner);
+    newProfileData.append('bio', bio);
 
-  useEffect(() => {
-    if (isSuccess === true) {
-      if (!formData.picture) {
-        dispatch(removeUserPicture());
-      }
-      if (formData.banner && formData.banner !== true) {
-        const bannerData = new FormData();
-        bannerData.append('file', bannerRef.current.files[0]);
-        bannerData.append('upload_preset', 'social');
-        bannerData.append('public_id', user.id);
-        bannerData.append('folder', '/banners/');
-        axios
-          .post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, bannerData)
-          .then((response) => console.log(response));
-      }
-      if (formData.picture && formData.picture !== true) {
-        const pictureData = new FormData();
-        pictureData.append('file', pictureRef.current.files[0]);
-        pictureData.append('upload_preset', 'social');
-        pictureData.append('public_id', user.id);
-        pictureData.append('folder', '/pictures/');
-        axios
-          .post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, pictureData)
-          .then((response) => console.log(response));
-      }
-      setTimeout(() => {
-        dispatch(reset());
-        dispatch(fetchUser(user.id));
-        navigate(`/users/${username}`);
-      }, 1000);
+    dispatch(editProfile(newProfileData));
+    editProfileRef.current.classList.remove('fade');
+    editProfileHeaderRef.current.classList.remove('fade');
+    if (isSuccess) {
+      dispatch(reset());
+      dispatch(fetchUser(user.id));
+      navigate(`/users/${username}`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
+  };
 
   return (
     <div className="view">
@@ -186,15 +140,15 @@ const EditProfile = () => {
       {user && username === profileUsername ? (
         <div className="viewBox editProfile" ref={editProfileRef}>
           <div className="profileBanner">
-            {formData.banner ? (
+            {banner ? (
               <>
-                {formData.banner === true ? (
+                {!isNaN(banner) ? (
                   <AdvancedImage
-                    cldImg={cloudinary.image(`/banners/${user.id}`).setVersion(Date.now())}
+                    cldImg={cloudinary.image(`/banners/${user.id}`).setVersion(banner)}
                     className="bannerImage"
                   />
                 ) : (
-                  <img className="bannerImage" src={formData.banner} alt="new banner" />
+                  <img className="bannerImage" src={banner} alt="new banner" />
                 )}
               </>
             ) : null}
@@ -216,15 +170,15 @@ const EditProfile = () => {
           </div>
           <div className="editProfileBody">
             <div className="profilePicture">
-              {formData.picture ? (
+              {picture ? (
                 <>
-                  {formData.picture === true ? (
+                  {!isNaN(picture) ? (
                     <AdvancedImage
                       cldImg={cloudinary.image(`/pictures/${user.id}`).setVersion(Date.now())}
                       className="profileImage"
                     />
                   ) : (
-                    <img className="profileImage" src={formData.picture} alt="new profilepicture" />
+                    <img className="profileImage" src={picture} alt="new profilepicture" />
                   )}
                 </>
               ) : (

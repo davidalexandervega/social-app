@@ -76,7 +76,7 @@ const Sidebar = (props) => {
           onClick={() => navigate(`/users/` + username)}
         >
           <div className="sidebarPicture">
-            {user && user.hasPicture ? (
+            {user && user.pictureID ? (
               <AdvancedImage
                 cldImg={cloudinary.image(`/pictures/${user.id}`).setVersion(Date.now())}
                 className="sidebarImage"
