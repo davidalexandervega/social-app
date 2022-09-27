@@ -104,11 +104,6 @@ textarea:focus {
   opacity: 1;
 }
 
-.postView {
-  transition: opacity 0.75s ease-out;
-  opacity: 0;
-}
-
 .editViewHeader {
   width: 70vw;
   max-width: 500px;
@@ -150,6 +145,14 @@ textarea:focus {
   user-select: none;
   max-width: 90vw;
   color: rgb(255, 64, 0);
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 25vh;
+  width: 70vw;
+  max-width: 500px;
 }
 
 .labelButton {

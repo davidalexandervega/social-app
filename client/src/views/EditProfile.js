@@ -2,20 +2,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { fetchUser, editProfile, reset } from '../features/auth/authSlice';
+import { fetchUser, editProfile, setLoading, reset } from '../features/auth/authSlice';
 import { disablePost, enablePost } from '../features/post/postSlice';
 
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
 
 import { ProfileCircled, RemoveSquare, UploadSquareOutline } from 'iconoir-react';
+import { BallTriangle } from 'react-loading-icons';
 
 const EditProfile = () => {
   const { profileUsername } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user, isSuccess } = useSelector((state) => state.auth);
+  const { user, isLoading, isSuccess } = useSelector((state) => state.auth);
   const { username } = user;
 
   const cloudName = 'dgwf4o5mj';
@@ -125,114 +126,130 @@ const EditProfile = () => {
     dispatch(editProfile(newProfileData));
     editProfileRef.current.classList.remove('fade');
     editProfileHeaderRef.current.classList.remove('fade');
+    setTimeout(() => {
+      dispatch(setLoading(true));
+    }, 750);
   };
 
   useEffect(() => {
     if (isSuccess) {
-      dispatch(reset());
       dispatch(fetchUser(user.id));
-      setTimeout(() => {
-        navigate(`/users/${username}`);
-      }, 100);
+      dispatch(reset());
+      navigate(`/users/${username}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
   return (
     <div className="view">
-      <div className="editViewHeader" ref={editProfileHeaderRef}>
-        edit profile
-      </div>
-      {user && username === profileUsername ? (
-        <div className="viewBox editProfile" ref={editProfileRef}>
-          <div className="profileBanner">
-            {banner ? (
-              <>
-                {!isNaN(banner) ? (
-                  <AdvancedImage
-                    cldImg={cloudinary.image(`/banners/${user.id}`).setVersion(user.bannerID)}
-                    className="bannerImage"
-                  />
-                ) : (
-                  <img className="bannerImage" src={banner} alt="new banner" />
-                )}
-              </>
-            ) : null}
-            <div className="editImageActions">
-              <label className="fileUpload">
-                <UploadSquareOutline className="editImageAction" />
-                <input
-                  type="file"
-                  accept=".jpg, .jpeg, .png"
-                  className="fileInput"
-                  ref={bannerRef}
-                  onChange={() => onBannerInput()}
-                />
-              </label>
-              <label>
-                <RemoveSquare className="editImageAction" onClick={() => removeBanner()} />
-              </label>
-            </div>
+      {!isLoading ? (
+        <>
+          <div className="editViewHeader" ref={editProfileHeaderRef}>
+            edit profile
           </div>
-          <div className="editProfileBody">
-            <div className="profilePicture">
-              {picture ? (
-                <>
-                  {!isNaN(picture) ? (
-                    <AdvancedImage
-                      cldImg={cloudinary.image(`/pictures/${user.id}`).setVersion(user.pictureID)}
-                      className="profileImage"
+          {user && username === profileUsername ? (
+            <div className="viewBox editProfile" ref={editProfileRef}>
+              <div className="profileBanner">
+                {banner ? (
+                  <>
+                    {!isNaN(banner) ? (
+                      <AdvancedImage
+                        cldImg={cloudinary.image(`/banners/${user.id}`).setVersion(user.bannerID)}
+                        className="bannerImage"
+                      />
+                    ) : (
+                      <img className="bannerImage" src={banner} alt="new banner" />
+                    )}
+                  </>
+                ) : null}
+                <div className="editImageActions">
+                  <label className="fileUpload">
+                    <UploadSquareOutline className="editImageAction" />
+                    <input
+                      type="file"
+                      accept=".jpg, .jpeg, .png"
+                      className="fileInput"
+                      ref={bannerRef}
+                      onChange={() => onBannerInput()}
                     />
+                  </label>
+                  <label>
+                    <RemoveSquare className="editImageAction" onClick={() => removeBanner()} />
+                  </label>
+                </div>
+              </div>
+              <div className="editProfileBody">
+                <div className="profilePicture">
+                  {picture ? (
+                    <>
+                      {!isNaN(picture) ? (
+                        <AdvancedImage
+                          cldImg={cloudinary
+                            .image(`/pictures/${user.id}`)
+                            .setVersion(user.pictureID)}
+                          className="profileImage"
+                        />
+                      ) : (
+                        <img className="profileImage" src={picture} alt="new profilepicture" />
+                      )}
+                    </>
                   ) : (
-                    <img className="profileImage" src={picture} alt="new profilepicture" />
+                    <ProfileCircled
+                      height="150px"
+                      width="150px"
+                      strokeWidth="0.5"
+                      fill="whitesmoke"
+                    />
                   )}
-                </>
-              ) : (
-                <ProfileCircled height="150px" width="150px" strokeWidth="0.5" fill="whitesmoke" />
-              )}
-              <div className="editImageActions">
-                <label className="fileUpload">
-                  <UploadSquareOutline className="editImageAction" />
-                  <input
-                    type="file"
-                    accept=".jpg, .jpeg, .png"
-                    className="fileInput"
-                    ref={pictureRef}
-                    onChange={() => onPictureInput()}
-                  />
-                </label>
-                <label>
-                  <RemoveSquare className="editImageAction" onClick={() => removePicture()} />
-                </label>
+                  <div className="editImageActions">
+                    <label className="fileUpload">
+                      <UploadSquareOutline className="editImageAction" />
+                      <input
+                        type="file"
+                        accept=".jpg, .jpeg, .png"
+                        className="fileInput"
+                        ref={pictureRef}
+                        onChange={() => onPictureInput()}
+                      />
+                    </label>
+                    <label>
+                      <RemoveSquare className="editImageAction" onClick={() => removePicture()} />
+                    </label>
+                  </div>
+                </div>
+                <div className="editProfileActions">
+                  <div className="solidButton longButton" onClick={() => onSubmit()}>
+                    save changes
+                  </div>
+                  <div
+                    className="solidButton redButton longButton"
+                    onClick={() => navigate(`/users/${username}`)}
+                  >
+                    cancel
+                  </div>
+                </div>
+              </div>
+              <div className="editBio">
+                <label htmlFor="bio">bio</label>
+                <textarea
+                  className="editBioControl"
+                  id="bio"
+                  name="bio"
+                  value={bio}
+                  onChange={onChange}
+                  maxLength="200"
+                />
+                <span className="charLeft" ref={charLeftRef}></span>
               </div>
             </div>
-            <div className="editProfileActions">
-              <div className="solidButton longButton" onClick={() => onSubmit()}>
-                save changes
-              </div>
-              <div
-                className="solidButton redButton longButton"
-                onClick={() => navigate(`/users/${username}`)}
-              >
-                cancel
-              </div>
-            </div>
-          </div>
-          <div className="editBio">
-            <label htmlFor="bio">bio</label>
-            <textarea
-              className="editBioControl"
-              id="bio"
-              name="bio"
-              value={bio}
-              onChange={onChange}
-              maxLength="200"
-            />
-            <span className="charLeft" ref={charLeftRef}></span>
-          </div>
-        </div>
+          ) : (
+            <div>edit page is unavailable if it's not your account.</div>
+          )}
+        </>
       ) : (
-        <div>edit page is unavailable if it's not your account.</div>
+        <span className="loadingContainer">
+          <BallTriangle className="loadingIcon" stroke="#000000" strokeOpacity="0.7" height="2em" />
+        </span>
       )}
     </div>
   );

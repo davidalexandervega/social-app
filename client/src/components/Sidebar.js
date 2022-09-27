@@ -45,12 +45,10 @@ const Sidebar = (props) => {
       }, 10);
     }
     if (token && !user) {
-      console.log('no user');
       sidebarRef.current.style.display = 'none';
       sidebarRef.current.classList.remove('fade');
     }
     if (user) {
-      console.log('user');
       setTimeout(() => {
         sidebarRef.current.style.display = 'flex';
       }, 10);

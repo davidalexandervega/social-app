@@ -82,24 +82,16 @@ export const replySlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createReply.fulfilled, (state, action) => {
-        state.isSuccess = true;
         state.replies.push(action.payload);
         state.replies.sort((a, b) => new Date(b.time) - new Date(a.time));
       })
-      .addCase(createReply.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      })
+      .addCase(createReply.rejected, (state, action) => {})
       .addCase(fetchReplies.fulfilled, (state, action) => {
         state.isSuccess = true;
         state.replies = action.payload.sort((a, b) => new Date(b.time) - new Date(a.time));
       })
-      .addCase(fetchReplies.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      })
+      .addCase(fetchReplies.rejected, (state, action) => {})
       .addCase(likeReply.fulfilled, (state, action) => {
-        state.isSuccess = true;
         // to reflect the edited change so it immediately appears
         // in the UI without reloading:
         state.replies = state.replies.map((reply) =>
@@ -111,20 +103,13 @@ export const replySlice = createSlice({
             : reply
         );
       })
-      .addCase(likeReply.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      })
+      .addCase(likeReply.rejected, (state, action) => {})
       .addCase(deleteReply.fulfilled, (state, action) => {
-        state.isSuccess = true;
         // the deleted reply is filtered out so the UI
         // is immediately updated without reloading:
         state.replies = state.replies.filter((reply) => reply.id !== action.payload.id);
       })
-      .addCase(deleteReply.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      });
+      .addCase(deleteReply.rejected, (state, action) => {});
   },
 });
 

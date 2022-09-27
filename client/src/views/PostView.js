@@ -13,6 +13,7 @@ import Reply from '../components/Reply';
 
 import '../assets/styles/Post.scss';
 import { ProfileCircled, Heart, Cancel, ChatBubbleEmpty } from 'iconoir-react';
+import { BallTriangle } from 'react-loading-icons';
 
 import { fetchPostById, likePost, reset as resetPosts } from '../features/post/postSlice';
 import { fetchReplies, reset as resetReplies } from '../features/reply/replySlice';
@@ -20,12 +21,14 @@ import { fetchNotifications } from '../features/notification/notificationSlice';
 import { createNotification } from '../features/notification/notificationSlice';
 
 const PostView = () => {
-  const { id } = useParams();
+  const { postID } = useParams();
   const { user } = useSelector((state) => state.auth);
   const { username } = user;
   const { posts } = useSelector((state) => state.post);
-  const post = posts.length > 1 ? posts.find((post) => post.id === id) : posts[0];
+  const post = posts[0];
   const { replies } = useSelector((state) => state.reply);
+  const postLoaded = useSelector((state) => state.post.isSuccess);
+  const repliesLoaded = useSelector((state) => state.reply.isSuccess);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -39,9 +42,10 @@ const PostView = () => {
 
   useEffect(() => {
     dispatch(resetPosts());
+    dispatch(resetReplies());
 
-    dispatch(fetchPostById(id));
-    dispatch(fetchReplies(id));
+    dispatch(fetchPostById(postID));
+    dispatch(fetchReplies(postID));
     feedReplyDelta.current = 0;
 
     dispatch(fetchNotifications());
@@ -53,16 +57,15 @@ const PostView = () => {
   }, []);
 
   const postRef = useRef();
-  const postViewRef = useRef();
+  const postViewContainerRef = useRef();
   useEffect(() => {
-    if (post) {
+    if (postLoaded && repliesLoaded) {
       postRef.current.classList.add('fade');
-      const timer = setTimeout(() => {
-        postViewRef.current.classList.add('fade');
+      setTimeout(() => {
+        postViewContainerRef.current.classList.add('fade');
       }, 10);
-      return () => clearTimeout(timer);
     }
-  }, [post]);
+  }, [postLoaded, repliesLoaded]);
 
   const displayTime = () => {
     // returns the time since the post rounded up to the nearest second:
@@ -151,9 +154,9 @@ const PostView = () => {
   const replyDelta = useRef(0);
 
   return (
-    <div className="view postView" ref={postViewRef}>
-      {post ? (
-        <div className="postContainer">
+    <div className="view">
+      {postLoaded && repliesLoaded ? (
+        <div className="postViewContainer" ref={postViewContainerRef}>
           <div className="post" ref={postRef}>
             <span className="postHeader">
               <span className="postUserPicture">
@@ -200,7 +203,7 @@ const PostView = () => {
                 postRef={postRef}
                 setDeleteMode={setDeleteMode}
                 postView={true}
-                postViewRef={postViewRef}
+                postViewContainerRef={postViewContainerRef}
               />
             ) : null}
           </div>
@@ -219,7 +222,11 @@ const PostView = () => {
             ))}
           </div>
         </div>
-      ) : null}
+      ) : (
+        <span className="loadingContainer">
+          <BallTriangle className="loadingIcon" stroke="#000000" strokeOpacity="0.7" height="2em" />
+        </span>
+      )}
     </div>
   );
 };

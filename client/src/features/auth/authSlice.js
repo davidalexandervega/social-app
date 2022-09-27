@@ -10,6 +10,7 @@ const initialState = {
   user: null,
   profileUser: null,
   relog: false,
+  isLoading: false,
   isSuccess: false,
   isError: false,
   message: '',
@@ -141,9 +142,13 @@ export const authSlice = createSlice({
   reducers: {
     reset: (state) => {
       state.relog = false;
+      state.isLoading = false;
       state.isSuccess = false;
       state.isError = false;
       state.message = '';
+    },
+    setLoading: (state, action) => {
+      state.isLoading = action.payload;
     },
     ejectProfile: (state) => {
       state.profileUser = null;
@@ -185,17 +190,11 @@ export const authSlice = createSlice({
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.user = action.payload;
       })
-      .addCase(fetchUser.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      })
+      .addCase(fetchUser.rejected, (state, action) => {})
       .addCase(fetchProfile.fulfilled, (state, action) => {
         state.profileUser = action.payload;
       })
-      .addCase(fetchProfile.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      })
+      .addCase(fetchProfile.rejected, (state, action) => {})
       .addCase(editProfile.fulfilled, (state, action) => {
         state.isSuccess = true;
       })
@@ -209,6 +208,7 @@ export const authSlice = createSlice({
       })
       .addCase(editUser.rejected, (state, action) => {
         state.isError = true;
+        state.isLoading = false;
         state.message = action.payload;
       })
       .addCase(changePassword.fulfilled, (state, action) => {
@@ -216,18 +216,16 @@ export const authSlice = createSlice({
       })
       .addCase(changePassword.rejected, (state, action) => {
         state.isError = true;
+        state.isLoading = false;
         state.message = action.payload;
       })
       .addCase(followUser.fulfilled, (state, action) => {})
-      .addCase(followUser.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      });
+      .addCase(followUser.rejected, (state, action) => {});
   },
 });
 
 // export the reducer of the slice:
-export const { reset, ejectProfile, updateFollowing } = authSlice.actions;
+export const { reset, setLoading, ejectProfile, updateFollowing } = authSlice.actions;
 
 // export the slice (which is a reducer of the global store):
 export default authSlice.reducer;

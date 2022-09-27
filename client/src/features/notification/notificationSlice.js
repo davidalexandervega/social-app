@@ -56,29 +56,16 @@ export const notificationSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createNotification.fulfilled, (state, action) => {
-        state.isSuccess = true;
-      })
-      .addCase(createNotification.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      })
+      .addCase(createNotification.fulfilled, (state, action) => {})
+      .addCase(createNotification.rejected, (state, action) => {})
       .addCase(fetchNotifications.fulfilled, (state, action) => {
-        state.isSuccess = true;
         state.notifications = action.payload.sort((a, b) => new Date(b.time) - new Date(a.time));
       })
-      .addCase(fetchNotifications.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      })
+      .addCase(fetchNotifications.rejected, (state, action) => {})
       .addCase(checkNotifications.fulfilled, (state, action) => {
-        state.isSuccess = true;
         state.notifications = action.payload.sort((a, b) => new Date(b.time) - new Date(a.time));
       })
-      .addCase(checkNotifications.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      });
+      .addCase(checkNotifications.rejected, (state, action) => {});
   },
 });
 

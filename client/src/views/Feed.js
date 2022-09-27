@@ -2,11 +2,12 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import Post from '../components/Post';
-
 import { fetchAllPosts } from '../features/post/postSlice';
 import { fetchNotifications } from '../features/notification/notificationSlice';
 import { expandPost } from '../features/reply/replySlice';
+
+import Post from '../components/Post';
+import { BallTriangle } from 'react-loading-icons';
 
 const Feed = () => {
   const dispatch = useDispatch();
@@ -23,9 +24,17 @@ const Feed = () => {
 
   return (
     <div className="view">
-      {posts.map((post) => (
-        <Post key={post.id} post={post} />
-      ))}
+      {posts.length > 0 ? (
+        <>
+          {posts.map((post) => (
+            <Post key={post.id} post={post} />
+          ))}
+        </>
+      ) : (
+        <span className="loadingContainer">
+          <BallTriangle className="loadingIcon" stroke="#000000" strokeOpacity="0.7" height="2em" />
+        </span>
+      )}
     </div>
   );
 };

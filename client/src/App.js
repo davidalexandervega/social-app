@@ -64,7 +64,7 @@ const App = () => {
               element={<Notifications notify={notify} setNotify={setNotify} />}
             />
             <Route path="/" element={<Feed />} />
-            <Route path="/posts/:id" element={<PostView />} />
+            <Route path="/posts/:postID" element={<PostView />} />
             <Route path="/settings" element={<Settings />} />
             <Route
               path="*"

@@ -7,7 +7,7 @@ const UpdateBar = () => {
   useEffect(() => {
     setTimeout(() => {
       updateBarRef.current.style.opacity = '1';
-    }, 1000);
+    }, 500);
   }, []);
 
   return (

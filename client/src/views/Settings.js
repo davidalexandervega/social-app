@@ -3,15 +3,25 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { login, editUser, changePassword, fetchUser, reset } from '../features/auth/authSlice';
+import {
+  login,
+  editUser,
+  changePassword,
+  fetchUser,
+  setLoading,
+  reset,
+} from '../features/auth/authSlice';
 import { disablePost, enablePost } from '../features/post/postSlice';
 
 import '../assets/styles/Settings.scss';
+import { BallTriangle } from 'react-loading-icons';
 
 const Settings = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, relog, isError, isSuccess, message } = useSelector((state) => state.auth);
+  const { user, relog, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
   const { username } = user;
 
   const settingsRef = useRef();
@@ -22,7 +32,7 @@ const Settings = () => {
       setTimeout(() => {
         settingsHeaderRef.current.classList.add('fade');
         settingsRef.current.classList.add('fade');
-      }, 700);
+      }, 200);
     } else {
       navigate('/');
     }
@@ -70,6 +80,9 @@ const Settings = () => {
         settingsHeaderRef.current.classList.remove('fade');
         settingsRef.current.classList.remove('fade');
       }, 10);
+      setTimeout(() => {
+        dispatch(setLoading(true));
+      }, 750);
     } else {
       if (!reUsername.test(newUsername)) {
         errorRef.current.innerHTML = 'usernames must be alphanumeric & may contain underscores';
@@ -97,6 +110,9 @@ const Settings = () => {
         settingsHeaderRef.current.classList.remove('fade');
         settingsRef.current.classList.remove('fade');
       }, 10);
+      setTimeout(() => {
+        dispatch(setLoading(true));
+      }, 750);
     } else if (newPassword !== confirmNewPassword) {
       errorRef.current.innerHTML = 'passwords do not match';
     }
@@ -128,105 +144,116 @@ const Settings = () => {
       }, 1000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isError, isSuccess]);
+  }, [isError, isSuccess, message]);
 
   return (
     <div className="view">
-      <div className="editViewHeader" ref={settingsHeaderRef}>
-        settings
-      </div>
-      <div className="viewBox settings" ref={settingsRef}>
-        <form className="authForm settingsForm">
-          <div className="formItem">
-            <label htmlFor="newEmail">email </label>
-            <input
-              type="email"
-              className="formControl"
-              id="newEmail"
-              name="newEmail"
-              value={newEmail}
-              onChange={onChange}
-              size="20"
-            />
+      {!isLoading ? (
+        <>
+          <div className="editViewHeader" ref={settingsHeaderRef}>
+            settings
           </div>
+          <div className="viewBox settings" ref={settingsRef}>
+            <form className="authForm settingsForm">
+              <div className="formItem">
+                <label htmlFor="newEmail">email </label>
+                <input
+                  type="email"
+                  className="formControl"
+                  id="newEmail"
+                  name="newEmail"
+                  value={newEmail}
+                  onChange={onChange}
+                  size="20"
+                />
+              </div>
 
-          <div className="formItem">
-            <label htmlFor="username">username </label>
-            <input
-              type="text"
-              className="formControl"
-              id="newUsername"
-              name="newUsername"
-              value={newUsername}
-              onChange={onChange}
-              size="20"
-            />
-          </div>
+              <div className="formItem">
+                <label htmlFor="username">username </label>
+                <input
+                  type="text"
+                  className="formControl"
+                  id="newUsername"
+                  name="newUsername"
+                  value={newUsername}
+                  onChange={onChange}
+                  size="20"
+                />
+              </div>
 
-          <div className="formItem">
-            <label htmlFor="password">password </label>
-            <input
-              type="password"
-              className="formControl"
-              id="password"
-              name="password"
-              value={password}
-              onChange={onChange}
-              size="20"
-            />
-          </div>
-          <div className="solidButton longButton settingsButton" onClick={() => onSaveChanges()}>
-            save changes
-          </div>
-        </form>
+              <div className="formItem">
+                <label htmlFor="password">password </label>
+                <input
+                  type="password"
+                  className="formControl"
+                  id="password"
+                  name="password"
+                  value={password}
+                  onChange={onChange}
+                  size="20"
+                />
+              </div>
+              <div
+                className="solidButton longButton settingsButton"
+                onClick={() => onSaveChanges()}
+              >
+                save changes
+              </div>
+            </form>
 
-        <div className="errorMessage" ref={errorRef}></div>
+            <div className="errorMessage" ref={errorRef}></div>
 
-        <form className="authForm settingsForm">
-          <div className="formItem">
-            <label htmlFor="currentPassword">current password </label>
-            <input
-              type="password"
-              className="formControl"
-              id="currentPassword"
-              name="currentPassword"
-              value={currentPassword}
-              onChange={onChange}
-              size="20"
-            />
+            <form className="authForm settingsForm">
+              <div className="formItem">
+                <label htmlFor="currentPassword">current password </label>
+                <input
+                  type="password"
+                  className="formControl"
+                  id="currentPassword"
+                  name="currentPassword"
+                  value={currentPassword}
+                  onChange={onChange}
+                  size="20"
+                />
+              </div>
+              <div className="formItem">
+                <label htmlFor="newPassword">new password </label>
+                <input
+                  type="password"
+                  className="formControl"
+                  id="newPassword"
+                  name="newPassword"
+                  value={newPassword}
+                  onChange={onChange}
+                  size="20"
+                />
+              </div>
+              <div className="formItem">
+                <label htmlFor="confirmNewPassword">confirm password </label>
+                <input
+                  type="password"
+                  className="formControl"
+                  id="confirmNewPassword"
+                  name="confirmNewPassword"
+                  value={confirmNewPassword}
+                  onChange={onChange}
+                  size="20"
+                />
+              </div>
+              <div
+                className="solidButton longButton changePassword settingsButton"
+                onClick={() => onChangePassword()}
+              >
+                change password
+              </div>
+            </form>
           </div>
-          <div className="formItem">
-            <label htmlFor="newPassword">new password </label>
-            <input
-              type="password"
-              className="formControl"
-              id="newPassword"
-              name="newPassword"
-              value={newPassword}
-              onChange={onChange}
-              size="20"
-            />
-          </div>
-          <div className="formItem">
-            <label htmlFor="confirmNewPassword">confirm password </label>
-            <input
-              type="password"
-              className="formControl"
-              id="confirmNewPassword"
-              name="confirmNewPassword"
-              value={confirmNewPassword}
-              onChange={onChange}
-              size="20"
-            />
-          </div>
-          <div
-            className="solidButton longButton changePassword settingsButton"
-            onClick={() => onChangePassword()}
-          >
-            change password
-          </div>
-        </form>
-      </div>
+        </>
+      ) : (
+        <span className="loadingContainer">
+          <BallTriangle className="loadingIcon" stroke="#000000" strokeOpacity="0.7" height="2em" />
+        </span>
+      )}
     </div>
   );
 };

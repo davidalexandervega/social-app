@@ -113,40 +113,25 @@ export const postSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createPost.fulfilled, (state, action) => {
-        state.isSuccess = true;
         state.posts.push(action.payload);
         state.posts.sort((a, b) => new Date(b.time) - new Date(a.time));
       })
-      .addCase(createPost.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      })
+      .addCase(createPost.rejected, (state, action) => {})
       .addCase(fetchAllPosts.fulfilled, (state, action) => {
-        state.isSuccess = true;
         state.posts = action.payload.sort((a, b) => new Date(b.time) - new Date(a.time));
       })
-      .addCase(fetchAllPosts.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      })
+      .addCase(fetchAllPosts.rejected, (state, action) => {})
       .addCase(fetchUserPosts.fulfilled, (state, action) => {
         state.isSuccess = true;
         state.posts = action.payload.sort((a, b) => new Date(b.time) - new Date(a.time));
       })
-      .addCase(fetchUserPosts.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      })
+      .addCase(fetchUserPosts.rejected, (state, action) => {})
       .addCase(fetchPostById.fulfilled, (state, action) => {
         state.isSuccess = true;
         state.posts = [action.payload];
       })
-      .addCase(fetchPostById.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      })
+      .addCase(fetchPostById.rejected, (state, action) => {})
       .addCase(likePost.fulfilled, (state, action) => {
-        state.isSuccess = true;
         // to reflect the edited change so it immediately appears
         // in the UI without reloading:
         state.posts = state.posts.map((post) =>
@@ -158,20 +143,13 @@ export const postSlice = createSlice({
             : post
         );
       })
-      .addCase(likePost.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      })
+      .addCase(likePost.rejected, (state, action) => {})
       .addCase(deletePost.fulfilled, (state, action) => {
-        state.isSuccess = true;
         // the deleted post is filtered out so the UI
         // is immediately updated without reloading:
         state.posts = state.posts.filter((post) => post.id !== action.payload.id);
       })
-      .addCase(deletePost.rejected, (state, action) => {
-        state.isError = true;
-        state.message = action.payload;
-      });
+      .addCase(deletePost.rejected, (state, action) => {});
   },
 });
 

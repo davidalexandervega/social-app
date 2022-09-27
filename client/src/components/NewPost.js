@@ -24,7 +24,10 @@ const NewPost = (props) => {
 
   const newPostRef = useRef();
   useEffect(() => {
-    if (postEnabled) {
+    if (postEnabled && mode === 'expanded') {
+      newPostRef.current.style.opacity = '1';
+      newPostRef.current.style.display = 'flex';
+    } else if (postEnabled) {
       newPostRef.current.style.opacity = '0';
       newPostRef.current.style.display = 'flex';
       setTimeout(() => {
@@ -34,7 +37,7 @@ const NewPost = (props) => {
     if (!postEnabled) {
       newPostRef.current.style.display = 'none';
     }
-  }, [postEnabled]);
+  }, [postEnabled, mode]);
 
   const onFileInput = () => {
     if (fileRef.current.files.length !== 0) {

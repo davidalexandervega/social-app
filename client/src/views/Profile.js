@@ -16,8 +16,8 @@ import Post from '../components/Post';
 
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
-
 import { Check, Plus, ProfileCircled } from 'iconoir-react';
+import { BallTriangle } from 'react-loading-icons';
 
 import '../assets/styles/Profile.scss';
 
@@ -157,7 +157,11 @@ const Profile = () => {
             ))}
           </div>
         </>
-      ) : null}
+      ) : (
+        <span className="loadingContainer">
+          <BallTriangle className="loadingIcon" stroke="#000000" strokeOpacity="0.7" height="2em" />
+        </span>
+      )}
     </div>
   );
 };

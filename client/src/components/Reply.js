@@ -28,10 +28,7 @@ const Reply = (props) => {
 
   const replyRef = useRef();
   useEffect(() => {
-    const timer = setTimeout(() => {
-      replyRef.current.classList.add('fade');
-    }, 10);
-    return () => clearTimeout(timer);
+    replyRef.current.classList.add('fade');
   }, []);
 
   const displayTime = () => {
