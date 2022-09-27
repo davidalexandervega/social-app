@@ -41,10 +41,9 @@ const Login = () => {
 
     if (isSuccess) {
       errorRef.current.innerHTML = '';
+      dispatch(reset());
       navigate('/');
     }
-
-    dispatch(reset());
   }, [token, isError, isSuccess, message, navigate, dispatch]);
 
   const onChange = (e) => {

@@ -50,58 +50,46 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      {user ? (
-        <>
-          <Header notify={notify} />
-          <div id="page">
-            <Sidebar newPostData={newPostData} setNewPost={setNewPost} notify={notify} />
-            <Routes>
-              <Route path="/users/:profileUsername" element={<Profile />} />
-              <Route path="/users/:profileUsername/edit" element={<EditProfile />} />
-              <Route
-                path="/notifications"
-                element={<Notifications notify={notify} setNotify={setNotify} />}
-              />
-              <Route path="/" element={<Feed />} />
-              <Route path="/posts/:id" element={<PostView />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route
-                path="*"
-                exact={true}
-                element={<div className="view">404: page not found.</div>}
-              />
-            </Routes>
-            <UpdateBar />
-          </div>
+      <Header notify={notify} />
+      <div id="page">
+        <Sidebar newPostData={newPostData} setNewPost={setNewPost} notify={notify} />
+        {user ? (
           <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/users/:profileUsername" element={<Profile />} />
+            <Route path="/users/:profileUsername/edit" element={<EditProfile />} />
             <Route
-              path="/"
-              element={<Footer newPostData={newPostData} setNewPost={setNewPost} />}
+              path="/notifications"
+              element={<Notifications notify={notify} setNotify={setNotify} />}
             />
+            <Route path="/" element={<Feed />} />
+            <Route path="/posts/:id" element={<PostView />} />
+            <Route path="/settings" element={<Settings />} />
             <Route
-              path="/users/:profileUsername"
-              element={<Footer newPostData={newPostData} setNewPost={setNewPost} />}
+              path="*"
+              exact={true}
+              element={<div className="view">404: page not found.</div>}
             />
-            <Route path="*" element={<></>} />
           </Routes>
-        </>
-      ) : null}
-      {!token ? (
-        <>
-          <Header notify={notify} />
-          <div id="page">
-            <Sidebar newPostData={newPostData} setNewPost={setNewPost} notify={notify} />
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="*" exact={true} element={<Navigate to="/login" />} />
-            </Routes>
-            <UpdateBar />
-          </div>
-        </>
-      ) : null}
+        ) : null}
+        {!token ? (
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="*" exact={true} element={<Navigate to="/login" />} />
+          </Routes>
+        ) : null}
+        <UpdateBar />
+      </div>
+      <Routes>
+        <Route path="/" element={<Footer newPostData={newPostData} setNewPost={setNewPost} />} />
+        <Route
+          path="/users/:profileUsername"
+          element={<Footer newPostData={newPostData} setNewPost={setNewPost} />}
+        />
+        <Route path="*" element={<></>} />
+      </Routes>
     </BrowserRouter>
   );
 };

@@ -36,27 +36,29 @@ const Sidebar = (props) => {
   });
 
   const sidebarRef = useRef();
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      sidebarRef.current.classList.add('fade');
-    }, 10);
-    return () => clearTimeout(timer);
-  }, []);
 
-  // handle the transition from the login page sidebar to the fully expanded one:
+  // handle life-cycle transitions:
   useEffect(() => {
-    if (token) {
+    if (!token) {
+      setTimeout(() => {
+        sidebarRef.current.classList.add('fade');
+      }, 10);
+    }
+    if (token && !user) {
+      console.log('no user');
       sidebarRef.current.style.display = 'none';
       sidebarRef.current.classList.remove('fade');
+    }
+    if (user) {
+      console.log('user');
       setTimeout(() => {
         sidebarRef.current.style.display = 'flex';
       }, 10);
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         sidebarRef.current.classList.add('fade');
-      }, 500);
-      return () => clearTimeout(timer);
+      }, 100);
     }
-  }, [token]);
+  }, [token, user]);
 
   const loadFeed = () => {
     navigate('/');
@@ -70,7 +72,7 @@ const Sidebar = (props) => {
 
   return (
     <header className="sidebar" ref={sidebarRef}>
-      {token ? (
+      {user ? (
         <span
           className="button labelButton sidebarProfile"
           onClick={() => navigate(`/users/` + username)}
@@ -93,7 +95,7 @@ const Sidebar = (props) => {
           profile
         </span>
       )}
-      {token ? (
+      {user ? (
         <span
           className="button labelButton sidebarButton"
           onClick={() => navigate('/notifications')}
@@ -110,13 +112,13 @@ const Sidebar = (props) => {
         <Globe height="2em" width="2em" strokeWidth="1.1" />
         feed
       </span>
-      {token ? (
+      {user ? (
         <span className="button labelButton sidebarButton" onClick={() => navigate('/settings')}>
           <Settings height="2em" width="2em" strokeWidth="1.1" />
           settings
         </span>
       ) : null}
-      {token ? (
+      {user ? (
         <span className="button labelButton sidebarButton" onClick={() => onLogout()}>
           <LogOut height="2em" width="2em" strokeWidth="1.1" />
           logout
@@ -127,7 +129,7 @@ const Sidebar = (props) => {
           login
         </span>
       )}
-      {token ? (
+      {user ? (
         <div className="newPostContainer">
           <NewPost newPostData={newPostData} setNewPost={setNewPost} />
         </div>
