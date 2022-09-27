@@ -39,9 +39,11 @@ const PostView = () => {
 
   useEffect(() => {
     dispatch(resetPosts());
+
     dispatch(fetchPostById(id));
     dispatch(fetchReplies(id));
     feedReplyDelta.current = 0;
+
     dispatch(fetchNotifications());
     return () => {
       dispatch(resetPosts());

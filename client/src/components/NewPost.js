@@ -13,6 +13,7 @@ const NewPost = (props) => {
   const dispatch = useDispatch();
   const { newPostData, setNewPost, mode, setMode } = props;
   const { newPostBody, newPostImg, disableFile } = newPostData;
+  const { postEnabled } = useSelector((state) => state.post);
 
   const { user } = useSelector((state) => state.auth);
   const { username } = user;
@@ -20,6 +21,20 @@ const NewPost = (props) => {
   const fileRef = useRef();
   const uploadButtonRef = useRef();
   const cloudName = 'dgwf4o5mj';
+
+  const newPostRef = useRef();
+  useEffect(() => {
+    if (postEnabled) {
+      newPostRef.current.style.opacity = '0';
+      newPostRef.current.style.display = 'flex';
+      setTimeout(() => {
+        newPostRef.current.style.opacity = '1';
+      }, 10);
+    }
+    if (!postEnabled) {
+      newPostRef.current.style.display = 'none';
+    }
+  }, [postEnabled]);
 
   const onFileInput = () => {
     if (fileRef.current.files.length !== 0) {
@@ -119,7 +134,7 @@ const NewPost = (props) => {
   const [isHovering, setHovering] = useState(false);
 
   return (
-    <div className="newPost">
+    <div className="newPost fade" ref={newPostRef}>
       <textarea
         className="formControl newPostBody"
         name="newPostBody"

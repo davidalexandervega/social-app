@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { login, editUser, changePassword, fetchUser, reset } from '../features/auth/authSlice';
+import { disablePost, enablePost } from '../features/post/postSlice';
 
 import '../assets/styles/Settings.scss';
 
@@ -17,14 +18,17 @@ const Settings = () => {
   const settingsHeaderRef = useRef();
   useEffect(() => {
     if (user.id) {
-      const timer = setTimeout(() => {
+      dispatch(disablePost());
+      setTimeout(() => {
         settingsHeaderRef.current.classList.add('fade');
         settingsRef.current.classList.add('fade');
       }, 700);
-      return () => clearTimeout(timer);
     } else {
       navigate('/');
     }
+    return () => {
+      dispatch(enablePost());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

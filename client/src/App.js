@@ -25,8 +25,15 @@ const App = () => {
   const { notifications } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
 
-  const [notify, setNotify] = useState(false);
+  useEffect(() => {
+    if (token) {
+      // this is causing there to be an error message on the login page upon logout.
+      // the reason is because the username is still present in the global state upon logout.
+      dispatch(fetchUser(jwt(token.access).user_id));
+    }
+  }, [dispatch, token]);
 
+  const [notify, setNotify] = useState(false);
   useEffect(() => {
     if (notifications.filter((notification) => notification.seen === false).length > 0) {
       setNotify(true);
@@ -40,14 +47,6 @@ const App = () => {
     newPostImg: null,
     disableFile: false,
   });
-
-  useEffect(() => {
-    if (token) {
-      // this is causing there to be an error message on the login page upon logout.
-      // the reason is because the username is still present in the global state upon logout.
-      dispatch(fetchUser(jwt(token.access).user_id));
-    }
-  }, [dispatch, token]);
 
   return (
     <BrowserRouter>

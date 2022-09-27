@@ -3,6 +3,7 @@ import postService from './postService';
 
 const initialState = {
   posts: [],
+  postEnabled: true,
   isError: false,
   isSuccess: false,
   message: '',
@@ -94,6 +95,12 @@ export const postSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
+    enablePost: (state) => {
+      state.postEnabled = true;
+    },
+    disablePost: (state) => {
+      state.postEnabled = false;
+    },
     // here a post is actually removed from the global store before it's deleted,
     // enabling a more responsive user experience:
     removePost: (state, action) => {
@@ -168,5 +175,5 @@ export const postSlice = createSlice({
   },
 });
 
-export const { reset, removePost } = postSlice.actions;
+export const { reset, enablePost, disablePost, removePost } = postSlice.actions;
 export default postSlice.reducer;

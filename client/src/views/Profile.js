@@ -38,9 +38,14 @@ const Profile = () => {
   });
 
   useEffect(() => {
+    dispatch(resetPosts());
     dispatch(ejectProfile());
+
     dispatch(fetchProfile(profileUsername));
     dispatch(fetchUserPosts(profileUsername));
+    return () => {
+      dispatch(resetPosts());
+    };
   }, [dispatch, profileUsername]);
 
   const profileRef = useRef();
@@ -52,13 +57,6 @@ const Profile = () => {
       return () => clearTimeout(timer);
     }
   }, [profileUser]);
-
-  useEffect(() => {
-    dispatch(resetPosts());
-    return () => {
-      dispatch(resetPosts());
-    };
-  }, [dispatch]);
 
   const onFollowUser = () => {
     if (!profileUser.followers.includes(user.id)) {

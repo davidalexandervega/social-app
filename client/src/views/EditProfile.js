@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import { fetchUser, editProfile, removeUserPicture, reset } from '../features/auth/authSlice';
+import { disablePost, enablePost } from '../features/post/postSlice';
 
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
@@ -19,21 +20,24 @@ const EditProfile = () => {
   const { user, isSuccess } = useSelector((state) => state.auth);
   const { username } = user;
 
-  useEffect(() => {
-    if (!user) navigate('/');
-  }, [dispatch, navigate, user]);
+  useEffect(() => {}, [dispatch, navigate, user]);
 
   const editProfileHeaderRef = useRef();
   const editProfileRef = useRef();
   useEffect(() => {
     if (user) {
-      const timer = setTimeout(() => {
+      dispatch(disablePost());
+      setTimeout(() => {
         editProfileRef.current.classList.add('fade');
         editProfileHeaderRef.current.classList.add('fade');
       }, 700);
-      return () => clearTimeout(timer);
+    } else {
+      navigate('/');
     }
-  }, [user]);
+    return () => {
+      dispatch(enablePost());
+    };
+  }, [dispatch, navigate, user]);
 
   const [formData, setFormData] = useState({
     banner: user ? user.hasBanner : null,

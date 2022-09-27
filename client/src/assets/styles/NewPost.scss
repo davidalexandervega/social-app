@@ -7,6 +7,8 @@
   /* this allows for posts to slide behind the top of the new post textarea
   but disappear at the bottom of the textarea: */
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0), whitesmoke 75%);
+  transition: opacity 0.75s ease-out /* , max-height 1s linear */;
+  opacity: 1;
 }
 
 .newPostBody {
