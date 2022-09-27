@@ -59,7 +59,7 @@ const PostView = () => {
       postRef.current.classList.add('fade');
       const timer = setTimeout(() => {
         postViewRef.current.classList.add('fade');
-      }, 600);
+      }, 10);
       return () => clearTimeout(timer);
     }
   }, [post]);
@@ -160,7 +160,9 @@ const PostView = () => {
                 {post.userPictureID ? (
                   <AdvancedImage
                     className="postUserImage"
-                    cldImg={cloudinary.image(`/pictures/${post.user}`).setVersion(Date.now())}
+                    cldImg={cloudinary
+                      .image(`/pictures/${post.user}`)
+                      .setVersion(post.userPictureID)}
                   />
                 ) : (
                   <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />

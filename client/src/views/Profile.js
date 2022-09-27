@@ -53,7 +53,7 @@ const Profile = () => {
     if (profileUser) {
       const timer = setTimeout(() => {
         profileRef.current.classList.add('fade');
-      }, 600);
+      }, 10);
       return () => clearTimeout(timer);
     }
   }, [profileUser]);
@@ -90,7 +90,9 @@ const Profile = () => {
             <div className="profileBanner">
               {profileUser.bannerID ? (
                 <AdvancedImage
-                  cldImg={cloudinary.image(`/banners/${profileUser.id}`).setVersion(Date.now())}
+                  cldImg={cloudinary
+                    .image(`/banners/${profileUser.id}`)
+                    .setVersion(profileUser.bannerID)}
                   className="bannerImage"
                 />
               ) : null}
@@ -99,7 +101,9 @@ const Profile = () => {
               <div className="profilePicture">
                 {profileUser.pictureID ? (
                   <AdvancedImage
-                    cldImg={cloudinary.image(`/pictures/${profileUser.id}`).setVersion(Date.now())}
+                    cldImg={cloudinary
+                      .image(`/pictures/${profileUser.id}`)
+                      .setVersion(profileUser.pictureID)}
                     className="profileImage"
                   />
                 ) : (

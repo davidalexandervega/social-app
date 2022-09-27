@@ -23,7 +23,7 @@ const Notification = (props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       notificationRef.current.classList.add('fade');
-    }, 500);
+    }, 10);
     return () => clearTimeout(timer);
   }, []);
 
@@ -74,7 +74,9 @@ const Notification = (props) => {
         {notification.creatorPictureID ? (
           <AdvancedImage
             className="notificationCreatorImage"
-            cldImg={cloudinary.image(`/pictures/${notification.creatorID}`).setVersion(Date.now())}
+            cldImg={cloudinary
+              .image(`/pictures/${notification.creatorID}`)
+              .setVersion(notification.creatorPictureID)}
           />
         ) : (
           <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />

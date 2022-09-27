@@ -30,7 +30,7 @@ class PostSerializer(serializers.ModelSerializer):
 class ReplySerializer(serializers.ModelSerializer):
   class Meta:
     model = Reply
-    fields = ['id', 'origin', 'user', 'username', 'userBannerID', 'image', 'body', 'time', 'likes']
+    fields = ['id', 'origin', 'user', 'username', 'userPictureID', 'image', 'body', 'time', 'likes']
 
 class NotificationSerializer(serializers.ModelSerializer):
   class Meta:

@@ -78,7 +78,7 @@ const Sidebar = (props) => {
           <div className="sidebarPicture">
             {user && user.pictureID ? (
               <AdvancedImage
-                cldImg={cloudinary.image(`/pictures/${user.id}`).setVersion(Date.now())}
+                cldImg={cloudinary.image(`/pictures/${user.id}`).setVersion(user.pictureID)}
                 className="sidebarImage"
               />
             ) : (

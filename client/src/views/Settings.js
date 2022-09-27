@@ -110,7 +110,6 @@ const Settings = () => {
       };
       dispatch(login(loginData));
       dispatch(fetchUser(user.id));
-      dispatch(reset());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [relog]);
@@ -124,10 +123,12 @@ const Settings = () => {
       dispatch(reset());
     } else if (isSuccess) {
       setTimeout(() => {
+        dispatch(reset());
         navigate(`/users/${newUsername ? newUsername : username}`);
       }, 1000);
     }
-  }, [dispatch, navigate, username, newUsername, message, isError, isSuccess]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isError, isSuccess]);
 
   return (
     <div className="view">

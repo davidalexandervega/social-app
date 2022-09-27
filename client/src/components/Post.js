@@ -34,7 +34,7 @@ const Post = ({ post }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       postRef.current.classList.add('fade');
-    }, 500);
+    }, 10);
     return () => clearTimeout(timer);
   }, []);
 
@@ -166,7 +166,7 @@ const Post = ({ post }) => {
             {post.userPictureID ? (
               <AdvancedImage
                 className="postUserImage"
-                cldImg={cloudinary.image(`/pictures/${post.user}`).setVersion(Date.now())}
+                cldImg={cloudinary.image(`/pictures/${post.user}`).setVersion(post.userPictureID)}
               />
             ) : (
               <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />

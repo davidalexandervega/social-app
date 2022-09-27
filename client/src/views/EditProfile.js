@@ -33,7 +33,7 @@ const EditProfile = () => {
       setTimeout(() => {
         editProfileRef.current.classList.add('fade');
         editProfileHeaderRef.current.classList.add('fade');
-      }, 700);
+      }, 200);
     } else {
       navigate('/');
     }
@@ -125,12 +125,16 @@ const EditProfile = () => {
     dispatch(editProfile(newProfileData));
     editProfileRef.current.classList.remove('fade');
     editProfileHeaderRef.current.classList.remove('fade');
+  };
+
+  useEffect(() => {
     if (isSuccess) {
       dispatch(reset());
       dispatch(fetchUser(user.id));
       navigate(`/users/${username}`);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
   return (
     <div className="view">
@@ -144,7 +148,7 @@ const EditProfile = () => {
               <>
                 {!isNaN(banner) ? (
                   <AdvancedImage
-                    cldImg={cloudinary.image(`/banners/${user.id}`).setVersion(banner)}
+                    cldImg={cloudinary.image(`/banners/${user.id}`).setVersion(user.bannerID)}
                     className="bannerImage"
                   />
                 ) : (
@@ -174,7 +178,7 @@ const EditProfile = () => {
                 <>
                   {!isNaN(picture) ? (
                     <AdvancedImage
-                      cldImg={cloudinary.image(`/pictures/${user.id}`).setVersion(Date.now())}
+                      cldImg={cloudinary.image(`/pictures/${user.id}`).setVersion(user.pictureID)}
                       className="profileImage"
                     />
                   ) : (
