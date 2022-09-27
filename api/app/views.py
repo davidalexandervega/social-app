@@ -93,7 +93,8 @@ def userApi(request, user_id=0):
             notification.creatorUsername = user_data['newUsername']
             notification.save()
       user.save()
-    return JsonResponse(UserSerializer(user).data, safe=False)
+      return JsonResponse(UserSerializer(user).data, safe=False)
+    return JsonResponse({'message':'incorrect password'}, status=401)
   elif request.method == 'PUT' and ('change-password' in request.path):
     password_data = JSONParser().parse(request)
     user = User.objects.get(id=password_data['userID'])
@@ -102,7 +103,7 @@ def userApi(request, user_id=0):
       user.password = make_password(password_data['newPassword'])
       user.save()
       return JsonResponse('password updated', safe=False)
-    return JsonResponse('password update failed', safe=False)
+    return JsonResponse({'message':'incorrect password'}, status=401)
   elif request.method == 'PUT' and ('follow-user' in request.path):
     follow_data = JSONParser().parse(request)
     creator = User.objects.get(id=follow_data['creatorID'])

@@ -70,7 +70,7 @@ const NewPost = (props) => {
   };
 
   const onSubmit = () => {
-    if (newPostBody !== '') {
+    if (newPostBody.replace(/\s+/g, '') !== '') {
       const postID = uuidv4();
       const newPostData = {
         id: postID,
@@ -89,9 +89,7 @@ const NewPost = (props) => {
         formData.append('upload_preset', 'social');
         formData.append('public_id', postID);
         formData.append('folder', '/posts/');
-        axios
-          .post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, formData)
-          .then((response) => console.log(response));
+        axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, formData);
       }
 
       setNewPost((prevState) => ({

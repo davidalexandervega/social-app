@@ -14,9 +14,11 @@ const Register = () => {
 
   const { token } = useSelector((state) => state.auth);
 
+  const viewRef = useRef();
   const registerRef = useRef();
   useEffect(() => {
     if (!token) {
+      viewRef.current.classList.add('fade');
       const timer = setTimeout(() => {
         registerRef.current.classList.add('fade');
       }, 700);
@@ -35,6 +37,9 @@ const Register = () => {
 
   const { email, username, password, confirmPassword } = formData;
 
+  const reEmail = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim;
+  const reUsername = /^[a-zA-Z0-9_]+$/;
+
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -42,11 +47,20 @@ const Register = () => {
     }));
   };
 
+  const errorRef = useRef();
+
   const onRegister = () => {
-    if (email && username && password && password === confirmPassword) {
+    reEmail.test(email);
+    reUsername.test(username);
+    if (
+      reEmail.test(email) &&
+      reUsername.test(username) &&
+      password &&
+      password === confirmPassword
+    ) {
       const userData = {
         email,
-        username,
+        username: username.toLowerCase(),
         password,
         id: uuidv4(),
         created: new Date(),
@@ -60,11 +74,21 @@ const Register = () => {
       setTimeout(() => {
         navigate('/login');
       }, 1000);
+    } else {
+      if (!reUsername.test(username)) {
+        errorRef.current.innerHTML = 'usernames are alphanumeric and may contain underscores';
+      }
+      if (!reEmail.test(email)) {
+        errorRef.current.innerHTML = 'invalid email';
+      }
+      if (password !== confirmPassword) {
+        errorRef.current.innerHTML = 'passwords do not match';
+      }
     }
   };
 
   return (
-    <div className="loginPage">
+    <div className="loginPage" ref={viewRef}>
       <div className="viewBox register" ref={registerRef}>
         <form className="authForm registerForm">
           <div className="formItem">
@@ -131,6 +155,7 @@ const Register = () => {
           </div>
         </form>
       </div>
+      <div className="errorMessage" ref={errorRef}></div>
     </div>
   );
 };

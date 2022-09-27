@@ -64,8 +64,6 @@ const editProfile = async (profileData, token) => {
     config
   );
 
-  console.log(response.data);
-
   return response.data;
 };
 

@@ -26,7 +26,7 @@ const NewReply = (props) => {
   };
 
   const onSubmit = () => {
-    if (newReplyBody !== '') {
+    if (newReplyBody.replace(/\s+/g, '') !== '') {
       const replyID = uuidv4();
 
       const newReplyData = {
@@ -56,16 +56,16 @@ const NewReply = (props) => {
         };
         dispatch(createNotification(notificationData));
       }
-    }
 
-    if (postView) {
-      setNewReply((prevState) => ({
-        ...prevState,
-        newReplyBody: '',
-      }));
-    }
+      if (postView) {
+        setNewReply((prevState) => ({
+          ...prevState,
+          newReplyBody: '',
+        }));
+      }
 
-    dispatch(expandPost(null));
+      dispatch(expandPost(null));
+    }
   };
 
   const charLeftRef = useRef();

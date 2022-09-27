@@ -9,7 +9,7 @@ const initialState = {
   token: token ? token : null,
   user: null,
   profileUser: null,
-  updating: false,
+  relog: false,
   isSuccess: false,
   isError: false,
   message: '',
@@ -140,13 +140,10 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state.updating = false;
+      state.relog = false;
       state.isSuccess = false;
       state.isError = false;
       state.message = '';
-    },
-    toggleUpdate: (state) => {
-      state.updating === false ? (state.updating = true) : (state.updating = false);
     },
     removeUserPicture: (state) => {
       state.user.hasPicture = false;
@@ -170,16 +167,14 @@ export const authSlice = createSlice({
   // a 'payload' is the return value of an action (see above).
   extraReducers: (builder) => {
     builder
-      .addCase(register.fulfilled, (state) => {
-        state.isSuccess = true;
-      })
+      .addCase(register.fulfilled, (state) => {})
       .addCase(register.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
       })
       .addCase(login.fulfilled, (state, action) => {
-        state.isSuccess = true;
         state.token = action.payload;
+        state.isSuccess = true;
       })
       .addCase(login.rejected, (state, action) => {
         state.isError = true;
@@ -190,7 +185,6 @@ export const authSlice = createSlice({
         state.token = null;
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
-        state.isSuccess = true;
         state.user = action.payload;
       })
       .addCase(fetchUser.rejected, (state, action) => {
@@ -198,7 +192,6 @@ export const authSlice = createSlice({
         state.message = action.payload;
       })
       .addCase(fetchProfile.fulfilled, (state, action) => {
-        state.isSuccess = true;
         state.profileUser = action.payload;
       })
       .addCase(fetchProfile.rejected, (state, action) => {
@@ -207,7 +200,6 @@ export const authSlice = createSlice({
       })
       .addCase(editProfile.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.updating = true;
       })
       .addCase(editProfile.rejected, (state, action) => {
         state.isError = true;
@@ -215,7 +207,7 @@ export const authSlice = createSlice({
       })
       .addCase(editUser.fulfilled, (state, action) => {
         state.isSuccess = true;
-        state.updating = true;
+        state.relog = true;
       })
       .addCase(editUser.rejected, (state, action) => {
         state.isError = true;
@@ -228,9 +220,7 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(followUser.fulfilled, (state, action) => {
-        state.isSuccess = true;
-      })
+      .addCase(followUser.fulfilled, (state, action) => {})
       .addCase(followUser.rejected, (state, action) => {
         state.isError = true;
         state.message = action.payload;
@@ -239,8 +229,7 @@ export const authSlice = createSlice({
 });
 
 // export the reducer of the slice:
-export const { reset, toggleUpdate, removeUserPicture, ejectProfile, updateFollowing } =
-  authSlice.actions;
+export const { reset, removeUserPicture, ejectProfile, updateFollowing } = authSlice.actions;
 
 // export the slice (which is a reducer of the global store):
 export default authSlice.reducer;

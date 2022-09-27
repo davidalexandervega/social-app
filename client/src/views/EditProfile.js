@@ -4,12 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-import {
-  fetchUser,
-  editProfile,
-  toggleUpdate,
-  removeUserPicture,
-} from '../features/auth/authSlice';
+import { fetchUser, editProfile, removeUserPicture, reset } from '../features/auth/authSlice';
 
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
@@ -21,7 +16,7 @@ const EditProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user, updating } = useSelector((state) => state.auth);
+  const { user, isSuccess } = useSelector((state) => state.auth);
   const { username } = user;
 
   useEffect(() => {
@@ -31,14 +26,14 @@ const EditProfile = () => {
   const editProfileHeaderRef = useRef();
   const editProfileRef = useRef();
   useEffect(() => {
-    if (user && updating === false) {
+    if (user) {
       const timer = setTimeout(() => {
         editProfileRef.current.classList.add('fade');
         editProfileHeaderRef.current.classList.add('fade');
       }, 700);
       return () => clearTimeout(timer);
     }
-  }, [user, updating]);
+  }, [user]);
 
   const [formData, setFormData] = useState({
     banner: user ? user.hasBanner : null,
@@ -146,7 +141,7 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-    if (updating === true) {
+    if (isSuccess === true) {
       if (!formData.picture) {
         dispatch(removeUserPicture());
       }
@@ -171,13 +166,13 @@ const EditProfile = () => {
           .then((response) => console.log(response));
       }
       setTimeout(() => {
-        dispatch(toggleUpdate());
+        dispatch(reset());
         dispatch(fetchUser(user.id));
         navigate(`/users/${username}`);
       }, 1000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updating]);
+  }, [isSuccess]);
 
   return (
     <div className="view">

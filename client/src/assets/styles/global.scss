@@ -146,6 +146,11 @@ textarea:focus {
   gap: 10px;
 }
 
+.errorMessage {
+  user-select: none;
+  color: rgb(255, 64, 0);
+}
+
 .labelButton {
   display: flex;
   align-items: center;

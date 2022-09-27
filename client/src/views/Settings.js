@@ -3,22 +3,14 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import {
-  login,
-  editUser,
-  changePassword,
-  toggleUpdate,
-  fetchUser,
-} from '../features/auth/authSlice';
+import { login, editUser, changePassword, fetchUser, reset } from '../features/auth/authSlice';
 
 import '../assets/styles/Settings.scss';
 
 const Settings = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const { user, updating } = useSelector((state) => state.auth);
-
+  const { user, relog, isError, isSuccess, message } = useSelector((state) => state.auth);
   const { username } = user;
 
   const settingsRef = useRef();
@@ -30,8 +22,11 @@ const Settings = () => {
         settingsRef.current.classList.add('fade');
       }, 700);
       return () => clearTimeout(timer);
+    } else {
+      navigate('/');
     }
-  }, [user.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [formData, setFormData] = useState({
     newUsername: username,
@@ -41,9 +36,11 @@ const Settings = () => {
     newPassword: '',
     confirmNewPassword: '',
   });
-
   const { newUsername, newEmail, password, currentPassword, newPassword, confirmNewPassword } =
     formData;
+
+  const reEmail = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim;
+  const reUsername = /^[a-zA-Z0-9_]+$/;
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -53,10 +50,13 @@ const Settings = () => {
   };
 
   const onSaveChanges = () => {
-    if (username !== newUsername || user.email !== newEmail) {
+    if (
+      (username !== newUsername && reUsername.test(newUsername)) ||
+      (user.email !== newEmail && reEmail.test(newEmail))
+    ) {
       const userData = {
         userID: user.id,
-        username,
+        username: username.toLowerCase(),
         newUsername,
         newEmail,
         password,
@@ -66,27 +66,22 @@ const Settings = () => {
         settingsHeaderRef.current.classList.remove('fade');
         settingsRef.current.classList.remove('fade');
       }, 10);
+    } else {
+      if (!reUsername.test(newUsername)) {
+        errorRef.current.innerHTML = 'usernames are alphanumeric and may contain underscores';
+      }
+      if (!reEmail.test(newEmail)) {
+        errorRef.current.innerHTML = 'invalid email';
+      }
     }
   };
 
-  useEffect(() => {
-    if (updating === true) {
-      const loginData = {
-        username: newUsername ? newUsername : username,
-        password,
-      };
-      dispatch(login(loginData));
-      dispatch(fetchUser(user.id));
-      dispatch(toggleUpdate());
-      setTimeout(() => {
-        navigate(`/users/${loginData.username}`);
-      }, 1000);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updating]);
-
   const onChangePassword = () => {
-    if (currentPassword !== newPassword && newPassword === confirmNewPassword) {
+    if (
+      currentPassword !== newPassword &&
+      newPassword !== '' &&
+      newPassword === confirmNewPassword
+    ) {
       const passwordData = {
         userID: user.id,
         username,
@@ -98,11 +93,37 @@ const Settings = () => {
         settingsHeaderRef.current.classList.remove('fade');
         settingsRef.current.classList.remove('fade');
       }, 10);
-      setTimeout(() => {
-        navigate(`/users/${username}`);
-      }, 1000);
+    } else if (newPassword !== confirmNewPassword) {
+      errorRef.current.innerHTML = 'passwords do not match';
     }
   };
+
+  useEffect(() => {
+    if (relog === true) {
+      const loginData = {
+        username: newUsername ? newUsername : username,
+        password,
+      };
+      dispatch(login(loginData));
+      dispatch(fetchUser(user.id));
+      dispatch(reset());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [relog]);
+
+  const errorRef = useRef();
+  useEffect(() => {
+    if (isError) {
+      settingsHeaderRef.current.classList.add('fade');
+      settingsRef.current.classList.add('fade');
+      errorRef.current.innerHTML = message;
+      dispatch(reset());
+    } else if (isSuccess) {
+      setTimeout(() => {
+        navigate(`/users/${newUsername ? newUsername : username}`);
+      }, 1000);
+    }
+  }, [dispatch, navigate, username, newUsername, message, isError, isSuccess]);
 
   return (
     <div className="view">
@@ -114,7 +135,7 @@ const Settings = () => {
           <div className="formItem">
             <label htmlFor="newEmail">email </label>
             <input
-              type="text"
+              type="email"
               className="formControl"
               id="newEmail"
               name="newEmail"
@@ -153,6 +174,8 @@ const Settings = () => {
             save changes
           </div>
         </form>
+
+        <div className="errorMessage" ref={errorRef}></div>
 
         <form className="authForm settingsForm">
           <div className="formItem">
