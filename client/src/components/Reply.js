@@ -30,7 +30,7 @@ const Reply = (props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       replyRef.current.classList.add('fade');
-    }, 500);
+    }, 10);
     return () => clearTimeout(timer);
   }, []);
 

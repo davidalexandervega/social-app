@@ -42,8 +42,6 @@ def userApi(request, user_id=0):
       user_serializer.save()
       return JsonResponse('created a user', safe=False)
   elif request.method == 'POST' and ('edit-profile' in request.path):
-    print(request.POST)
-    print(request.FILES)
     user = User.objects.get(id=request.POST['id'])
     if request.POST.get('banner') and request.POST.get('banner') != user.bannerID:
       cloudinary.uploader.destroy('banners/' + request.POST['id'])

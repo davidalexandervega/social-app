@@ -39,7 +39,7 @@ const Sidebar = (props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       sidebarRef.current.classList.add('fade');
-    }, 300);
+    }, 10);
     return () => clearTimeout(timer);
   }, []);
 

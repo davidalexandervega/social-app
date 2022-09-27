@@ -119,7 +119,7 @@ const EditProfile = () => {
       : newProfileData.append('banner', banner);
     isNaN(picture) && picture !== ''
       ? newProfileData.append('picture', pictureRef.current.files[0])
-      : newProfileData.append('picture', banner);
+      : newProfileData.append('picture', picture);
     newProfileData.append('bio', bio);
 
     dispatch(editProfile(newProfileData));
@@ -131,7 +131,9 @@ const EditProfile = () => {
     if (isSuccess) {
       dispatch(reset());
       dispatch(fetchUser(user.id));
-      navigate(`/users/${username}`);
+      setTimeout(() => {
+        navigate(`/users/${username}`);
+      }, 100);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);

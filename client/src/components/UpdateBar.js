@@ -10,7 +10,7 @@ const UpdateBar = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       updateBarRef.current.classList.add('fade');
-    }, 300);
+    }, 10);
     return () => clearTimeout(timer);
   }, []);
 
