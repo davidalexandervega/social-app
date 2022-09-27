@@ -28,7 +28,7 @@ const Profile = () => {
 
   const { user, profileUser } = useSelector((state) => state.auth);
   const { username } = user;
-  const { posts } = useSelector((state) => state.post);
+  const { posts, isSuccess } = useSelector((state) => state.post);
 
   const cloudName = 'dgwf4o5mj';
   const cloudinary = new Cloudinary({
@@ -50,13 +50,13 @@ const Profile = () => {
 
   const profileRef = useRef();
   useEffect(() => {
-    if (profileUser) {
+    if (profileUser && isSuccess) {
       const timer = setTimeout(() => {
         profileRef.current.classList.add('fade');
       }, 10);
       return () => clearTimeout(timer);
     }
-  }, [profileUser]);
+  }, [profileUser, isSuccess]);
 
   const onFollowUser = () => {
     if (!profileUser.followers.includes(user.id)) {
@@ -84,7 +84,7 @@ const Profile = () => {
 
   return (
     <div className="view">
-      {profileUser ? (
+      {profileUser && isSuccess ? (
         <>
           <div className="viewBox" ref={profileRef}>
             <div className="profileBanner">
