@@ -51,10 +51,9 @@ const Profile = () => {
   const profileRef = useRef();
   useEffect(() => {
     if (profileUser && isSuccess) {
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         profileRef.current.classList.add('fade');
       }, 10);
-      return () => clearTimeout(timer);
     }
   }, [profileUser, isSuccess]);
 

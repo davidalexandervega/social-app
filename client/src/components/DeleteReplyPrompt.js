@@ -11,12 +11,11 @@ const DeleteReplyPrompt = (props) => {
 
   const onDelete = async (replyID) => {
     replyRef.current.classList.remove('fade');
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       dispatch(removeReply(replyID));
       dispatch(deleteReply(replyID));
       replyDelta.current--;
     }, 1000);
-    return () => clearTimeout(timer);
   };
 
   return (

@@ -25,10 +25,9 @@ const Login = () => {
   const loginRef = useRef();
   useEffect(() => {
     if (token) navigate('/');
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       loginRef.current.classList.add('fade');
     }, 500);
-    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

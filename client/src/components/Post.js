@@ -32,10 +32,9 @@ const Post = ({ post }) => {
 
   const postRef = useRef();
   useEffect(() => {
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       postRef.current.classList.add('fade');
     }, 10);
-    return () => clearTimeout(timer);
   }, []);
 
   const displayTime = () => {

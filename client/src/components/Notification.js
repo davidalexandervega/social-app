@@ -21,10 +21,9 @@ const Notification = (props) => {
 
   const notificationRef = useRef();
   useEffect(() => {
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       notificationRef.current.classList.add('fade');
     }, 10);
-    return () => clearTimeout(timer);
   }, []);
 
   const displayTime = () => {

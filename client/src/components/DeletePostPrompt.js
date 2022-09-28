@@ -14,22 +14,18 @@ const DeletePostPrompt = (props) => {
   const onDelete = async (postID) => {
     if (postView === true) {
       dispatch(deletePost(postID));
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         postViewContainerRef.current.classList.remove('fade');
       }, 10);
       setTimeout(() => {
         navigate('/');
       }, 1000);
-      return () => {
-        clearTimeout(timer);
-      };
     } else {
       postRef.current.classList.remove('fade');
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         dispatch(removePost(postID));
         dispatch(deletePost(postID));
       }, 1000);
-      return () => clearTimeout(timer);
     }
   };
 

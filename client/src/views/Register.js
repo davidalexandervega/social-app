@@ -19,10 +19,9 @@ const Register = () => {
   useEffect(() => {
     if (!token) {
       viewRef.current.classList.add('fade');
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         registerRef.current.classList.add('fade');
       }, 700);
-      return () => clearTimeout(timer);
     } else {
       navigate('/');
     }
