@@ -116,7 +116,9 @@ const Reply = (props) => {
             {reply.userPictureID ? (
               <AdvancedImage
                 className="postUserImage"
-                cldImg={cloudinary.image(`/pictures/${reply.user}`).setVersion(reply.userPictureID)}
+                cldImg={cloudinary
+                  .image(`/social-app/pictures/${reply.user}`)
+                  .setVersion(reply.userPictureID)}
               />
             ) : (
               <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />

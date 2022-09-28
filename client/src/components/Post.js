@@ -166,7 +166,9 @@ const Post = ({ post }) => {
             {post.userPictureID ? (
               <AdvancedImage
                 className="postUserImage"
-                cldImg={cloudinary.image(`/pictures/${post.user}`).setVersion(post.userPictureID)}
+                cldImg={cloudinary
+                  .image(`/social-app/pictures/${post.user}`)
+                  .setVersion(post.userPictureID)}
               />
             ) : (
               <ProfileCircled height="42px" width="42px" strokeWidth="1" fill="whitesmoke" />
@@ -179,7 +181,10 @@ const Post = ({ post }) => {
         </span>
         <div className="postBody" onClick={() => onPostView(post.id)}>
           {post.image === true ? (
-            <AdvancedImage cldImg={cloudinary.image(`/posts/${post.id}`)} className="feedImage" />
+            <AdvancedImage
+              cldImg={cloudinary.image(`/social-app/posts/${post.id}`)}
+              className="feedImage"
+            />
           ) : null}
           <div className="postText">{post.body}</div>
         </div>

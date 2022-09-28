@@ -44,19 +44,19 @@ def userApi(request, user_id=0):
   elif request.method == 'POST' and ('edit-profile' in request.path):
     user = User.objects.get(id=request.POST['id'])
     if request.POST.get('banner') and request.POST.get('banner') != user.bannerID:
-      cloudinary.uploader.destroy('banners/' + request.POST['id'])
+      cloudinary.uploader.destroy('/social-app/banners/' + request.POST['id'])
       user.bannerID = ''
     if request.FILES.get('banner'):
-      cloudinary.uploader.destroy('banners/' + request.POST['id'])
-      cloudinary.uploader.upload(file=request.FILES.get('banner'), folder='/banners/', public_id = request.POST['id'])
-      user.bannerID = cloudinary.api.resource('banners/' + request.POST['id'])['version']
+      cloudinary.uploader.destroy('/social-app/banners/' + request.POST['id'])
+      cloudinary.uploader.upload(file=request.FILES.get('banner'), folder='/social-app/banners/', public_id = request.POST['id'])
+      user.bannerID = cloudinary.api.resource('/social-app/banners/' + request.POST['id'])['version']
     if request.POST.get('picture') and request.POST.get('picture') != user.pictureID:
-      cloudinary.uploader.destroy('pictures/' + request.POST['id'])
+      cloudinary.uploader.destroy('/social-app/pictures/' + request.POST['id'])
       user.pictureID = ''
     if request.FILES.get('picture'):
-      cloudinary.uploader.destroy('pictures/' + request.POST['id'])
-      cloudinary.uploader.upload(file=request.FILES.get('picture'), folder='/pictures/', public_id = request.POST['id'])
-      user.pictureID = cloudinary.api.resource('pictures/' + request.POST['id'])['version']
+      cloudinary.uploader.destroy('/social-app/pictures/' + request.POST['id'])
+      cloudinary.uploader.upload(file=request.FILES.get('picture'), folder='/social-app/pictures/', public_id = request.POST['id'])
+      user.pictureID = cloudinary.api.resource('/social-app/pictures/' + request.POST['id'])['version']
     user.bio = request.POST['bio']
     user.save()
     posts = Post.objects.all().filter(user=request.POST['id'])
@@ -171,7 +171,7 @@ def postApi(request):
       post_id = (request.path.split('/api/posts/'))[1]
       post = Post.objects.get(id=post_id)
       if post.image == True:
-        cloudinary.uploader.destroy('posts/' + post_id)
+        cloudinary.uploader.destroy('/social-app/posts/' + post_id)
       post_serializer = PostSerializer(post)
       if str(post.user_id) == userID:
         post.delete()

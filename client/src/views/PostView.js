@@ -164,7 +164,7 @@ const PostView = () => {
                   <AdvancedImage
                     className="postUserImage"
                     cldImg={cloudinary
-                      .image(`/pictures/${post.user}`)
+                      .image(`/social-app/pictures/${post.user}`)
                       .setVersion(post.userPictureID)}
                   />
                 ) : (
@@ -178,7 +178,7 @@ const PostView = () => {
             </span>
             <div className="postBody">
               {post.image === true ? (
-                <AdvancedImage cldImg={cloudinary.image(`/posts/${post.id}`)} />
+                <AdvancedImage cldImg={cloudinary.image(`/social-app/posts/${post.id}`)} />
               ) : null}
               <div className="postText">{post.body}</div>
             </div>

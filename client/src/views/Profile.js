@@ -91,7 +91,7 @@ const Profile = () => {
               {profileUser.bannerID ? (
                 <AdvancedImage
                   cldImg={cloudinary
-                    .image(`/banners/${profileUser.id}`)
+                    .image(`/social-app/banners/${profileUser.id}`)
                     .setVersion(profileUser.bannerID)}
                   className="bannerImage"
                 />
@@ -102,7 +102,7 @@ const Profile = () => {
                 {profileUser.pictureID ? (
                   <AdvancedImage
                     cldImg={cloudinary
-                      .image(`/pictures/${profileUser.id}`)
+                      .image(`/social-app/pictures/${profileUser.id}`)
                       .setVersion(profileUser.pictureID)}
                     className="profileImage"
                   />

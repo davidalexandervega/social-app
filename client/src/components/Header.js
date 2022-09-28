@@ -49,7 +49,9 @@ const Header = (props) => {
           <div className="headerPicture">
             {user && user.pictureID ? (
               <AdvancedImage
-                cldImg={cloudinary.image(`/pictures/${user.id}`).setVersion(user.pictureID)}
+                cldImg={cloudinary
+                  .image(`social-app/pictures/${user.id}`)
+                  .setVersion(user.pictureID)}
                 className="headerImage"
               />
             ) : (

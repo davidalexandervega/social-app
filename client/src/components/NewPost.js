@@ -106,7 +106,7 @@ const NewPost = (props) => {
         formData.append('file', newPostImg);
         formData.append('upload_preset', 'social');
         formData.append('public_id', postID);
-        formData.append('folder', '/posts/');
+        formData.append('folder', '/social-app/posts/');
         axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, formData);
       }
 

@@ -154,7 +154,9 @@ const EditProfile = () => {
                   <>
                     {!isNaN(banner) ? (
                       <AdvancedImage
-                        cldImg={cloudinary.image(`/banners/${user.id}`).setVersion(user.bannerID)}
+                        cldImg={cloudinary
+                          .image(`/social-app/banners/${user.id}`)
+                          .setVersion(user.bannerID)}
                         className="bannerImage"
                       />
                     ) : (
@@ -185,7 +187,7 @@ const EditProfile = () => {
                       {!isNaN(picture) ? (
                         <AdvancedImage
                           cldImg={cloudinary
-                            .image(`/pictures/${user.id}`)
+                            .image(`/social-app/pictures/${user.id}`)
                             .setVersion(user.pictureID)}
                           className="profileImage"
                         />

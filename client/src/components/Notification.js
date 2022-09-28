@@ -75,7 +75,7 @@ const Notification = (props) => {
           <AdvancedImage
             className="notificationCreatorImage"
             cldImg={cloudinary
-              .image(`/pictures/${notification.creatorID}`)
+              .image(`/social-app/pictures/${notification.creatorID}`)
               .setVersion(notification.creatorPictureID)}
           />
         ) : (
