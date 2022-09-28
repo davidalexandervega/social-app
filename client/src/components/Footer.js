@@ -9,13 +9,13 @@ const Footer = (props) => {
   const { newPostData, setNewPost } = props;
   const { token } = useSelector((state) => state.auth);
 
-  const [mode, setMode] = useState('collapsed');
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     if (newPostData.newPostBody !== '') {
-      setMode('expanded');
+      setExpanded(true);
     } else {
-      setMode('collapsed');
+      setExpanded(false);
     }
   }, [newPostData.newPostBody]);
 
@@ -23,10 +23,10 @@ const Footer = (props) => {
     <div>
       {token ? (
         <footer className="footer">
-          {mode === 'collapsed' ? (
+          {!expanded ? (
             <span
               className="labelButton solidButton newPostButton"
-              onClick={() => setMode('expanded')}
+              onClick={() => setExpanded(true)}
             >
               new post &nbsp;
               <Plus />
@@ -35,8 +35,8 @@ const Footer = (props) => {
             <NewPost
               newPostData={newPostData}
               setNewPost={setNewPost}
-              mode={mode}
-              setMode={setMode}
+              expanded={expanded}
+              setExpanded={setExpanded}
             />
           )}
         </footer>

@@ -11,7 +11,7 @@ import { DoubleCheck, Cancel, Check } from 'iconoir-react';
 
 const NewPost = (props) => {
   const dispatch = useDispatch();
-  const { newPostData, setNewPost, mode, setMode } = props;
+  const { newPostData, setNewPost, expanded, setExpanded } = props;
   const { newPostBody, newPostImg, disableFile } = newPostData;
   const { postEnabled } = useSelector((state) => state.post);
 
@@ -24,7 +24,7 @@ const NewPost = (props) => {
 
   const newPostRef = useRef();
   useEffect(() => {
-    if (postEnabled && mode === 'expanded') {
+    if (postEnabled && expanded) {
       newPostRef.current.style.opacity = '1';
       newPostRef.current.style.display = 'flex';
     } else if (postEnabled) {
@@ -37,7 +37,7 @@ const NewPost = (props) => {
     if (!postEnabled) {
       newPostRef.current.style.display = 'none';
     }
-  }, [postEnabled, mode]);
+  }, [postEnabled, expanded]);
 
   const onFileInput = () => {
     if (fileRef.current.files.length !== 0) {
@@ -117,15 +117,9 @@ const NewPost = (props) => {
         disableFile: false,
       }));
 
-      collapse();
+      setExpanded(false);
 
       dispatch(createPost(newPostData));
-    }
-  };
-
-  const collapse = () => {
-    if (mode === 'expanded') {
-      setMode('collapsed');
     }
   };
 
@@ -178,10 +172,10 @@ const NewPost = (props) => {
             disabled={disableFile}
           ></input>
         </label>
-        {mode === 'expanded' ? (
+        {expanded ? (
           <span
             className="labelButton solidButton redButton cancelNewPost"
-            onClick={() => collapse()}
+            onClick={() => setExpanded(false)}
           >
             <Cancel />
           </span>
