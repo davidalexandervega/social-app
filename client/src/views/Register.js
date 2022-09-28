@@ -21,7 +21,7 @@ const Register = () => {
       viewRef.current.classList.add('fade');
       setTimeout(() => {
         registerRef.current.classList.add('fade');
-      }, 700);
+      }, 300);
     } else {
       navigate('/');
     }
