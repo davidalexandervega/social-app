@@ -14,8 +14,6 @@ const createReply = async (newReplyData, token) => {
 
   const response = await axios.post(API_URL, newReplyData, config);
 
-  console.log(response.data);
-
   return response.data;
 };
 

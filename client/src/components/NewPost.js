@@ -117,7 +117,7 @@ const NewPost = (props) => {
         disableFile: false,
       }));
 
-      setExpanded(false);
+      if (expanded) setExpanded(false);
 
       dispatch(createPost(newPostData));
     }

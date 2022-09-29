@@ -33,8 +33,9 @@ const Post = ({ post }) => {
   const postRef = useRef();
   useEffect(() => {
     setTimeout(() => {
-      postRef.current.classList.add('fade');
+      if (postRef.current) postRef.current.classList.add('fade');
     }, 10);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const displayTime = () => {

@@ -60,8 +60,6 @@ const editProfile = async (profileData, token) => {
 
   const response = await axios.post(API_URL + 'edit-profile', profileData, config);
 
-  console.log(response.data);
-
   return response.data;
 };
 

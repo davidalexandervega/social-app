@@ -26,7 +26,7 @@ const Login = () => {
   useEffect(() => {
     if (token) navigate('/');
     setTimeout(() => {
-      loginRef.current.classList.add('fade');
+      if (loginRef.current) loginRef.current.classList.add('fade');
     }, 500);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -34,8 +34,7 @@ const Login = () => {
   const errorRef = useRef();
   useEffect(() => {
     if (isError) {
-      console.log(message);
-      errorRef.current.innerHTML = message;
+      errorRef.current.innerHTML = 'incorrect username or password';
     }
 
     if (isSuccess) {
@@ -95,7 +94,7 @@ const Login = () => {
             />
           </div>
         </form>
-        <div className="error" ref={errorRef}></div>
+        <div className="errorMessage" ref={errorRef}></div>
         <span onClick={() => onSubmit()} className="button labelButton loginButton">
           login
         </span>
