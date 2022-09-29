@@ -149,7 +149,7 @@ const Register = () => {
               size="20"
             />
           </div>
-          <div className="solidButton longButton registerButton" onClick={() => onRegister()}>
+          <div className="solidButton registerButton" onClick={() => onRegister()}>
             register
           </div>
         </form>

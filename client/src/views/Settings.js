@@ -193,10 +193,7 @@ const Settings = () => {
                   size="20"
                 />
               </div>
-              <div
-                className="solidButton longButton settingsButton"
-                onClick={() => onSaveChanges()}
-              >
+              <div className="solidButton settingsButton" onClick={() => onSaveChanges()}>
                 save changes
               </div>
             </form>
@@ -240,10 +237,7 @@ const Settings = () => {
                   size="20"
                 />
               </div>
-              <div
-                className="solidButton longButton changePassword settingsButton"
-                onClick={() => onChangePassword()}
-              >
+              <div className="solidButton settingsButton" onClick={() => onChangePassword()}>
                 change password
               </div>
             </form>

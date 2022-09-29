@@ -125,13 +125,13 @@ const Profile = () => {
                 <div className="profileActions">
                   {profileUser.id === user.id ? (
                     <div
-                      className="solidButton longButton"
+                      className="solidButton"
                       onClick={() => navigate(`/users/${profileUser.username}/edit`)}
                     >
                       edit profile
                     </div>
                   ) : (
-                    <div className="solidButton longButton" onClick={() => onFollowUser()}>
+                    <div className="solidButton" onClick={() => onFollowUser()}>
                       {profileUser.followers.includes(user.id) ? (
                         <>
                           following &nbsp;

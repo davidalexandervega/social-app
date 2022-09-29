@@ -220,11 +220,11 @@ const EditProfile = () => {
                   </div>
                 </div>
                 <div className="editProfileActions">
-                  <div className="solidButton longButton" onClick={() => onSubmit()}>
+                  <div className="solidButton" onClick={() => onSubmit()}>
                     save changes
                   </div>
                   <div
-                    className="solidButton redButton longButton"
+                    className="solidButton redButton "
                     onClick={() => navigate(`/users/${username}`)}
                   >
                     cancel

@@ -164,21 +164,17 @@ textarea:focus {
 }
 
 .solidButton {
+  display: flex;
+  align-items: center;
   justify-content: center;
   height: 30px;
-  width: 80px;
+  width: fit-content;
+  padding: 0px 10px 0 10px;
   font-size: 0.75em;
   border: 1px solid black;
   border-radius: 10px;
   background-color: rgb(232, 226, 244);
-}
-
-.longButton {
   user-select: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100px;
 }
 
 .solidButton:hover {
@@ -195,8 +191,8 @@ textarea:focus {
 }
 
 .newPostButton {
-  height: 40px;
-  width: 95px;
+  height: 45px;
+  margin-bottom: 2vh;
 }
 
 .button:hover {
