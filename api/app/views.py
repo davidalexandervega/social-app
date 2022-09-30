@@ -36,8 +36,8 @@ def userApi(request, user_id=0):
       user = User.objects.get(id=request.GET['userID'])
     if user:
       user_serializer = UserSerializer(user)
-      return JsonResponse(user_serializer.data, safe=False)
-    return JsonResponse('user not found', safe=False)
+      return JsonResponse(user_serializer.data)
+    return JsonResponse({'message':'user not found'}, status=404)
 
     # create a user:
   elif request.method == 'POST' and ('edit-profile' not in request.path):
@@ -45,7 +45,7 @@ def userApi(request, user_id=0):
     user_serializer = UserSerializer(data=user_data)
     if user_serializer.is_valid(raise_exception=True):
       user_serializer.save()
-      return JsonResponse('created a user', safe=False)
+    return JsonResponse({'message':'created a user'})
 
       # edit user profile:
   elif request.method == 'POST' and ('edit-profile' in request.path):
@@ -81,7 +81,7 @@ def userApi(request, user_id=0):
       for notification in notifications:
         notification.creatorPictureID = user.pictureID
         notification.save()
-    return JsonResponse(UserSerializer(user).data, safe=False)
+    return JsonResponse(UserSerializer(user).data)
 
     # edit username/email:
   elif request.method == 'PUT' and ('edit-user' in request.path):
@@ -108,7 +108,7 @@ def userApi(request, user_id=0):
             notification.creatorUsername = user_data['newUsername']
             notification.save()
       user.save()
-      return JsonResponse(UserSerializer(user).data, safe=False)
+      return JsonResponse(UserSerializer(user).data)
     return JsonResponse({'message':'incorrect password'}, status=401)
 
     # edit user password:
@@ -118,7 +118,7 @@ def userApi(request, user_id=0):
     if check_password(password_data['currentPassword'], user.password):
       user.password = make_password(password_data['newPassword'])
       user.save()
-      return JsonResponse('password updated', safe=False)
+      return JsonResponse({'message':'password updated'})
     return JsonResponse({'message':'incorrect password'}, status=401)
 
     # follow/unfollow a user:
@@ -134,13 +134,13 @@ def userApi(request, user_id=0):
       creator.following.remove(target.id)
     creator.save()
     target.save()
-    return JsonResponse(UserSerializer(target).data, safe=False)
+    return JsonResponse(UserSerializer(target).data)
 
     # delete a user:
   elif request.method == 'DELETE':
     user = User.objects.get(id=user_id)
     user.delete()
-    return JsonResponse('deleted a user', safe=False)
+    return JsonResponse({'message':'deleted a user'})
 
 @csrf_exempt
 def postApi(request):
@@ -165,8 +165,8 @@ def postApi(request):
     elif (request.method == 'GET') and (request.GET['mode'] == 'origin'):
       post = Post.objects.get(id=request.GET['id'])
       if post:
-        return JsonResponse(PostSerializer(post).data, safe=False)
-      return JsonResponse('post not found', safe=False)
+        return JsonResponse(PostSerializer(post).data)
+      return JsonResponse({'message':'post not found'}, status=404)
 
       # get all replies to a post:
     elif (request.method == 'GET') and (request.GET['mode'] == 'replies'):
@@ -182,7 +182,7 @@ def postApi(request):
       post_serializer = PostSerializer(data=post_data)
       if post_serializer.is_valid():
         post_serializer.save()
-        return JsonResponse(post_data, safe=False)
+        return JsonResponse(post_data)
 
         # like a post:
     elif (request.method == 'PUT') and ('like' in request.path):
@@ -191,7 +191,7 @@ def postApi(request):
       post_serializer = PostSerializer(post, data=post_data)
       if post_serializer.is_valid():
         post_serializer.save()
-        return JsonResponse(post_data, safe=False)
+        return JsonResponse(post_data)
 
         # delete a post:
     elif request.method == 'DELETE':
@@ -202,9 +202,9 @@ def postApi(request):
       post_serializer = PostSerializer(post)
       if str(post.user_id) == userID:
         post.delete()
-        return JsonResponse(post_serializer.data, safe=False)
+        return JsonResponse(post_serializer.data)
   else:
-    return JsonResponse('no token is present in the header, or no header', safe=False)
+    return JsonResponse({'message':'no token is present in the header, or no header exists'}, status=401)
 
 @csrf_exempt
 def replyApi(request):
@@ -223,7 +223,7 @@ def replyApi(request):
         origin = Post.objects.get(id=reply_data['origin'])
         origin.replies.append(reply_data['id'])
         origin.save()
-        return JsonResponse(reply_data, safe=False)
+        return JsonResponse(reply_data)
 
     # like a reply:
     elif (request.method == 'PUT') and ('like' in request.path):
@@ -232,7 +232,7 @@ def replyApi(request):
       reply_serializer = ReplySerializer(reply, data=reply_data)
       if reply_serializer.is_valid():
         reply_serializer.save()
-        return JsonResponse(reply_data, safe=False)
+        return JsonResponse(reply_data)
     
     # delete a reply:
     elif request.method == 'DELETE':
@@ -243,9 +243,9 @@ def replyApi(request):
         origin.replies.remove(reply.id)
         origin.save()
         reply.delete()
-        return JsonResponse(reply_serializer.data, safe=False)
+        return JsonResponse(reply_serializer.data)
   else:
-    return JsonResponse('no token is present in the header, or no header', safe=False)
+    return JsonResponse({'message':'no token is present in the header, or no header exists'}, status=401)
 
 
 @csrf_exempt
@@ -261,7 +261,7 @@ def notificationApi(request):
       notification_serializer = NotificationSerializer(data=notification_data)
       if notification_serializer.is_valid():
         notification_serializer.save()
-        return JsonResponse(notification_data, safe=False)
+        return JsonResponse(notification_data)
 
     # get all notifications by user:
     elif request.method == 'GET':
