@@ -224,7 +224,7 @@ const EditProfile = () => {
                     save changes
                   </div>
                   <div
-                    className="solidButton redButton "
+                    className="solidButton redButton cancelEditProfile"
                     onClick={() => navigate(`/users/${username}`)}
                   >
                     cancel

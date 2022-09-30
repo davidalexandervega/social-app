@@ -1,6 +1,4 @@
 from django.views.decorators.csrf import csrf_exempt
-import re
-import json
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 from django.contrib.auth.hashers import check_password, make_password
@@ -19,13 +17,18 @@ config = cloudinary.config(secure=True)
 from app.models import User, Post, Reply, Notification
 from app.serializers import CustomTokenObtainPairSerializer, UserSerializer, PostSerializer, ReplySerializer, NotificationSerializer
 
-# Create your views here.
+# potentially useful print statements:
+  # print(post_serializer.is_valid())
+  # print(post_serializer.errors)
 
+# generate token:
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
 @csrf_exempt
 def userApi(request, user_id=0):
+
+  # get user by id:
   if request.method == 'GET':
     if request.GET.get('username'):
       user = User.objects.get(username=request.GET['username'])
@@ -35,12 +38,16 @@ def userApi(request, user_id=0):
       user_serializer = UserSerializer(user)
       return JsonResponse(user_serializer.data, safe=False)
     return JsonResponse('user not found', safe=False)
+
+    # create a user:
   elif request.method == 'POST' and ('edit-profile' not in request.path):
     user_data = JSONParser().parse(request)
     user_serializer = UserSerializer(data=user_data)
     if user_serializer.is_valid(raise_exception=True):
       user_serializer.save()
       return JsonResponse('created a user', safe=False)
+
+      # edit user profile:
   elif request.method == 'POST' and ('edit-profile' in request.path):
     user = User.objects.get(id=request.POST['id'])
     if request.POST.get('banner') and request.POST.get('banner') != user.bannerID:
@@ -75,6 +82,8 @@ def userApi(request, user_id=0):
         notification.creatorPictureID = user.pictureID
         notification.save()
     return JsonResponse(UserSerializer(user).data, safe=False)
+
+    # edit username/email:
   elif request.method == 'PUT' and ('edit-user' in request.path):
     user_data = JSONParser().parse(request)
     user = User.objects.get(id=user_data['userID'])
@@ -101,6 +110,8 @@ def userApi(request, user_id=0):
       user.save()
       return JsonResponse(UserSerializer(user).data, safe=False)
     return JsonResponse({'message':'incorrect password'}, status=401)
+
+    # edit user password:
   elif request.method == 'PUT' and ('change-password' in request.path):
     password_data = JSONParser().parse(request)
     user = User.objects.get(id=password_data['userID'])
@@ -109,6 +120,8 @@ def userApi(request, user_id=0):
       user.save()
       return JsonResponse('password updated', safe=False)
     return JsonResponse({'message':'incorrect password'}, status=401)
+
+    # follow/unfollow a user:
   elif request.method == 'PUT' and ('follow-user' in request.path):
     follow_data = JSONParser().parse(request)
     creator = User.objects.get(id=follow_data['creatorID'])
@@ -122,6 +135,8 @@ def userApi(request, user_id=0):
     creator.save()
     target.save()
     return JsonResponse(UserSerializer(target).data, safe=False)
+
+    # delete a user:
   elif request.method == 'DELETE':
     user = User.objects.get(id=user_id)
     user.delete()
@@ -133,33 +148,43 @@ def postApi(request):
   if response is not None:
     username , token = response
     userID = token.payload['user_id']
+
+    # get all posts:
     if (request.method == 'GET') and (request.path == '/api/posts/all'):
       posts = Post.objects.all()
       if posts:
         return JsonResponse(PostSerializer(posts, many=True).data, safe=False)
       return JsonResponse([], safe=False)
+
+      # get all posts by a specific user:
     elif (request.method == 'GET') and (request.path == '/api/posts/users/'):
       posts = Post.objects.all().filter(username=request.GET['username'])
       return JsonResponse(PostSerializer(posts, many=True).data, safe=False)
+
+      # get post by id:
     elif (request.method == 'GET') and (request.GET['mode'] == 'origin'):
       post = Post.objects.get(id=request.GET['id'])
       if post:
         return JsonResponse(PostSerializer(post).data, safe=False)
       return JsonResponse('post not found', safe=False)
+
+      # get all replies to a post:
     elif (request.method == 'GET') and (request.GET['mode'] == 'replies'):
       replies = Reply.objects.all().filter(origin=request.GET['id'])
       if replies:
         return JsonResponse(ReplySerializer(replies, many=True).data, safe=False)
       return JsonResponse([], safe=False)
+
+      # create a post:
     elif request.method == 'POST':
       post_data = JSONParser().parse(request)
       post_data['user'] = userID
       post_serializer = PostSerializer(data=post_data)
-      # print(post_serializer.is_valid())
-      # print(post_serializer.errors)
       if post_serializer.is_valid():
         post_serializer.save()
         return JsonResponse(post_data, safe=False)
+
+        # like a post:
     elif (request.method == 'PUT') and ('like' in request.path):
       post_data = JSONParser().parse(request)
       post = Post.objects.get(id=post_data['id'])
@@ -167,6 +192,8 @@ def postApi(request):
       if post_serializer.is_valid():
         post_serializer.save()
         return JsonResponse(post_data, safe=False)
+
+        # delete a post:
     elif request.method == 'DELETE':
       post_id = (request.path.split('/api/posts/'))[1]
       post = Post.objects.get(id=post_id)
@@ -185,6 +212,8 @@ def replyApi(request):
   if response is not None:
     username , token = response
     userID = token.payload['user_id']
+
+    # create a reply:
     if request.method == 'POST':
       reply_data = JSONParser().parse(request)
       reply_data['user'] = userID
@@ -195,6 +224,8 @@ def replyApi(request):
         origin.replies.append(reply_data['id'])
         origin.save()
         return JsonResponse(reply_data, safe=False)
+
+    # like a reply:
     elif (request.method == 'PUT') and ('like' in request.path):
       reply_data = JSONParser().parse(request)
       reply = Reply.objects.get(id=reply_data['id'])
@@ -202,6 +233,8 @@ def replyApi(request):
       if reply_serializer.is_valid():
         reply_serializer.save()
         return JsonResponse(reply_data, safe=False)
+    
+    # delete a reply:
     elif request.method == 'DELETE':
       reply = Reply.objects.get(id=request.path.split('/api/replies/')[1])
       reply_serializer = ReplySerializer(reply)
@@ -221,17 +254,23 @@ def notificationApi(request):
   if response is not None:
     username , token = response
     userID = token.payload['user_id']
+
+    # generate notification:
     if request.method == 'POST':
       notification_data = JSONParser().parse(request)
       notification_serializer = NotificationSerializer(data=notification_data)
       if notification_serializer.is_valid():
         notification_serializer.save()
         return JsonResponse(notification_data, safe=False)
+
+    # get all notifications by user:
     elif request.method == 'GET':
       notifications = Notification.objects.all().filter(recipientID=userID)
       if notifications:
         return JsonResponse(NotificationSerializer(notifications, many=True).data, safe=False)
       return JsonResponse([], safe=False)
+
+    # mark notifications as seen:
     elif request.method == 'PUT':
       Notification.objects.all().filter(recipientID=userID).update(seen=True)
       notifications = Notification.objects.all().filter(recipientID=userID)
