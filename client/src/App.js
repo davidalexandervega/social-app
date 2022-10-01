@@ -25,14 +25,15 @@ const App = () => {
   const { notifications } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
 
+  // fetch the user from the token claim info if present:
   useEffect(() => {
     if (token) {
-      // this is causing there to be an error message on the login page upon logout.
-      // the reason is because the username is still present in the global state upon logout.
       dispatch(fetchUser(jwt(token.access).user_id));
     }
   }, [dispatch, token]);
 
+  // set the notification bell's style every time new notifications are fetched
+  // throughout the application:
   const [notify, setNotify] = useState(false);
   useEffect(() => {
     if (notifications.filter((notification) => notification.seen === false).length > 0) {
@@ -42,6 +43,8 @@ const App = () => {
     }
   }, [notifications]);
 
+  // create the new post object here, which is passed into the sidebar and footer,
+  // allowing them to share data as the view size changes:
   const [newPostData, setNewPost] = useState({
     newPostBody: '',
     newPostImg: null,

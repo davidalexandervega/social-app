@@ -11,6 +11,8 @@ const Footer = (props) => {
 
   const [expanded, setExpanded] = useState(false);
 
+  // if the user has started to compose a post,
+  // the footer expands automatically as the view size changes:
   useEffect(() => {
     if (newPostData.newPostBody !== '') {
       setExpanded(true);

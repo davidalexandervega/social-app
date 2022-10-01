@@ -11,6 +11,7 @@ const DeletePostPrompt = (props) => {
   const navigate = useNavigate();
   const { post, postRef, setDeleteMode, postView, postViewContainerRef } = props;
 
+  // handling the post deletion based on the current view:
   const onDelete = async (postID) => {
     if (postView === true) {
       dispatch(deletePost(postID));

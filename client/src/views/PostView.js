@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -21,6 +21,8 @@ import { fetchNotifications } from '../features/notification/notificationSlice';
 import { createNotification } from '../features/notification/notificationSlice';
 
 const PostView = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { postID } = useParams();
   const { user } = useSelector((state) => state.auth);
   const { username } = user;
@@ -30,10 +32,7 @@ const PostView = () => {
   const postLoaded = useSelector((state) => state.post.isSuccess);
   const repliesLoaded = useSelector((state) => state.reply.isSuccess);
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
-
+  // initialize cloudinary:
   const cloudinary = new Cloudinary({
     cloud: {
       cloudName: 'dgwf4o5mj',
@@ -46,7 +45,6 @@ const PostView = () => {
 
     dispatch(fetchPostById(postID));
     dispatch(fetchReplies(postID));
-    feedReplyDelta.current = 0;
 
     dispatch(fetchNotifications());
     return () => {
@@ -56,6 +54,7 @@ const PostView = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // handle transition:
   const postRef = useRef();
   const postViewContainerRef = useRef();
   useEffect(() => {
@@ -68,7 +67,7 @@ const PostView = () => {
   }, [postLoaded, repliesLoaded]);
 
   const displayTime = () => {
-    // returns the time since the post rounded up to the nearest second:
+    // returns the time since post creation rounded up to the nearest second:
     const seconds = Math.ceil((new Date() - new Date(post.time)) / 1000);
     if (seconds < 60) {
       return `${seconds}s`;
@@ -91,7 +90,7 @@ const PostView = () => {
   const onLikePost = (post) => {
     // the state update allows for the like/unlike to be reflected immediately to the user.
     // the placeholder and color change the value immediately to reflect
-    // the state that will be returned and reinforced by the useEffect() call below:
+    // the state that will be returned and replaced in the useEffect() call below:
     let postData = {};
     if (post.likes.includes(user.id)) {
       setIsLiked({
@@ -150,7 +149,8 @@ const PostView = () => {
     newReplyBody: '',
   });
 
-  const feedReplyDelta = useRef(location.state ? location.state.replyDelta.current : 0);
+  // hold a reference value to immediately reflect the new count
+  // of replies in the indicator upon creation/deletion:
   const replyDelta = useRef(0);
 
   return (
@@ -189,7 +189,7 @@ const PostView = () => {
               </span>
               <span className="postReply">
                 <ChatBubbleEmpty className="button postReplyButton" strokeWidth="1.1" />
-                &nbsp;{post.replies.length + feedReplyDelta.current + replyDelta.current}
+                &nbsp;{post.replies.length + replyDelta.current}
               </span>
               {post.user === user.id ? (
                 <span className="postDelete" onClick={() => setDeleteMode(true)}>

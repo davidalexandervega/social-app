@@ -26,6 +26,7 @@ const NewReply = (props) => {
   };
 
   const onSubmit = () => {
+    // checking that the reply body is neither empty nor whitespace:
     if (newReplyBody.replace(/\s+/g, '') !== '') {
       const replyID = uuidv4();
 
@@ -39,6 +40,8 @@ const NewReply = (props) => {
         likes: [],
       };
 
+      // immediately adding 1 to the number of replies
+      // indicated on the post:
       replyDelta.current++;
 
       dispatch(createReply(newReplyData));

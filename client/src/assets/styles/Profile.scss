@@ -123,6 +123,10 @@
   resize: none;
 }
 
+.editUnavailable {
+  cursor: default;
+}
+
 /* mobile styles */
 @media only screen and (max-width: 400px) {
   .profile {

@@ -13,7 +13,7 @@ const register = async (userData) => {
 const login = async (userData) => {
   const response = await axios.post('/api/token/', userData);
 
-  // save the user data in localStorage, including the token:
+  // save the token in localStorage:
   if (response.data) {
     localStorage.setItem('token', JSON.stringify(response.data));
   }
@@ -28,6 +28,7 @@ const logout = () => {
 };
 
 const fetchUser = async (userID, token) => {
+  // set the correct header with the token to access the protected route:
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

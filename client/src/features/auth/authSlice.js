@@ -17,7 +17,8 @@ const initialState = {
 };
 
 // this is an action which can be dispatched in any component via useDispatch.
-// useSelector may be used in any component to access any slice of the state.
+// actions modify the state of the corresponding slice of the global store they're in.
+// useSelector may be used in any component to access any slice of the store.
 // createAsyncThunk is a handler for async operations in redux.
 // thunkAPI assists with the response.
 export const register = createAsyncThunk('auth/register', async (user, thunkAPI) => {
@@ -139,6 +140,8 @@ export const followUser = createAsyncThunk('auth/user/follow', async (followData
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
+  // reducers are functions that may be dispatched anywhere they're imported
+  // which can modify their parent slice of the global store:
   reducers: {
     reset: (state) => {
       state.relog = false;
@@ -164,8 +167,9 @@ export const authSlice = createSlice({
     },
   },
 
-  // extraReducers watch for actions and update the state of the slice according
-  // to the status of the action.
+  // extraReducers watch actions and may update the state of the slice
+  // according to changes in the status of the action, which are determined
+  // by the type of value they return (i.e. a json response versus an error).
   // a 'payload' is the return value of an action (see above).
   extraReducers: (builder) => {
     builder
@@ -224,7 +228,7 @@ export const authSlice = createSlice({
   },
 });
 
-// export the reducer of the slice:
+// export the reducers of the slice:
 export const { reset, setLoading, ejectProfile, updateFollowing } = authSlice.actions;
 
 // export the slice (which is a reducer of the global store):

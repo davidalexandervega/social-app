@@ -10,18 +10,18 @@ import { login, reset } from '../features/auth/authSlice';
 import '../assets/styles/Login.scss';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { token, isError, isSuccess, message } = useSelector((state) => state.auth);
+
+  // initialize login form:
   const [formData, setFormData] = useState({
     username: '',
     password: '',
   });
-
   const { username, password } = formData;
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const { token, isError, isSuccess, message } = useSelector((state) => state.auth);
-
+  // handle render condition and transition:
   const loginRef = useRef();
   useEffect(() => {
     if (token) navigate('/');
@@ -30,19 +30,6 @@ const Login = () => {
     }, 500);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const errorRef = useRef();
-  useEffect(() => {
-    if (isError) {
-      errorRef.current.innerHTML = 'incorrect username or password';
-    }
-
-    if (isSuccess) {
-      errorRef.current.innerHTML = '';
-      dispatch(reset());
-      navigate('/');
-    }
-  }, [token, isError, isSuccess, message, navigate, dispatch]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -61,6 +48,18 @@ const Login = () => {
 
     dispatch(login(loginData));
   };
+
+  const errorRef = useRef();
+  useEffect(() => {
+    if (isError) {
+      errorRef.current.innerHTML = 'incorrect username or password';
+    }
+    if (isSuccess) {
+      errorRef.current.innerHTML = '';
+      dispatch(reset());
+      navigate('/');
+    }
+  }, [token, isError, isSuccess, message, navigate, dispatch]);
 
   return (
     <div className="loginPage" ref={loginRef}>

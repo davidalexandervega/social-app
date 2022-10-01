@@ -15,10 +15,10 @@ const EditProfile = () => {
   const { profileUsername } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { user, isLoading, isSuccess } = useSelector((state) => state.auth);
   const { username } = user;
 
+  // initialize cloudinary:
   const cloudName = 'dgwf4o5mj';
   const cloudinary = new Cloudinary({
     cloud: {
@@ -26,6 +26,7 @@ const EditProfile = () => {
     },
   });
 
+  // handle transition:
   const editProfileHeaderRef = useRef();
   const editProfileRef = useRef();
   useEffect(() => {
@@ -43,6 +44,7 @@ const EditProfile = () => {
     };
   }, [dispatch, navigate, user]);
 
+  // initialize edit form:
   const [profileData, setProfileData] = useState({
     banner: user ? user.bannerID : null,
     picture: user ? user.pictureID : null,
@@ -112,6 +114,7 @@ const EditProfile = () => {
   }, [bio]);
 
   const onSubmit = () => {
+    // the FormData() type is required to pass the data down to django:
     const newProfileData = new FormData();
     newProfileData.append('username', username);
     newProfileData.append('id', user.id);
@@ -123,6 +126,7 @@ const EditProfile = () => {
       : newProfileData.append('picture', picture);
     newProfileData.append('bio', bio);
 
+    // dispatch, transition the form, and start loading animation:
     dispatch(editProfile(newProfileData));
     editProfileRef.current.classList.remove('fade');
     editProfileHeaderRef.current.classList.remove('fade');
@@ -245,7 +249,9 @@ const EditProfile = () => {
               </div>
             </div>
           ) : (
-            <div>edit page is unavailable if it's not your account.</div>
+            <div className="editUnavailable">
+              edit page is unavailable if it's not your account.
+            </div>
           )}
         </>
       ) : (

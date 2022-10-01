@@ -15,24 +15,35 @@ import { likeReply } from '../features/reply/replySlice';
 import { createNotification } from '../features/notification/notificationSlice';
 
 const Reply = (props) => {
-  const { reply, replyDelta, post } = props;
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { username } = user;
+  const { replyCreated } = useSelector((state) => state.reply);
+  const { reply, replyDelta, post } = props;
 
+  // initialize cloudinary:
   const cloudinary = new Cloudinary({
     cloud: {
       cloudName: 'dgwf4o5mj',
     },
   });
 
+  // handle transition based on whether replies are being loaded
+  // or a new reply is being added:
   const replyRef = useRef();
+
   useEffect(() => {
-    replyRef.current.classList.add('fade');
-  }, []);
+    if (replyCreated) {
+      setTimeout(() => {
+        replyRef.current.classList.add('fade');
+      }, 10);
+    } else {
+      replyRef.current.classList.add('fade');
+    }
+  }, [replyCreated]);
 
   const displayTime = () => {
-    // returns the time since the reply rounded up to the nearest second:
+    // returns the time since reply creation rounded up to the nearest second:
     const seconds = Math.ceil((new Date() - new Date(reply.time)) / 1000);
     if (seconds < 60) {
       return `${seconds}s`;
@@ -55,7 +66,7 @@ const Reply = (props) => {
   const onLikeReply = (reply) => {
     // the state update allows for the like/unlike to be reflected immediately to the user.
     // the placeholder and color change the value immediately to reflect
-    // the state that will be returned and reinforced by the useEffect() call below:
+    // the state that will be returned and replaced in the useEffect() call below:
     let replyData = {};
     if (reply.likes.includes(user.id)) {
       setIsLiked({

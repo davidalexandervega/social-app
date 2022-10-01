@@ -9,16 +9,17 @@ import '../assets/styles/Post.scss';
 import '../assets/styles/Notification.scss';
 
 const Notification = (props) => {
+  const navigate = useNavigate();
   const { notification } = props;
 
-  const navigate = useNavigate();
-
+  // initialize cloudinary:
   const cloudinary = new Cloudinary({
     cloud: {
       cloudName: 'dgwf4o5mj',
     },
   });
 
+  // handle transition:
   const notificationRef = useRef();
   useEffect(() => {
     setTimeout(() => {
@@ -27,7 +28,8 @@ const Notification = (props) => {
   }, []);
 
   const displayTime = () => {
-    // returns the time since the post rounded up to the nearest second:
+    // returns the time since creation of the notification,
+    // rounded up to the nearest second:
     const seconds = Math.ceil((new Date() - new Date(notification.time)) / 1000);
     if (seconds < 60) {
       return `${seconds}s`;
@@ -46,6 +48,7 @@ const Notification = (props) => {
     }
   };
 
+  // determine what onClick() does based on the notification's type:
   const onClickAction = () => {
     if (
       notification.type === 'like_post' ||

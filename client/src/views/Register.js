@@ -11,9 +11,9 @@ import '../assets/styles/Register.scss';
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { token } = useSelector((state) => state.auth);
 
+  // handle render condition and transition:
   const viewRef = useRef();
   const registerRef = useRef();
   useEffect(() => {
@@ -27,15 +27,16 @@ const Register = () => {
     }
   }, [navigate, token]);
 
+  // initialize register form:
   const [formData, setFormData] = useState({
     email: '',
     username: '',
     password: '',
     confirmPassword: '',
   });
-
   const { email, username, password, confirmPassword } = formData;
 
+  // regular expressions used to validate form data:
   const reEmail = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim;
   const reUsername = /^[a-zA-Z0-9_]+$/;
 

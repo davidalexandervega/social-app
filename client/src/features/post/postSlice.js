@@ -14,7 +14,6 @@ export const createPost = createAsyncThunk('posts/create', async (newPostData, t
     const token = thunkAPI.getState().auth.token.access;
     return await postService.createPost(newPostData, token);
   } catch (error) {
-    // check if any errors, and using the message as the payload if so:
     const message =
       (error.response && error.response.data && error.response.data.message) ||
       error.message ||

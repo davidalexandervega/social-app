@@ -24,6 +24,7 @@ const Settings = () => {
   );
   const { username } = user;
 
+  // handle transition:
   const settingsRef = useRef();
   const settingsHeaderRef = useRef();
   useEffect(() => {
@@ -42,6 +43,7 @@ const Settings = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // initialize settings form:
   const [formData, setFormData] = useState({
     newUsername: username,
     newEmail: user.email,
@@ -53,6 +55,7 @@ const Settings = () => {
   const { newUsername, newEmail, password, currentPassword, newPassword, confirmNewPassword } =
     formData;
 
+  // regular expressions used to validate form data:
   const reEmail = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim;
   const reUsername = /^[a-zA-Z0-9_]+$/;
 
@@ -75,6 +78,8 @@ const Settings = () => {
         newEmail,
         password,
       };
+
+      // dispatch, transition the form, and start loading animation:
       dispatch(editUser(userData));
       setTimeout(() => {
         settingsHeaderRef.current.classList.remove('fade');
@@ -105,6 +110,8 @@ const Settings = () => {
         currentPassword,
         newPassword,
       };
+
+      // dispatch, transition the form, and start loading animation:
       dispatch(changePassword(passwordData));
       setTimeout(() => {
         settingsHeaderRef.current.classList.remove('fade');
@@ -119,6 +126,8 @@ const Settings = () => {
   };
 
   useEffect(() => {
+    // if the username has been changed, the user must be relogged
+    // to generate a new token:
     if (relog === true) {
       const loginData = {
         username: newUsername ? newUsername : username,
@@ -132,6 +141,7 @@ const Settings = () => {
 
   const errorRef = useRef();
   useEffect(() => {
+    // transition the form back in and display errors if they exist:
     if (isError) {
       settingsHeaderRef.current.classList.add('fade');
       settingsRef.current.classList.add('fade');

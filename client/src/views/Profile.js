@@ -22,14 +22,14 @@ import { BallTriangle } from 'react-loading-icons';
 import '../assets/styles/Profile.scss';
 
 const Profile = () => {
-  const { profileUsername } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const { profileUsername } = useParams();
   const { user, profileUser } = useSelector((state) => state.auth);
   const { username } = user;
   const { posts, isSuccess } = useSelector((state) => state.post);
 
+  // initialize cloudinary:
   const cloudName = 'dgwf4o5mj';
   const cloudinary = new Cloudinary({
     cloud: {
@@ -48,6 +48,7 @@ const Profile = () => {
     };
   }, [dispatch, profileUsername]);
 
+  // handle transition:
   const profileRef = useRef();
   useEffect(() => {
     if (profileUser && isSuccess) {

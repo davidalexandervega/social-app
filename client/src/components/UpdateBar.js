@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import '../assets/styles/UpdateBar.scss';
 
 const UpdateBar = () => {
+  // handle transition:
   const updateBarRef = useRef();
   useEffect(() => {
     setTimeout(() => {

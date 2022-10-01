@@ -14,14 +14,14 @@ const NewPost = (props) => {
   const { newPostData, setNewPost, expanded, setExpanded } = props;
   const { newPostBody, newPostImg, disableFile } = newPostData;
   const { postEnabled } = useSelector((state) => state.post);
-
   const { user } = useSelector((state) => state.auth);
   const { username } = user;
+  const cloudName = 'dgwf4o5mj';
 
   const fileRef = useRef();
   const uploadButtonRef = useRef();
-  const cloudName = 'dgwf4o5mj';
 
+  // handle rendering based upon the view size:
   const newPostRef = useRef();
   useEffect(() => {
     if (postEnabled && expanded) {
@@ -39,17 +39,14 @@ const NewPost = (props) => {
     }
   }, [postEnabled, expanded]);
 
+  // add file and disable the input,
+  // allowing the custom file removal handler to be interactable:
   const onFileInput = () => {
     if (fileRef.current.files.length !== 0) {
       setNewPost((prevState) => ({
         ...prevState,
         newPostImg: fileRef.current.files[0],
         disableFile: true,
-      }));
-    } else {
-      setNewPost((prevState) => ({
-        ...prevState,
-        newPostImg: null,
       }));
     }
   };
@@ -60,6 +57,8 @@ const NewPost = (props) => {
         ...prevState,
         newPostImg: null,
       }));
+      // the timeout is necessary to prevent the input from activating
+      // upon file removal:
       setTimeout(() => {
         setNewPost((prevState) => ({
           ...prevState,
@@ -88,6 +87,7 @@ const NewPost = (props) => {
   };
 
   const onSubmit = () => {
+    // checking that the post body is neither empty nor whitespace:
     if (newPostBody.replace(/\s+/g, '') !== '') {
       const postID = uuidv4();
       const newPostData = {

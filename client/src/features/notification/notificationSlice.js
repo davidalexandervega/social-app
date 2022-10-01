@@ -12,7 +12,6 @@ export const createNotification = createAsyncThunk(
       const token = thunkAPI.getState().auth.token.access;
       return await notificationService.createNotification(notificationData, token);
     } catch (error) {
-      // check if any errors, and using the message as the payload if so:
       const message =
         (error.response && error.response.data && error.response.data.message) ||
         error.message ||

@@ -21,13 +21,13 @@ import {
 } from 'iconoir-react';
 
 const Sidebar = (props) => {
-  const { newPostData, setNewPost, notify } = props;
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { token, user } = useSelector((state) => state.auth);
   const username = user ? user.username : null;
+  const { newPostData, setNewPost, notify } = props;
 
+  // initialize cloudinary:
   const cloudName = 'dgwf4o5mj';
   const cloudinary = new Cloudinary({
     cloud: {
@@ -35,9 +35,8 @@ const Sidebar = (props) => {
     },
   });
 
+  // handle lifecycle transitions:
   const sidebarRef = useRef();
-
-  // handle life-cycle transitions:
   useEffect(() => {
     if (!token) {
       setTimeout(() => {
@@ -57,10 +56,6 @@ const Sidebar = (props) => {
       }, 100);
     }
   }, [token, user]);
-
-  const loadFeed = () => {
-    navigate('/');
-  };
 
   const onLogout = () => {
     dispatch(logout());
@@ -108,7 +103,7 @@ const Sidebar = (props) => {
           notifications
         </span>
       ) : null}
-      <span className="button labelButton sidebarButton" onClick={() => loadFeed()}>
+      <span className="button labelButton sidebarButton" onClick={() => navigate('/')}>
         <Globe height="2em" width="2em" strokeWidth="1.1" />
         feed
       </span>

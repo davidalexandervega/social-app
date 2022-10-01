@@ -63,6 +63,7 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = 'app.User'
 
+# these are the token-generating package's settings:
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=90),

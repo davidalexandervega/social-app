@@ -24,12 +24,14 @@ const Post = ({ post }) => {
   const { username } = user;
   const { expandedPost } = useSelector((state) => state.reply);
 
+  // initialize cloudinary:
   const cloudinary = new Cloudinary({
     cloud: {
       cloudName: 'dgwf4o5mj',
     },
   });
 
+  // handle transition:
   const postRef = useRef();
   useEffect(() => {
     setTimeout(() => {
@@ -39,7 +41,7 @@ const Post = ({ post }) => {
   }, []);
 
   const displayTime = () => {
-    // returns the time since the post rounded up to the nearest second:
+    // returns the time since post creation rounded up to the nearest second:
     const seconds = Math.ceil((new Date() - new Date(post.time)) / 1000);
     if (seconds < 60) {
       return `${seconds}s`;
@@ -54,10 +56,6 @@ const Post = ({ post }) => {
     }
   };
 
-  const onPostView = (postID) => {
-    navigate(`/posts/${postID}`, { state: { replyDelta: replyDelta } });
-  };
-
   const [isLiked, setIsLiked] = useState({
     color: 'whitesmoke',
     placeholder: 0,
@@ -66,7 +64,7 @@ const Post = ({ post }) => {
   const onLikePost = (post) => {
     // the state update allows for the like/unlike to be reflected immediately to the user.
     // the placeholder and color change the value immediately to reflect
-    // the state that will be returned and reinforced by the useEffect() call below:
+    // the state that will be returned and replaced in the useEffect() call below:
     let postData = {};
     if (post.likes.includes(user.id)) {
       setIsLiked({
@@ -120,6 +118,8 @@ const Post = ({ post }) => {
 
   const [deleteMode, setDeleteMode] = useState(false);
 
+  // hold a reference value to immediately reflect the new count
+  // of replies in the indicator upon creation/deletion:
   const replyDelta = useRef(0);
 
   const [newReplyData, setNewReply] = useState({
@@ -128,13 +128,14 @@ const Post = ({ post }) => {
 
   const onReplyPost = (postID) => {
     if (expandedPost === postID) {
-      dispatch(resetReplies());
+      dispatch(expandPost(null));
     } else {
-      dispatch(resetReplies());
+      dispatch(expandPost(null));
       dispatch(expandPost(postID));
     }
   };
 
+  // handle the quick-reply slide transition if in feed view:
   const repliesContainerRef = useRef();
   useEffect(() => {
     if (expandedPost === post.id) {
@@ -179,7 +180,7 @@ const Post = ({ post }) => {
           </span>
           <span className="postTime">{displayTime()}</span>
         </span>
-        <div className="postBody" onClick={() => onPostView(post.id)}>
+        <div className="postBody" onClick={() => navigate(`/posts/${post.id}`)}>
           {post.image === true ? (
             <AdvancedImage
               cldImg={cloudinary.image(`/social-app/posts/${post.id}`)}

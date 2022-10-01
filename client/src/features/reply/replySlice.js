@@ -4,6 +4,7 @@ import replyService from './replyService';
 const initialState = {
   replies: [],
   expandedPost: null,
+  replyCreated: false,
   isError: false,
   isSuccess: false,
   message: '',
@@ -75,13 +76,12 @@ export const replySlice = createSlice({
     expandPost: (state, action) => {
       state.expandedPost = action.payload;
     },
-    // in this slice the entire state may be reset to the original,
-    // whereas in authSlice.js the user must be persisted if authenticated:
     reset: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
       .addCase(createReply.fulfilled, (state, action) => {
+        state.replyCreated = true;
         state.replies.push(action.payload);
         state.replies.sort((a, b) => new Date(b.time) - new Date(a.time));
       })
@@ -104,11 +104,7 @@ export const replySlice = createSlice({
         );
       })
       .addCase(likeReply.rejected, (state, action) => {})
-      .addCase(deleteReply.fulfilled, (state, action) => {
-        // the deleted reply is filtered out so the UI
-        // is immediately updated without reloading:
-        state.replies = state.replies.filter((reply) => reply.id !== action.payload.id);
-      })
+      .addCase(deleteReply.fulfilled, (state, action) => {})
       .addCase(deleteReply.rejected, (state, action) => {});
   },
 });

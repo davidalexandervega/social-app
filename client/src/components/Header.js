@@ -22,19 +22,15 @@ const Header = (props) => {
   const dispatch = useDispatch();
   const { token, user } = useSelector((state) => state.auth);
   const username = user ? user.username : null;
-
   const { notify } = props;
 
+  // initialize cloudinary:
   const cloudName = 'dgwf4o5mj';
   const cloudinary = new Cloudinary({
     cloud: {
       cloudName,
     },
   });
-
-  const loadFeed = () => {
-    navigate('/');
-  };
 
   const onLogout = () => {
     dispatch(logout());
@@ -91,7 +87,7 @@ const Header = (props) => {
         width="48px"
         strokeWidth="0.75"
         className="button"
-        onClick={() => loadFeed()}
+        onClick={() => navigate('/')}
       />
       {token ? (
         <Settings
