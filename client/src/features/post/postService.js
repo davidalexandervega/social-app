@@ -1,4 +1,6 @@
 import axios from 'axios';
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 // this includes the proxy definied in package.json
 // otherwise you would need the full path to the server-side:
