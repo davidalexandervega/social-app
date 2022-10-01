@@ -24,19 +24,14 @@ Requirements:
 • pip 22.0.4^
 • PostgreSQL 14.4^
 
-In order to run this application, fork this repository and then in `api/`, run:
+In order to run this application, fork this repository and then in the root directory, run:
 
 ```
 pip install -r requirements.txt
-```
-
-In `client/`, run:
-
-```
 npm install
 ```
 
-An `.env` file is required in `api/api` with the following parameters:
+An `.env` file is required in `api/` with the following parameters:
 
 ```
 SECRET_KEY=*a chosen secret key*
@@ -47,7 +42,7 @@ DB_USER=*the database username*
 DB_PASSWORD=*the database password*
 ```
 
-The project uses Cloudinary as an image host. Another `.env` file is therefore required in `api/app` with the following parameter:
+The project uses Cloudinary as an image host. Another `.env` file is therefore required in `app/` with the following parameter:
 
 ```
 CLOUDINARY_URL=*the cloudinary library connection URL*
@@ -55,14 +50,9 @@ CLOUDINARY_URL=*the cloudinary library connection URL*
 
 ## Commands
 
-To start the API locally on port 8000, in `api/`, run:
+To run this application's API and client locally on ports 8000 and 3000 respectively, run:
 
 ```
 python manage.py runserver
-```
-
-To run the client locally on port 3000, in `client/`, run:
-
-```
 npm start
 ```
