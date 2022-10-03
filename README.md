@@ -7,20 +7,22 @@ This project was created using React, Redux, Express, and PostgreSQL, with Cloud
 ## Features
 
 Users can:
-• register, login
-• set profile pictures, banners, bio
-• change their username or password
-• create posts and attach images
-• like and reply to posts and replies
-• follow each other
-• check and interact with their notifications
+
+- register, login
+- set profile pictures, banners, bio
+- change their username or password
+- create posts and attach images
+- like and reply to posts and replies
+- follow each other
+- check and interact with their notifications
 
 ## Setup
 
 Requirements:
-• Node.js v16.16.0
-• npm v8.15.1^
-• PostgreSQL 14.4^
+
+- Node.js v16.16.0
+- npm v8.15.1^
+- PostgreSQL 14.4^
 
 In order to run this application, fork this repository and then in both `client/` and `api/`, run:
 
