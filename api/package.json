@@ -19,7 +19,10 @@
     "express": "^4.17.3",
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
-    "node-postgres": "^0.6.2"
+    "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.23.2",
+    "sequelize-auto": "^0.8.8"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
