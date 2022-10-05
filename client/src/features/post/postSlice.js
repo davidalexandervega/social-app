@@ -51,10 +51,10 @@ export const fetchUserPosts = createAsyncThunk(
   }
 );
 
-export const fetchPostById = createAsyncThunk('posts/fetch/id', async (postID, thunkAPI) => {
+export const fetchPostByID = createAsyncThunk('posts/fetch/id', async (postID, thunkAPI) => {
   try {
     const token = thunkAPI.getState().auth.token.access;
-    return await postService.fetchPostById(postID, token);
+    return await postService.fetchPostByID(postID, token);
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -125,11 +125,11 @@ export const postSlice = createSlice({
         state.posts = action.payload.sort((a, b) => new Date(b.time) - new Date(a.time));
       })
       .addCase(fetchUserPosts.rejected, (state, action) => {})
-      .addCase(fetchPostById.fulfilled, (state, action) => {
+      .addCase(fetchPostByID.fulfilled, (state, action) => {
         state.isSuccess = true;
         state.posts = [action.payload];
       })
-      .addCase(fetchPostById.rejected, (state, action) => {})
+      .addCase(fetchPostByID.rejected, (state, action) => {})
       .addCase(likePost.fulfilled, (state, action) => {
         // to reflect the edited change so it immediately appears
         // in the UI without reloading:

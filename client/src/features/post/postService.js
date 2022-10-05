@@ -38,19 +38,19 @@ const fetchUserPosts = async (username, token) => {
     },
   };
 
-  const response = await axios.get(API_URL + 'users/?username=' + username, config);
+  const response = await axios.get(API_URL + 'user/?username=' + username, config);
 
   return response.data;
 };
 
-const fetchPostById = async (postID, token) => {
+const fetchPostByID = async (postID, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
 
-  const response = await axios.get(API_URL + '?id=' + postID + '&mode=origin', config);
+  const response = await axios.get(API_URL + 'id/?id=' + postID + '&mode=origin', config);
 
   return response.data;
 };
@@ -83,7 +83,7 @@ const postService = {
   createPost,
   fetchUserPosts,
   fetchAllPosts,
-  fetchPostById,
+  fetchPostByID,
   likePost,
   deletePost,
 };

@@ -14,7 +14,7 @@ const register = async (userData) => {
 };
 
 const login = async (userData) => {
-  const response = await axios.post('/api/token/', userData);
+  const response = await axios.post(API_URL + 'token/', userData);
 
   // save the token in localStorage:
   if (response.data) {
@@ -50,7 +50,7 @@ const fetchProfile = async (username, token) => {
     },
   };
 
-  const response = await axios.get(API_URL + '?username=' + username, config);
+  const response = await axios.get(API_URL + 'profiles/?username=' + username, config);
 
   return response.data;
 };
@@ -62,7 +62,11 @@ const editProfile = async (profileData, token) => {
     },
   };
 
-  const response = await axios.post(API_URL + 'edit-profile', profileData, config);
+  const response = await axios.put(
+    API_URL + 'profiles/edit?username=' + profileData.username,
+    profileData,
+    config
+  );
 
   return response.data;
 };
@@ -75,7 +79,7 @@ const editUser = async (userData, token) => {
   };
 
   const response = await axios.put(
-    API_URL + 'edit-user/?username=' + userData.username,
+    API_URL + 'edit/handle?username=' + userData.username,
     userData,
     config
   );
@@ -91,7 +95,7 @@ const changePassword = async (passwordData, token) => {
   };
 
   const response = await axios.put(
-    API_URL + 'change-password/?username=' + passwordData.username,
+    API_URL + 'edit/password?username=' + passwordData.username,
     passwordData,
     config
   );
@@ -107,7 +111,7 @@ const followUser = async (followData, token) => {
   };
 
   const response = await axios.put(
-    API_URL + 'follow-user/?userID=' + followData.targetID,
+    API_URL + 'follow/?userID=' + followData.targetID,
     followData,
     config
   );

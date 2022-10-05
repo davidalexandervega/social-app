@@ -15,7 +15,7 @@ import '../assets/styles/Post.scss';
 import { ProfileCircled, Heart, Cancel, ChatBubbleEmpty } from 'iconoir-react';
 import { BallTriangle } from 'react-loading-icons';
 
-import { fetchPostById, likePost, reset as resetPosts } from '../features/post/postSlice';
+import { fetchPostByID, likePost, reset as resetPosts } from '../features/post/postSlice';
 import { fetchReplies, reset as resetReplies } from '../features/reply/replySlice';
 import { fetchNotifications } from '../features/notification/notificationSlice';
 import { createNotification } from '../features/notification/notificationSlice';
@@ -43,7 +43,7 @@ const PostView = () => {
     dispatch(resetPosts());
     dispatch(resetReplies());
 
-    dispatch(fetchPostById(postID));
+    dispatch(fetchPostByID(postID));
     dispatch(fetchReplies(postID));
 
     dispatch(fetchNotifications());
