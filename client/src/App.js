@@ -16,8 +16,6 @@ import Login from './views/Login';
 import Register from './views/Register';
 import PostView from './views/PostView';
 
-import axios from 'axios';
-
 import jwt from 'jwt-decode';
 
 import { fetchUser } from './features/auth/authSlice';
@@ -27,13 +25,10 @@ const App = () => {
   const { notifications } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
 
-  axios.get('/api/test').then((response) => {
-    console.log(response);
-  });
-
   // fetch the user from the token claim info if present:
   useEffect(() => {
     if (token) {
+      console.log(token);
       dispatch(fetchUser(jwt(token.access).user_id));
     }
   }, [dispatch, token]);

@@ -50,8 +50,6 @@ const Register = () => {
   const errorRef = useRef();
 
   const onRegister = () => {
-    reEmail.test(email);
-    reUsername.test(username);
     if (
       reEmail.test(email) &&
       reUsername.test(username) &&
@@ -64,8 +62,8 @@ const Register = () => {
         password,
         id: uuidv4(),
         created: new Date(),
-        picture: false,
-        banner: false,
+        pictureID: null,
+        bannerID: null,
         bio: '',
         following: [],
         followers: [],

@@ -4,9 +4,12 @@ const Sequelize = require('sequelize');
 /*
 PROCEDURE FOR MAKING CHANGES TO THE MODEL:
 
+first, un-comment the {whatever}.sync() operation at the bottom of the file.
+remember to re-comment it after the update.
+
 if a column/constraint is simply being added or removed from a table,
 altering this file & running `node {whatever}Model.js` is enough.
-this will run the sequelize instance and perform the user.sync({alter: true})
+this will run the sequelize instance and perform the {whatever}.sync({alter: true})
 operation at the bottom of the file. 
 
 if a column or the table itself is being renamed,
@@ -14,12 +17,12 @@ first change the name using (preferably) the database's GUI or if not then a raw
 then also rename the table/columns & relevant constraints here,
 and finally run `node {whatever}Model.js` to ensure that this file is always the most current document.
 remember that renaming a column that is referenced by another table requires altering the constraint
-in the relevant model's file and running `node {whatever}Model.js` for that file too.
+in that model's file and running `node {whatever}Model.js` for that file too.
 */
 
 const sequelize = new Sequelize(process.env.DB_CONNECTION_URI);
 
-const user = sequelize.define(
+const userModel = sequelize.define(
   'user',
   {
     id: {
@@ -58,11 +61,11 @@ const user = sequelize.define(
     },
     bannerID: {
       type: Sequelize.DataTypes.STRING(255),
-      allowNull: false,
+      allowNull: true,
     },
     pictureID: {
       type: Sequelize.DataTypes.STRING(255),
-      allowNull: false,
+      allowNull: true,
     },
   },
   {
@@ -80,7 +83,8 @@ const user = sequelize.define(
   }
 );
 
-user
+/*
+userModel
   .sync({ alter: true })
   .then((response) => {
     console.log(response);
@@ -88,3 +92,6 @@ user
   .catch((error) => {
     console.log(error);
   });
+*/
+
+module.exports = userModel;

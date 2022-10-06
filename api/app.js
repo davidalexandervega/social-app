@@ -18,17 +18,11 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/api/test', (req, res) => {
-  res.send({
-    msg: 'test successful',
-  });
-});
-
 // use routes:
 app.use('/api/users', require('./routes/authRoutes'));
-app.use('/api/posts', require('./routes/postRoutes'));
-app.use('/api/replies', require('./routes/replyRoutes'));
-app.use('/api/notifications', require('./routes/notificationRoutes'));
+//app.use('/api/posts', require('./routes/postRoutes'));
+//app.use('/api/replies', require('./routes/replyRoutes'));
+//app.use('/api/notifications', require('./routes/notificationRoutes'));
 
 // serve client in production:
 if (process.env.NODE_ENV === 'production') {
