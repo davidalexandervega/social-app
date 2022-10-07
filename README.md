@@ -8,13 +8,13 @@ This project was created using React, Redux, Express, and PostgreSQL, with Cloud
 
 Users can:
 
-- register, login
-- set profile pictures, banners, bio
-- change their username or password
-- create posts and attach images
-- like and reply to posts and replies
-- follow each other
-- check and interact with their notifications
+- Register, login
+- Set profile pictures, banners, bio
+- Change their username or password
+- Create posts and attach images
+- Like and reply to posts and replies
+- Follow each other
+- Check and interact with their notifications
 
 ## Setup
 
@@ -46,9 +46,16 @@ CLOUDINARY_URL=*the cloudinary library connection URL*
 
 ## Commands
 
-To run this application's API and client locally on ports 4000 and 3000 respectively, run:
+To run this application locally, ensure `NODE_ENV` is set to development. In `api/`,run:
 
 ```
 npm run dev
+```
+
+In `client/`, run:
+
+```
 npm run start
 ```
+
+The API and client servers run on ports 4000 and 3000, respectively.
