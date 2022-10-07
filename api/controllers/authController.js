@@ -56,6 +56,46 @@ const login = async (req, res) => {
   }
 };
 
+const fetchUser = async (req, res) => {
+  const user = await userModel
+    .findAll({
+      where: {
+        id: req.query.userID,
+      },
+    })
+    .then((response) => {
+      return response[0].dataValues;
+    });
+
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).json({
+      error: 'user not found',
+    });
+  }
+};
+
+const fetchProfile = async (req, res) => {
+  const user = await userModel
+    .findAll({
+      where: {
+        username: req.query.username,
+      },
+    })
+    .then((response) => {
+      return response[0].dataValues;
+    });
+
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).json({
+      error: 'user not found',
+    });
+  }
+};
+
 const hashPassword = async (password, saltRounds = 10) => {
   try {
     const salt = await bcrypt.genSalt(saltRounds);
@@ -72,4 +112,6 @@ const generateToken = (id) => {
 module.exports = {
   register,
   login,
+  fetchUser,
+  fetchProfile,
 };

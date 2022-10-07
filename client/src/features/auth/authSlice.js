@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from './authService';
 
 // if token is in localStorage, parse the string into JSON and store it in token:
-const token = JSON.parse(localStorage.getItem('token'));
+const token = JSON.parse(localStorage.getItem('social-infinity'));
 
 // set the initial state:
 const initialState = {

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // import the interface functions from the controller:
-const { register, login } = require('../controllers/authController');
+const { register, login, fetchUser, fetchProfile } = require('../controllers/authController');
 
 // import the authorization middleware to protect private routes:
 const { protect } = require('../middleware/authMiddleware');
@@ -12,11 +12,11 @@ router.post('/', register);
 
 router.post('/token', login);
 
-/*
 router.get('/', fetchUser);
 
 router.get('/profiles', fetchProfile);
 
+/*
 router.put('/profiles/edit', protect, editProfile);
 
 router.put('/edit/handle', protect, editUser);

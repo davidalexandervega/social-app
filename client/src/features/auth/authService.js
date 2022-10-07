@@ -18,16 +18,14 @@ const login = async (userData) => {
 
   // save the token in localStorage:
   if (response.data) {
-    localStorage.setItem('token', JSON.stringify(response.data));
+    localStorage.setItem('social-infinity', JSON.stringify(response.data));
   }
-
-  console.log(JSON.parse(localStorage.getItem('token')));
 
   return response.data;
 };
 
 const logout = () => {
-  localStorage.removeItem('token');
+  localStorage.removeItem('social-infinity');
 };
 
 const fetchUser = async (userID, token) => {
@@ -38,7 +36,11 @@ const fetchUser = async (userID, token) => {
     },
   };
 
+  console.log('requesting user:', userID);
+
   const response = await axios.get(API_URL + '?userID=' + userID, config);
+
+  console.log(response.data);
 
   return response.data;
 };
