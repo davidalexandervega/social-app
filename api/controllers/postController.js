@@ -75,7 +75,7 @@ const fetchPostByID = (req, res) => {
       },
     })
     .then((response) => {
-      res.status(200).json(response);
+      res.status(200).json(response[0].dataValues);
     })
     .catch(() => {
       res.status(404).json({
@@ -89,9 +89,16 @@ const fetchPostByID = (req, res) => {
 // access: private
 const likePost = (req, res) => {
   postModel
-    .update({ likes: req.body.likes }, { where: { id: req.body.id } })
+    .update(
+      { likes: req.body.likes },
+      {
+        where: { id: req.body.id },
+        returning: true,
+        plain: true,
+      }
+    )
     .then((response) => {
-      res.status(200).json(response);
+      res.status(200).json(response[1].dataValues);
     })
     .catch(() => {
       res.status(500).json({
@@ -105,9 +112,14 @@ const likePost = (req, res) => {
 // access: public
 const deletePost = (req, res) => {
   postModel
-    .destroy({ where: { id: req.query.id } })
-    .then((response) => {
-      res.status(200).json(response);
+    .destroy({
+      where: { id: req.query.id },
+      returning: true,
+    })
+    .then(() => {
+      res.status(200).json({
+        message: `deleted post ${req.query.id}`,
+      });
     })
     .catch(() => {
       res.status(500).json({

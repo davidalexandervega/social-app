@@ -86,13 +86,13 @@ const Reply = (props) => {
         ...reply,
         likes: [...reply.likes, user.id],
       };
-      if (reply.user !== user.id) {
+      if (reply.userID !== user.id) {
         const notificationData = {
           id: uuidv4(),
           time: new Date(),
           creatorID: user.id,
           creatorUsername: username,
-          recipientID: reply.user,
+          recipientID: reply.userID,
           type: 'like_post',
           object: post.id,
         };
@@ -128,7 +128,7 @@ const Reply = (props) => {
               <AdvancedImage
                 className="postUserImage"
                 cldImg={cloudinary
-                  .image(`/social-app/pictures/${reply.user}`)
+                  .image(`/social-app/pictures/${reply.userID}`)
                   .setVersion(reply.userPictureID)}
               />
             ) : (
@@ -146,7 +146,7 @@ const Reply = (props) => {
             <Heart className="button postLikeButton" strokeWidth="1.1" fill={isLiked.color} />
             &nbsp;{reply.likes.length + isLiked.placeholder}
           </span>
-          {reply.user === user.id ? (
+          {reply.userID === user.id ? (
             <span className="postDelete" onClick={() => setDeleteMode(true)}>
               <Cancel className="postDeleteButton" strokeWidth="1.1" />
             </span>

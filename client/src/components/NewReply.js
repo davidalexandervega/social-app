@@ -32,9 +32,10 @@ const NewReply = (props) => {
 
       const newReplyData = {
         id: replyID,
+        userID: user.id,
         username,
         userPictureID: user.pictureID,
-        origin: post.id,
+        originID: post.id,
         body: newReplyBody,
         time: new Date(),
         likes: [],

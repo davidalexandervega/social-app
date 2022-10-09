@@ -8,6 +8,7 @@ const API_URL = '/api/replies/';
 
 const createReply = async (newReplyData, token) => {
   // set the correct header with the token to access the protected route:
+
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -26,19 +27,21 @@ const fetchReplies = async (postID, token) => {
     },
   };
 
-  const response = await axios.get('/api/posts/?id=' + postID + '&mode=replies', config);
+  const response = await axios.get('/api/replies/?postID=' + postID, config);
 
   return response.data;
 };
 
 const likeReply = async (replyData, token) => {
+  console.log('liking reply...');
+  console.log(replyData);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
 
-  const response = await axios.put(API_URL + replyData.id + '/like', replyData, config);
+  const response = await axios.put(API_URL + 'like/?id=' + replyData.id, replyData, config);
 
   return response.data;
 };
@@ -50,7 +53,7 @@ const deleteReply = async (replyID, token) => {
     },
   };
 
-  const response = await axios.delete(API_URL + replyID, config);
+  const response = await axios.delete(API_URL + '?id=' + replyID, config);
 
   return response.data;
 };

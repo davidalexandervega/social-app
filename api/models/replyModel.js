@@ -30,10 +30,6 @@ const replyModel = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    image: {
-      type: Sequelize.DataTypes.BOOLEAN,
-      allowNull: false,
-    },
     body: {
       type: Sequelize.DataTypes.STRING(200),
       allowNull: false,

@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 // use routes:
 app.use('/api/users', require('./routes/authRoutes'));
 app.use('/api/posts', require('./routes/postRoutes'));
-//app.use('/api/replies', require('./routes/replyRoutes'));
+app.use('/api/replies', require('./routes/replyRoutes'));
 //app.use('/api/notifications', require('./routes/notificationRoutes'));
 
 // serve client in production:
