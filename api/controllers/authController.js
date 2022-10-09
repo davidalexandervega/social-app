@@ -130,9 +130,7 @@ const editUser = async (req, res) => {
         });
       });
   } else {
-    res.status(401).json({
-      error: 'incorrect username or password',
-    });
+    res.status(401).send('incorrect username or password');
   }
 };
 

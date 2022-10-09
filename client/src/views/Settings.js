@@ -79,15 +79,15 @@ const Settings = () => {
         password,
       };
 
-      // dispatch, transition the form, and start loading animation:
-      dispatch(editUser(userData));
+      // transition the form, dispatch and start loading animation:
       setTimeout(() => {
         settingsHeaderRef.current.classList.remove('fade');
         settingsRef.current.classList.remove('fade');
       }, 10);
       setTimeout(() => {
+        dispatch(editUser(userData));
         dispatch(setLoading(true));
-      }, 10);
+      }, 750);
     } else {
       if (!reUsername.test(newUsername)) {
         errorRef.current.innerHTML = 'usernames must be alphanumeric & may contain underscores';
@@ -111,15 +111,15 @@ const Settings = () => {
         newPassword,
       };
 
-      // dispatch, transition the form, and start loading animation:
-      dispatch(changePassword(passwordData));
+      // transition the form, dispatch and start loading animation:
       setTimeout(() => {
         settingsHeaderRef.current.classList.remove('fade');
         settingsRef.current.classList.remove('fade');
       }, 10);
       setTimeout(() => {
+        dispatch(changePassword(passwordData));
         dispatch(setLoading(true));
-      }, 10);
+      }, 750);
     } else if (newPassword !== confirmNewPassword) {
       errorRef.current.innerHTML = 'passwords do not match';
     }
