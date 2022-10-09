@@ -95,6 +95,7 @@ const NewPost = (props) => {
       const postID = uuidv4();
       const newPostData = {
         id: postID,
+        userID: user.id,
         username: username,
         userPictureID: user.pictureID,
         body: newPostBody,

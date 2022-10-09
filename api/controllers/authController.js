@@ -24,11 +24,11 @@ const register = (req, res) => {
       });
     })
     .then((user) => {
-      res.status(201).json(user);
+      res.status(201).json(user.dataValues);
     })
     .catch(() => {
-      res.status(400).json({
-        error: 'invalid user data',
+      res.status(503).json({
+        error: 'server error',
       });
     });
 };
@@ -37,6 +37,7 @@ const register = (req, res) => {
 // route: POST /api/users/token
 // access: public
 const login = async (req, res) => {
+  console.log('ATTEMPTING LOGIN...');
   const user = await userModel
     .findAll({
       where: {
@@ -44,6 +45,7 @@ const login = async (req, res) => {
       },
     })
     .then((response) => {
+      console.log('FOUND USER:', response[0].dataValues);
       return response[0].dataValues;
     });
 

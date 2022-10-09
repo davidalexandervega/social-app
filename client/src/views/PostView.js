@@ -110,13 +110,13 @@ const PostView = () => {
         ...post,
         likes: [...post.likes, user.id],
       };
-      if (post.user !== user.id) {
+      if (post.userID !== user.id) {
         const notificationData = {
           id: uuidv4(),
           time: new Date(),
           creatorID: user.id,
           creatorUsername: username,
-          recipientID: post.user,
+          recipientID: post.userID,
           type: 'like_post',
           object: post.id,
         };
@@ -164,7 +164,7 @@ const PostView = () => {
                   <AdvancedImage
                     className="postUserImage"
                     cldImg={cloudinary
-                      .image(`/social-app/pictures/${post.user}`)
+                      .image(`/social-app/pictures/${post.userID}`)
                       .setVersion(post.userPictureID)}
                   />
                 ) : (
@@ -191,7 +191,7 @@ const PostView = () => {
                 <ChatBubbleEmpty className="button postReplyButton" strokeWidth="1.1" />
                 &nbsp;{post.replies.length + replyDelta.current}
               </span>
-              {post.user === user.id ? (
+              {post.userID === user.id ? (
                 <span className="postDelete" onClick={() => setDeleteMode(true)}>
                   <Cancel className="postDeleteButton" strokeWidth="1.1" />
                 </span>
