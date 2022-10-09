@@ -38,8 +38,6 @@ const fetchUser = async (userID, token) => {
 
   const response = await axios.get(API_URL + '?userID=' + userID, config);
 
-  console.log('user:', response.data);
-
   return response.data;
 };
 
@@ -83,8 +81,6 @@ const editUser = async (userData, token) => {
     userData,
     config
   );
-
-  console.log(response.data);
 
   return response.data;
 };

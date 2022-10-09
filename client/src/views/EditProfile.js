@@ -114,7 +114,6 @@ const EditProfile = () => {
   }, [bio]);
 
   const onSubmit = () => {
-    // the FormData() type is required to pass the data down to django:
     const newProfileData = new FormData();
     newProfileData.append('username', username);
     newProfileData.append('id', user.id);

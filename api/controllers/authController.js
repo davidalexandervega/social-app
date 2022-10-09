@@ -96,11 +96,23 @@ const fetchProfile = async (req, res) => {
   }
 };
 
+const editProfile = async (req, res) => {
+  const user = await userModel
+    .findAll({
+      where: {
+        id: req.body.id,
+      },
+    })
+    .then((response) => {
+      return response[0].dataValues;
+    });
+};
+
 const editUser = async (req, res) => {
   const user = await userModel
     .findAll({
       where: {
-        username: req.body.username,
+        id: req.body.userID,
       },
     })
     .then((response) => {
@@ -123,14 +135,43 @@ const editUser = async (req, res) => {
       .then((response) => {
         res.status(200).json(response[1].dataValues);
       })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json({
-          error: 'user unable to be updated',
-        });
+      .catch(() => {
+        res.status(500).send('user unable to be updated');
       });
   } else {
     res.status(401).send('incorrect username or password');
+  }
+};
+
+const changePassword = async (req, res) => {
+  const user = await userModel
+    .findAll({
+      where: {
+        id: req.body.userID,
+      },
+    })
+    .then((response) => {
+      return response[0].dataValues;
+    });
+
+  if (user && (await bcrypt.compare(req.body.currentPassword, user.password))) {
+    hashPassword(req.body.newPassword).then((hashedPassword) => {
+      userModel
+        .update(
+          {
+            password: hashedPassword,
+          },
+          { where: { id: req.body.userID } }
+        )
+        .then(() => {
+          res.status(200).send('password changed');
+        })
+        .catch(() => {
+          res.status(503).send('server error');
+        });
+    });
+  } else {
+    res.status(401).send('incorrect password');
   }
 };
 
@@ -153,4 +194,5 @@ module.exports = {
   fetchUser,
   fetchProfile,
   editUser,
+  changePassword,
 };

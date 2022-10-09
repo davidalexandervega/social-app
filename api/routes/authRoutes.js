@@ -8,6 +8,8 @@ const {
   fetchUser,
   fetchProfile,
   editUser,
+  changePassword,
+  editProfile,
 } = require('../controllers/authController');
 
 // import the authorization middleware to protect private routes:
@@ -22,13 +24,13 @@ router.get('/', fetchUser);
 
 router.get('/profiles', fetchProfile);
 
+// router.put('/profiles/edit', protect, editProfile);
+
 router.put('/edit/handle', protect, editUser);
 
-// router.put('/edit/password', protect, changePassword);
+router.put('/edit/password', protect, changePassword);
 
 /*
-router.put('/profiles/edit', protect, editProfile);
-
 router.put('/follow', protect, followUser);
 */
 
