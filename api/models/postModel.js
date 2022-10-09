@@ -22,7 +22,7 @@ in that model's file and running `node {whatever}Model.js` for that file too.
 
 const sequelize = new Sequelize(process.env.DB_CONNECTION_URI);
 
-const post = sequelize.define(
+const postModel = sequelize.define(
   'post',
   {
     id: {
@@ -30,6 +30,40 @@ const post = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
+    userID: {
+      type: Sequelize.DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+    },
+    username: {
+      type: Sequelize.DataTypes.STRING(200),
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'username',
+      },
+    },
+    userPictureID: {
+      type: Sequelize.DataTypes.STRING(255),
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'pictureID',
+      },
+    },
+    /*
+    username: {
+      type: Sequelize.DataTypes.STRING(200),
+      allowNull: false,
+    },
+    userPictureID: {
+      type: Sequelize.DataTypes.STRING(255),
+      allowNull: false,
+    },
+    */
     body: {
       type: Sequelize.DataTypes.STRING(200),
       allowNull: false,
@@ -42,28 +76,12 @@ const post = sequelize.define(
       type: Sequelize.DataTypes.ARRAY(Sequelize.DataTypes.UUID),
       allowNull: false,
     },
-    userID: {
-      type: Sequelize.DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'users',
-        key: 'id',
-      },
-    },
     image: {
       type: Sequelize.DataTypes.BOOLEAN,
       allowNull: false,
     },
     replies: {
       type: Sequelize.DataTypes.ARRAY(Sequelize.DataTypes.UUID),
-      allowNull: false,
-    },
-    username: {
-      type: Sequelize.DataTypes.STRING(200),
-      allowNull: false,
-    },
-    userPictureID: {
-      type: Sequelize.DataTypes.STRING(255),
       allowNull: false,
     },
   },
@@ -82,11 +100,20 @@ const post = sequelize.define(
         name: 'post_userID',
         fields: [{ name: 'userID' }],
       },
+      {
+        name: 'post_username',
+        fields: [{ name: 'username' }],
+      },
+      {
+        name: 'post_userPictureID',
+        fields: [{ name: 'userPictureID' }],
+      },
     ],
   }
 );
 
-post
+/*
+postModel
   .sync({ alter: true })
   .then((response) => {
     console.log(response);
@@ -94,3 +121,6 @@ post
   .catch((error) => {
     console.log(error);
   });
+*/
+
+module.exports = postModel;

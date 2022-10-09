@@ -22,7 +22,7 @@ in that model's file and running `node {whatever}Model.js` for that file too.
 
 const sequelize = new Sequelize(process.env.DB_CONNECTION_URI);
 
-const reply = sequelize.define(
+const replyModel = sequelize.define(
   'reply',
   {
     id: {
@@ -65,11 +65,29 @@ const reply = sequelize.define(
     username: {
       type: Sequelize.DataTypes.STRING(200),
       allowNull: false,
+      references: {
+        model: 'users',
+        key: 'username',
+      },
+    },
+    userPictureID: {
+      type: Sequelize.DataTypes.STRING(255),
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'pictureID',
+      },
+    },
+    /*
+    username: {
+      type: Sequelize.DataTypes.STRING(200),
+      allowNull: false,
     },
     userPictureID: {
       type: Sequelize.DataTypes.STRING(255),
       allowNull: false,
     },
+    */
   },
   {
     sequelize,
@@ -78,23 +96,32 @@ const reply = sequelize.define(
     timestamps: false,
     indexes: [
       {
-        name: 'reply_originID',
-        fields: [{ name: 'originID' }],
-      },
-      {
         name: 'reply_pkey',
         unique: true,
         fields: [{ name: 'id' }],
       },
       {
+        name: 'reply_originID',
+        fields: [{ name: 'originID' }],
+      },
+      {
         name: 'reply_userID',
         fields: [{ name: 'userID' }],
+      },
+      {
+        name: 'reply_username',
+        fields: [{ name: 'username' }],
+      },
+      {
+        name: 'reply_userPictureID',
+        fields: [{ name: 'userPictureID' }],
       },
     ],
   }
 );
 
-reply
+/*
+replyModel
   .sync({ alter: true })
   .then((response) => {
     console.log(response);
@@ -102,3 +129,6 @@ reply
   .catch((error) => {
     console.log(error);
   });
+*/
+
+module.exports = replyModel;

@@ -22,7 +22,7 @@ in that model's file and running `node {whatever}Model.js` for that file too.
 
 const sequelize = new Sequelize(process.env.DB_CONNECTION_URI);
 
-const notification = sequelize.define(
+const notificationModel = sequelize.define(
   'notification',
   {
     id: {
@@ -34,11 +34,11 @@ const notification = sequelize.define(
       type: Sequelize.DataTypes.STRING(200),
       allowNull: false,
     },
-    object: {
+    objectID: {
       type: Sequelize.DataTypes.UUID,
       allowNull: false,
     },
-    creatorID: {
+    recipientID: {
       type: Sequelize.DataTypes.UUID,
       allowNull: false,
       references: {
@@ -46,7 +46,7 @@ const notification = sequelize.define(
         key: 'id',
       },
     },
-    recipientID: {
+    creatorID: {
       type: Sequelize.DataTypes.UUID,
       allowNull: false,
       references: {
@@ -57,17 +57,35 @@ const notification = sequelize.define(
     creatorUsername: {
       type: Sequelize.DataTypes.STRING(200),
       allowNull: false,
+      references: {
+        model: 'users',
+        key: 'username',
+      },
     },
+    creatorPictureID: {
+      type: Sequelize.DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'pictureID',
+      },
+    },
+    /*
+    creatorUsername: {
+      type: Sequelize.DataTypes.STRING(200),
+      allowNull: false,
+    },
+        creatorPictureID: {
+      type: Sequelize.DataTypes.STRING(255),
+      allowNull: false,
+    },
+    */
     time: {
       type: Sequelize.DataTypes.DATE,
       allowNull: false,
     },
     seen: {
       type: Sequelize.DataTypes.BOOLEAN,
-      allowNull: false,
-    },
-    creatorPictureID: {
-      type: Sequelize.DataTypes.STRING(255),
       allowNull: false,
     },
   },
@@ -78,10 +96,6 @@ const notification = sequelize.define(
     timestamps: false,
     indexes: [
       {
-        name: 'notification_creatorID',
-        fields: [{ name: 'creatorID' }],
-      },
-      {
         name: 'notification_pkey',
         unique: true,
         fields: [{ name: 'id' }],
@@ -90,11 +104,24 @@ const notification = sequelize.define(
         name: 'notification_recipientID',
         fields: [{ name: 'recipientID' }],
       },
+      {
+        name: 'notification_creatorID',
+        fields: [{ name: 'creatorID' }],
+      },
+      {
+        name: 'notification_creatorUsername',
+        fields: [{ name: 'creatorUsername' }],
+      },
+      {
+        name: 'notification_creatorPictureID',
+        fields: [{ name: 'creatorPictureID' }],
+      },
     ],
   }
 );
 
-notification
+/*
+notificationModel
   .sync({ alter: true })
   .then((response) => {
     console.log(response);
@@ -102,3 +129,6 @@ notification
   .catch((error) => {
     console.log(error);
   });
+*/
+
+module.exports = notificationModel;
