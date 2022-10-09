@@ -13,14 +13,15 @@ const Feed = () => {
   const dispatch = useDispatch();
 
   const { posts } = useSelector((state) => state.post);
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(fetchAllPosts());
-    dispatch(fetchNotifications());
+    dispatch(fetchNotifications(user.id));
     return () => {
       dispatch(expandPost(null));
     };
-  }, [dispatch]);
+  }, [dispatch, user.id]);
 
   return (
     <div className="view">

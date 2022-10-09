@@ -9,14 +9,16 @@ const Notifications = (props) => {
   const dispatch = useDispatch();
 
   const { notifications } = useSelector((state) => state.notification);
+  const { user } = useSelector((state) => state.auth);
 
   const { notify, setNotify } = props;
 
   useEffect(() => {
-    dispatch(fetchNotifications());
     if (notify === true) {
       setNotify(false);
-      dispatch(checkNotifications());
+      dispatch(checkNotifications(user.id));
+    } else {
+      dispatch(fetchNotifications(user.id));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

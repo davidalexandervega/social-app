@@ -93,7 +93,7 @@ const Post = ({ post }) => {
           creatorPictureID: user.pictureID,
           recipientID: post.userID,
           type: 'like_post',
-          object: post.id,
+          objectID: post.id,
         };
         dispatch(createNotification(notificationData));
       }

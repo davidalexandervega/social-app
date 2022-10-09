@@ -52,7 +52,7 @@ const fetchPostByID = async (postID, token) => {
     },
   };
 
-  const response = await axios.get(API_URL + '?id=' + postID + '&mode=origin', config);
+  const response = await axios.get(API_URL + '?id=' + postID, config);
 
   return response.data;
 };

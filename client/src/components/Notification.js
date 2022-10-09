@@ -55,7 +55,7 @@ const Notification = (props) => {
       notification.type === 'reply_post' ||
       notification.type === 'like_reply'
     ) {
-      navigate(`/posts/${notification.object}`);
+      navigate(`/posts/${notification.objectID}`);
     } else if (notification.type === 'follow_user') {
       navigate(`/users/${notification.creatorUsername}`);
     }

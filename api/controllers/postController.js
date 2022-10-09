@@ -1,6 +1,5 @@
-require('dotenv').config({ path: '../.env' });
-
 const postModel = require('../models/postModel');
+const notificationModel = require('../models/notificationModel');
 
 // description: create post
 // route: POST /api/posts/
@@ -114,7 +113,13 @@ const deletePost = (req, res) => {
   postModel
     .destroy({
       where: { id: req.query.id },
-      returning: true,
+    })
+    .then(() => {
+      notificationModel.destroy({
+        where: {
+          objectID: req.query.id,
+        },
+      });
     })
     .then(() => {
       res.status(200).json({

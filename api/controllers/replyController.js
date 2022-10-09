@@ -1,5 +1,3 @@
-require('dotenv').config({ path: '../.env' });
-
 const replyModel = require('../models/replyModel');
 
 // description: create reply

@@ -87,6 +87,7 @@ const notificationModel = sequelize.define(
     seen: {
       type: Sequelize.DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
     },
   },
   {

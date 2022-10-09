@@ -68,7 +68,7 @@ const Profile = () => {
         creatorUsername: username,
         recipientID: profileUser.id,
         type: 'follow_user',
-        object: profileUser.id,
+        objectID: profileUser.id,
       };
       dispatch(createNotification(notificationData));
     }

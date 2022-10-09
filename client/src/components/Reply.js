@@ -94,7 +94,7 @@ const Reply = (props) => {
           creatorUsername: username,
           recipientID: reply.userID,
           type: 'like_post',
-          object: post.id,
+          objectID: post.id,
         };
         dispatch(createNotification(notificationData));
       }

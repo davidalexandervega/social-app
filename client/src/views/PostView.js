@@ -46,7 +46,7 @@ const PostView = () => {
     dispatch(fetchPostByID(postID));
     dispatch(fetchReplies(postID));
 
-    dispatch(fetchNotifications());
+    dispatch(fetchNotifications(user.id));
     return () => {
       dispatch(resetPosts());
       dispatch(resetReplies());

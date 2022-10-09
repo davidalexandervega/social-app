@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api/users', require('./routes/authRoutes'));
 app.use('/api/posts', require('./routes/postRoutes'));
 app.use('/api/replies', require('./routes/replyRoutes'));
-//app.use('/api/notifications', require('./routes/notificationRoutes'));
+app.use('/api/notifications', require('./routes/notificationRoutes'));
 
 // serve client in production:
 if (process.env.NODE_ENV === 'production') {
