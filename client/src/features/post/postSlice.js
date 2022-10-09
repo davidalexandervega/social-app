@@ -11,7 +11,7 @@ const initialState = {
 
 export const createPost = createAsyncThunk('posts/create', async (newPostData, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.token.access;
+    const token = thunkAPI.getState().auth.token;
     return await postService.createPost(newPostData, token);
   } catch (error) {
     const message =
@@ -24,7 +24,7 @@ export const createPost = createAsyncThunk('posts/create', async (newPostData, t
 
 export const fetchAllPosts = createAsyncThunk('posts/fetch', async (_, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.token.access;
+    const token = thunkAPI.getState().auth.token;
     return await postService.fetchAllPosts(token);
   } catch (error) {
     const message =
@@ -39,7 +39,7 @@ export const fetchUserPosts = createAsyncThunk(
   'posts/fetch/username',
   async (username, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.token.access;
+      const token = thunkAPI.getState().auth.token;
       return await postService.fetchUserPosts(username, token);
     } catch (error) {
       const message =
@@ -53,7 +53,7 @@ export const fetchUserPosts = createAsyncThunk(
 
 export const fetchPostByID = createAsyncThunk('posts/fetch/id', async (postID, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.token.access;
+    const token = thunkAPI.getState().auth.token;
     return await postService.fetchPostByID(postID, token);
   } catch (error) {
     const message =
@@ -66,7 +66,7 @@ export const fetchPostByID = createAsyncThunk('posts/fetch/id', async (postID, t
 
 export const likePost = createAsyncThunk('posts/like', async (postData, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.token.access;
+    const token = thunkAPI.getState().auth.token;
     return await postService.likePost(postData, token);
   } catch (error) {
     const message =
@@ -79,7 +79,7 @@ export const likePost = createAsyncThunk('posts/like', async (postData, thunkAPI
 
 export const deletePost = createAsyncThunk('posts/delete', async (postID, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.token.access;
+    const token = thunkAPI.getState().auth.token;
     return await postService.deletePost(postID, token);
   } catch (error) {
     const message =

@@ -9,7 +9,7 @@ export const createNotification = createAsyncThunk(
   'notifications/create',
   async (notificationData, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.token.access;
+      const token = thunkAPI.getState().auth.token;
       return await notificationService.createNotification(notificationData, token);
     } catch (error) {
       const message =
@@ -23,7 +23,7 @@ export const createNotification = createAsyncThunk(
 
 export const fetchNotifications = createAsyncThunk('notifications/fetch', async (_, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.token.access;
+    const token = thunkAPI.getState().auth.token;
     return await notificationService.fetchNotifications(token);
   } catch (error) {
     const message =
@@ -36,7 +36,7 @@ export const fetchNotifications = createAsyncThunk('notifications/fetch', async 
 
 export const checkNotifications = createAsyncThunk('notifications/check', async (_, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.token.access;
+    const token = thunkAPI.getState().auth.token;
     return await notificationService.checkNotifications(_, token);
   } catch (error) {
     const message =

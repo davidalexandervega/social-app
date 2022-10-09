@@ -52,7 +52,7 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 
 export const fetchUser = createAsyncThunk('auth/user/fetch-user', async (userID, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.token.access;
+    const token = thunkAPI.getState().auth.token;
     return await authService.fetchUser(userID, token);
   } catch (error) {
     const message =
@@ -67,7 +67,7 @@ export const fetchProfile = createAsyncThunk(
   'auth/user/fetch-profile',
   async (username, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.token.access;
+      const token = thunkAPI.getState().auth.token;
       return await authService.fetchProfile(username, token);
     } catch (error) {
       const message =
@@ -83,7 +83,7 @@ export const editProfile = createAsyncThunk(
   'auth/user/edit-profile',
   async (profileData, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.token.access;
+      const token = thunkAPI.getState().auth.token;
       return await authService.editProfile(profileData, token);
     } catch (error) {
       const message =
@@ -97,7 +97,7 @@ export const editProfile = createAsyncThunk(
 
 export const editUser = createAsyncThunk('auth/user/edit-user', async (userData, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.token.access;
+    const token = thunkAPI.getState().auth.token;
     return await authService.editUser(userData, token);
   } catch (error) {
     const message =
@@ -112,7 +112,7 @@ export const changePassword = createAsyncThunk(
   'auth/changePassword',
   async (passwordData, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.token.access;
+      const token = thunkAPI.getState().auth.token;
       return await authService.changePassword(passwordData, token);
     } catch (error) {
       const message =
@@ -126,7 +126,7 @@ export const changePassword = createAsyncThunk(
 
 export const followUser = createAsyncThunk('auth/user/follow', async (followData, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.token.access;
+    const token = thunkAPI.getState().auth.token;
     return await authService.followUser(followData, token);
   } catch (error) {
     const message =

@@ -16,6 +16,8 @@ const createPost = async (newPostData, token) => {
 
   const response = await axios.post(API_URL, newPostData, config);
 
+  console.log(response.data);
+
   return response.data;
 };
 
@@ -50,7 +52,7 @@ const fetchPostByID = async (postID, token) => {
     },
   };
 
-  const response = await axios.get(API_URL + 'id/?id=' + postID + '&mode=origin', config);
+  const response = await axios.get(API_URL + '?id=' + postID + '&mode=origin', config);
 
   return response.data;
 };
@@ -62,7 +64,7 @@ const likePost = async (postData, token) => {
     },
   };
 
-  const response = await axios.put(API_URL + postData.id + '/like', postData, config);
+  const response = await axios.put(API_URL + '/like/?id=' + postData.id, postData, config);
 
   return response.data;
 };
@@ -74,7 +76,7 @@ const deletePost = async (postID, token) => {
     },
   };
 
-  const response = await axios.delete(API_URL + postID, config);
+  const response = await axios.delete(API_URL + '?id=' + postID, config);
 
   return response.data;
 };

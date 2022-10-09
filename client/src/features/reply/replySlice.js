@@ -12,7 +12,7 @@ const initialState = {
 
 export const createReply = createAsyncThunk('replies/create', async (newReplyData, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.token.access;
+    const token = thunkAPI.getState().auth.token;
     return await replyService.createReply(newReplyData, token);
   } catch (error) {
     // check if any errors, and using the message as the payload if so:
@@ -26,7 +26,7 @@ export const createReply = createAsyncThunk('replies/create', async (newReplyDat
 
 export const fetchReplies = createAsyncThunk('replies/fetch', async (postID, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.token.access;
+    const token = thunkAPI.getState().auth.token;
     return await replyService.fetchReplies(postID, token);
   } catch (error) {
     const message =
@@ -39,7 +39,7 @@ export const fetchReplies = createAsyncThunk('replies/fetch', async (postID, thu
 
 export const likeReply = createAsyncThunk('replies/like', async (replyData, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.token.access;
+    const token = thunkAPI.getState().auth.token;
 
     return await replyService.likeReply(replyData, token);
   } catch (error) {
@@ -53,7 +53,7 @@ export const likeReply = createAsyncThunk('replies/like', async (replyData, thun
 
 export const deleteReply = createAsyncThunk('replies/delete', async (replyID, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().auth.token.access;
+    const token = thunkAPI.getState().auth.token;
     return await replyService.deleteReply(replyID, token);
   } catch (error) {
     const message =
