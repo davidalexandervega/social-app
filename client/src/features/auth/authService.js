@@ -84,6 +84,8 @@ const editUser = async (userData, token) => {
     config
   );
 
+  console.log(response.data);
+
   return response.data;
 };
 

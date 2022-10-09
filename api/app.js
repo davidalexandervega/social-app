@@ -24,6 +24,11 @@ app.use('/api/posts', require('./routes/postRoutes'));
 app.use('/api/replies', require('./routes/replyRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
 
+app.use((error, req, res, next) => {
+  res.status(400);
+  res.json({ error: error.message });
+});
+
 // serve client in production:
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../frontend/build')));
@@ -34,7 +39,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // use error middleware:
-app.use(errorHandler);
+//app.use(errorHandler);
 
 // serve client in development:
 app.listen(PORT, () => console.log(`social-infinity API server running on port ${PORT}.`));

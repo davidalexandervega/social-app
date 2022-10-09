@@ -61,6 +61,7 @@ const notificationModel = sequelize.define(
         model: 'users',
         key: 'username',
       },
+      onUpdate: 'CASCADE',
     },
     creatorPictureID: {
       type: Sequelize.DataTypes.UUID,
@@ -69,6 +70,7 @@ const notificationModel = sequelize.define(
         model: 'users',
         key: 'pictureID',
       },
+      onUpdate: 'CASCADE',
     },
     /*
     creatorUsername: {

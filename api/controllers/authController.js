@@ -37,7 +37,6 @@ const register = (req, res) => {
 // route: POST /api/users/token
 // access: public
 const login = async (req, res) => {
-  console.log('ATTEMPTING LOGIN...');
   const user = await userModel
     .findAll({
       where: {
@@ -45,7 +44,6 @@ const login = async (req, res) => {
       },
     })
     .then((response) => {
-      console.log('FOUND USER:', response[0].dataValues);
       return response[0].dataValues;
     });
 
@@ -98,6 +96,46 @@ const fetchProfile = async (req, res) => {
   }
 };
 
+const editUser = async (req, res) => {
+  const user = await userModel
+    .findAll({
+      where: {
+        username: req.body.username,
+      },
+    })
+    .then((response) => {
+      return response[0].dataValues;
+    });
+
+  if (user && (await bcrypt.compare(req.body.password, user.password))) {
+    userModel
+      .update(
+        {
+          email: req.body.email,
+          username: req.body.newUsername,
+        },
+        {
+          where: { id: req.body.userID },
+          returning: true,
+          plain: true,
+        }
+      )
+      .then((response) => {
+        res.status(200).json(response[1].dataValues);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({
+          error: 'user unable to be updated',
+        });
+      });
+  } else {
+    res.status(401).json({
+      error: 'incorrect username or password',
+    });
+  }
+};
+
 const hashPassword = async (password, saltRounds = 10) => {
   try {
     const salt = await bcrypt.genSalt(saltRounds);
@@ -116,4 +154,5 @@ module.exports = {
   login,
   fetchUser,
   fetchProfile,
+  editUser,
 };

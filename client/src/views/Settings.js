@@ -87,7 +87,7 @@ const Settings = () => {
       }, 10);
       setTimeout(() => {
         dispatch(setLoading(true));
-      }, 750);
+      }, 10);
     } else {
       if (!reUsername.test(newUsername)) {
         errorRef.current.innerHTML = 'usernames must be alphanumeric & may contain underscores';
@@ -119,7 +119,7 @@ const Settings = () => {
       }, 10);
       setTimeout(() => {
         dispatch(setLoading(true));
-      }, 750);
+      }, 10);
     } else if (newPassword !== confirmNewPassword) {
       errorRef.current.innerHTML = 'passwords do not match';
     }

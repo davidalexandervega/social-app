@@ -45,6 +45,7 @@ const postModel = sequelize.define(
         model: 'users',
         key: 'username',
       },
+      onUpdate: 'CASCADE',
     },
     userPictureID: {
       type: Sequelize.DataTypes.STRING(255),
@@ -53,6 +54,7 @@ const postModel = sequelize.define(
         model: 'users',
         key: 'pictureID',
       },
+      onUpdate: 'CASCADE',
     },
     /*
     username: {

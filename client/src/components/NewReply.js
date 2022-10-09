@@ -47,14 +47,14 @@ const NewReply = (props) => {
 
       dispatch(createReply(newReplyData));
 
-      if (post.user !== user.id) {
+      if (post.userID !== user.id) {
         const notificationData = {
           id: uuidv4(),
           time: new Date(),
           creatorID: user.id,
           creatorPictureID: user.pictureID,
           creatorUsername: username,
-          recipientID: post.user,
+          recipientID: post.userID,
           type: 'reply_post',
           objectID: post.id,
         };
