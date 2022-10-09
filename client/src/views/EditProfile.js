@@ -116,7 +116,7 @@ const EditProfile = () => {
   const onSubmit = () => {
     const newProfileData = new FormData();
     newProfileData.append('username', username);
-    newProfileData.append('id', user.id);
+    newProfileData.append('userID', user.id);
     isNaN(banner) && banner !== ''
       ? newProfileData.append('banner', bannerRef.current.files[0])
       : newProfileData.append('banner', banner);

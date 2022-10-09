@@ -1,6 +1,15 @@
+require('dotenv').config({ path: '../.env' });
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-require('dotenv').config({ path: '../.env' });
+
+// configure cloudinary for cloud querying:
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+  secure: true,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const userModel = require('../models/userModel');
 
@@ -97,14 +106,54 @@ const fetchProfile = async (req, res) => {
 };
 
 const editProfile = async (req, res) => {
-  const user = await userModel
-    .findAll({
-      where: {
-        id: req.body.id,
+  let bannerID, pictureID;
+
+  if (req.files.banner) {
+    await cloudinary.search
+      .expression(`public_id:social-app/banners/${req.body.userID}`)
+      .execute()
+      .then((response) => {
+        bannerID = `${response.resources[0].version}`;
+      });
+  } else if (req.body.banner === 'null' || req.body.banner === '') {
+    bannerID = null;
+  } else {
+    bannerID = req.body.bannerID;
+  }
+
+  if (req.files.picture) {
+    await cloudinary.search
+      .expression(`public_id:social-app/pictures/${req.body.userID}`)
+      .execute()
+      .then((response) => {
+        pictureID = `${response.resources[0].version}`;
+      });
+  } else if (req.body.picture === 'null' || req.body.picture === '') {
+    pictureID = null;
+  } else {
+    pictureID = req.body.pictureID;
+  }
+
+  userModel
+    .update(
+      {
+        bannerID: bannerID,
+        pictureID: pictureID,
+        bio: req.body.bio,
       },
-    })
+      {
+        where: { id: req.body.userID },
+        returning: true,
+        plain: true,
+      }
+    )
     .then((response) => {
-      return response[0].dataValues;
+      console.log(response[1].dataValues);
+      res.status(200).json(response[1].dataValues);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send('user unable to be updated');
     });
 };
 
@@ -193,6 +242,7 @@ module.exports = {
   login,
   fetchUser,
   fetchProfile,
+  editProfile,
   editUser,
   changePassword,
 };

@@ -15,6 +15,9 @@ const {
 // import the authorization middleware to protect private routes:
 const { protect } = require('../middleware/authMiddleware');
 
+// import the upload middleware to handle file uploads to the cloud:
+const { upload } = require('../middleware/uploadMiddleware');
+
 // define routes:
 router.post('/', register);
 
@@ -24,7 +27,15 @@ router.get('/', fetchUser);
 
 router.get('/profiles', fetchProfile);
 
-// router.put('/profiles/edit', protect, editProfile);
+router.put(
+  '/profiles/edit',
+  protect,
+  upload.fields([
+    { name: 'banner', maxCount: 1 },
+    { name: 'picture', maxCount: 1 },
+  ]),
+  editProfile
+);
 
 router.put('/edit/handle', protect, editUser);
 

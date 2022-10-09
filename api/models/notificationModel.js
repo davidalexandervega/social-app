@@ -65,10 +65,10 @@ const notificationModel = sequelize.define(
     },
     creatorPictureID: {
       type: Sequelize.DataTypes.UUID,
-      allowNull: false,
       references: {
         model: 'users',
         key: 'pictureID',
+        allowNull: true,
       },
       onUpdate: 'CASCADE',
     },

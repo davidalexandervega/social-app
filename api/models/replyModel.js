@@ -69,10 +69,11 @@ const replyModel = sequelize.define(
     },
     userPictureID: {
       type: Sequelize.DataTypes.STRING(255),
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'users',
         key: 'pictureID',
+        allowNull: true,
       },
       onUpdate: 'CASCADE',
     },

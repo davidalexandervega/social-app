@@ -49,10 +49,10 @@ const postModel = sequelize.define(
     },
     userPictureID: {
       type: Sequelize.DataTypes.STRING(255),
-      allowNull: false,
       references: {
         model: 'users',
         key: 'pictureID',
+        allowNull: true,
       },
       onUpdate: 'CASCADE',
     },

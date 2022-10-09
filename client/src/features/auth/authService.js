@@ -60,11 +60,7 @@ const editProfile = async (profileData, token) => {
     },
   };
 
-  const response = await axios.put(
-    API_URL + 'profiles/edit?username=' + profileData.username,
-    profileData,
-    config
-  );
+  const response = await axios.put(API_URL + 'profiles/edit', profileData, config);
 
   return response.data;
 };
