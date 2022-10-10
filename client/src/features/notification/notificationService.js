@@ -3,7 +3,6 @@ axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 const createNotification = async (notificationData, token) => {
-  console.log('notification data:', notificationData);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

@@ -106,24 +106,36 @@ const NewPost = (props) => {
       };
 
       if (newPostImg) {
+        console.log('uploading img...');
         const formData = new FormData();
         formData.append('file', newPostImg);
         formData.append('upload_preset', 'social');
         formData.append('public_id', postID);
         formData.append('folder', '/social-app/posts/');
-        axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, formData);
+        axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, formData).then(() => {
+          setNewPost((prevState) => ({
+            ...prevState,
+            newPostBody: '',
+            newPostImg: null,
+            disableFile: false,
+          }));
+
+          if (expanded) setExpanded(false);
+
+          dispatch(createPost(newPostData));
+        });
+      } else {
+        setNewPost((prevState) => ({
+          ...prevState,
+          newPostBody: '',
+          newPostImg: null,
+          disableFile: false,
+        }));
+
+        if (expanded) setExpanded(false);
+
+        dispatch(createPost(newPostData));
       }
-
-      setNewPost((prevState) => ({
-        ...prevState,
-        newPostBody: '',
-        newPostImg: null,
-        disableFile: false,
-      }));
-
-      if (expanded) setExpanded(false);
-
-      dispatch(createPost(newPostData));
     }
   };
 
