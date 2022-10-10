@@ -64,7 +64,7 @@ const EditProfile = () => {
     } else {
       setProfileData((prevState) => ({
         ...prevState,
-        banner: '',
+        banner: user.id,
       }));
     }
   };
@@ -72,7 +72,7 @@ const EditProfile = () => {
     if (banner) {
       setProfileData((prevState) => ({
         ...prevState,
-        banner: '',
+        banner: user.id,
       }));
     }
     bannerRef.current.value = null;
@@ -87,7 +87,7 @@ const EditProfile = () => {
     } else {
       setProfileData((prevState) => ({
         ...prevState,
-        picture: '',
+        picture: user.id,
       }));
     }
   };
@@ -95,7 +95,7 @@ const EditProfile = () => {
     if (picture) {
       setProfileData((prevState) => ({
         ...prevState,
-        picture: '',
+        picture: user.id,
       }));
     }
     pictureRef.current.value = null;
@@ -117,10 +117,10 @@ const EditProfile = () => {
     const newProfileData = new FormData();
     newProfileData.append('username', username);
     newProfileData.append('userID', user.id);
-    isNaN(banner) && banner !== ''
+    isNaN(banner) && banner !== user.id
       ? newProfileData.append('banner', bannerRef.current.files[0])
       : newProfileData.append('banner', banner);
-    isNaN(picture) && picture !== ''
+    isNaN(picture) && picture !== user.id
       ? newProfileData.append('picture', pictureRef.current.files[0])
       : newProfileData.append('picture', picture);
     newProfileData.append('bio', bio);
@@ -153,20 +153,20 @@ const EditProfile = () => {
           {user && username === profileUsername ? (
             <div className="viewBox editProfile" ref={editProfileRef}>
               <div className="profileBanner">
-                {banner ? (
+                {!isNaN(banner) ? (
+                  <AdvancedImage
+                    cldImg={cloudinary
+                      .image(`/social-app/banners/${user.id}`)
+                      .setVersion(user.bannerID)}
+                    className="bannerImage"
+                  />
+                ) : (
                   <>
-                    {!isNaN(banner) ? (
-                      <AdvancedImage
-                        cldImg={cloudinary
-                          .image(`/social-app/banners/${user.id}`)
-                          .setVersion(user.bannerID)}
-                        className="bannerImage"
-                      />
-                    ) : (
+                    {banner === user.id ? null : (
                       <img className="bannerImage" src={banner} alt="new banner" />
                     )}
                   </>
-                ) : null}
+                )}
                 <div className="editImageActions">
                   <label className="fileUpload">
                     <UploadSquareOutline className="editImageAction" />
@@ -185,26 +185,26 @@ const EditProfile = () => {
               </div>
               <div className="editProfileBody">
                 <div className="profilePicture">
-                  {picture ? (
+                  {!isNaN(picture) ? (
+                    <AdvancedImage
+                      cldImg={cloudinary
+                        .image(`/social-app/pictures/${user.id}`)
+                        .setVersion(user.pictureID)}
+                      className="profileImage"
+                    />
+                  ) : (
                     <>
-                      {!isNaN(picture) ? (
-                        <AdvancedImage
-                          cldImg={cloudinary
-                            .image(`/social-app/pictures/${user.id}`)
-                            .setVersion(user.pictureID)}
-                          className="profileImage"
+                      {picture === user.id ? (
+                        <ProfileCircled
+                          height="150px"
+                          width="150px"
+                          strokeWidth="0.5"
+                          fill="whitesmoke"
                         />
                       ) : (
                         <img className="profileImage" src={picture} alt="new profilepicture" />
                       )}
                     </>
-                  ) : (
-                    <ProfileCircled
-                      height="150px"
-                      width="150px"
-                      strokeWidth="0.5"
-                      fill="whitesmoke"
-                    />
                   )}
                   <div className="editImageActions">
                     <label className="fileUpload">

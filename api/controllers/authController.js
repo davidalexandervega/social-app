@@ -108,16 +108,12 @@ const fetchProfile = async (req, res) => {
 const editProfile = async (req, res) => {
   let bannerID, pictureID;
 
-  console.log('request body:', req.body);
+  console.log('request files:', req.files);
 
   if (req.files.banner) {
-    await cloudinary.search
-      .expression(`public_id:social-app/banners/${req.body.userID}`)
-      .execute()
-      .then((response) => {
-        bannerID = `${response.resources[0].version}`;
-      });
-  } else if (req.body.banner === 'null' || req.body.banner === '') {
+    // extract the version number from the upload path:
+    bannerID = req.files.banner[0].path.split('/upload/v')[1].split('/')[0];
+  } else if (req.body.banner === req.body.userID) {
     await cloudinary.uploader.destroy(`social-app/banners/${req.body.userID}`);
     bannerID = req.body.userID;
   } else {
@@ -125,21 +121,14 @@ const editProfile = async (req, res) => {
   }
 
   if (req.files.picture) {
-    await cloudinary.search
-      .expression(`public_id:social-app/pictures/${req.body.userID}`)
-      .execute()
-      .then((response) => {
-        pictureID = `${response.resources[0].version}`;
-      });
-  } else if (req.body.picture === 'null' || req.body.picture === '') {
+    // extract the version number from the upload path:
+    pictureID = req.files.picture[0].path.split('/upload/v')[1].split('/')[0];
+  } else if (req.body.picture === req.body.userID) {
     await cloudinary.uploader.destroy(`social-app/pictures/${req.body.userID}`);
     pictureID = req.body.userID;
   } else {
     pictureID = req.body.picture;
   }
-
-  console.log('pictureID: ', pictureID);
-  console.log('bannerID', bannerID);
 
   userModel
     .update(
