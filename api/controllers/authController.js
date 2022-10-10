@@ -65,6 +65,9 @@ const login = async (req, res) => {
   }
 };
 
+// description: fetch user data via id
+// route: GET /api/users/?userID=
+// access: public
 const fetchUser = async (req, res) => {
   const user = await userModel
     .findAll({
@@ -85,6 +88,9 @@ const fetchUser = async (req, res) => {
   }
 };
 
+// description: fetch user data via username
+// route: GET /api/users/profiles/?username=
+// access: public
 const fetchProfile = async (req, res) => {
   const user = await userModel
     .findAll({
@@ -105,10 +111,11 @@ const fetchProfile = async (req, res) => {
   }
 };
 
+// description: edit user profile data
+// route: PUT /api/users/profiles/edit
+// access: private
 const editProfile = async (req, res) => {
   let bannerID, pictureID;
-
-  console.log('request files:', req.files);
 
   if (req.files.banner) {
     // extract the version number from the upload path:
@@ -144,15 +151,16 @@ const editProfile = async (req, res) => {
       }
     )
     .then((response) => {
-      console.log(response[1].dataValues);
       res.status(200).json(response[1].dataValues);
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).send('user unable to be updated');
     });
 };
 
+// description: edit user login data
+// route: PUT /api/users/edit/handle?username=
+// access: private
 const editUser = async (req, res) => {
   const user = await userModel
     .findAll({
@@ -188,6 +196,9 @@ const editUser = async (req, res) => {
   }
 };
 
+// description: change user password
+// route: PUT /api/users/edit/password?username=
+// access: private
 const changePassword = async (req, res) => {
   const user = await userModel
     .findAll({
@@ -220,6 +231,48 @@ const changePassword = async (req, res) => {
   }
 };
 
+// description: follow or unfollow a user
+// route: PUT /api/users/follow
+// access: private
+const followUser = async (req, res) => {
+  const target = await userModel
+    .findAll({
+      where: {
+        id: req.body.targetID,
+      },
+    })
+    .then((response) => {
+      return response[0].dataValues;
+    });
+
+  const followers = [...target.followers];
+  if (followers.includes(req.body.creatorID)) {
+    followers.splice(followers.indexOf(req.body.creatorID), 1);
+    userModel
+      .update(
+        {
+          followers: followers,
+        },
+        { where: { id: req.body.targetID }, returning: true, plain: true }
+      )
+      .then((response) => {
+        res.status(200).json(response[1].dataValues);
+      });
+  } else {
+    followers.push(req.body.creatorID);
+    userModel
+      .update(
+        {
+          followers: followers,
+        },
+        { where: { id: req.body.targetID }, returning: true, plain: true }
+      )
+      .then((response) => {
+        res.status(200).json(response[1].dataValues);
+      });
+  }
+};
+
 const hashPassword = async (password, saltRounds = 10) => {
   try {
     const salt = await bcrypt.genSalt(saltRounds);
@@ -241,4 +294,5 @@ module.exports = {
   editProfile,
   editUser,
   changePassword,
+  followUser,
 };
