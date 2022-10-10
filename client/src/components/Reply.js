@@ -124,7 +124,7 @@ const Reply = (props) => {
       <div className="post reply" ref={replyRef}>
         <span className="postHeader">
           <span className="postUserPicture">
-            {reply.userPictureID ? (
+            {!isNaN(reply.userPictureID) ? (
               <AdvancedImage
                 className="postUserImage"
                 cldImg={cloudinary

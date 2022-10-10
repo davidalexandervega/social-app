@@ -71,7 +71,7 @@ const Sidebar = (props) => {
           onClick={() => navigate(`/users/` + username)}
         >
           <div className="sidebarPicture">
-            {user && user.pictureID ? (
+            {user && !isNaN(user.pictureID) ? (
               <AdvancedImage
                 cldImg={cloudinary
                   .image(`/social-app/pictures/${user.id}`)

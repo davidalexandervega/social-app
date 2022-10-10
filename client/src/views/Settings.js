@@ -40,8 +40,7 @@ const Settings = () => {
     return () => {
       dispatch(enablePost());
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch, isLoading, navigate, user.id]);
 
   // initialize settings form:
   const [formData, setFormData] = useState({

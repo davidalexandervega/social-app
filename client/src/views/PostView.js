@@ -160,7 +160,7 @@ const PostView = () => {
           <div className="post" ref={postRef}>
             <span className="postHeader">
               <span className="postUserPicture">
-                {post.userPictureID ? (
+                {!isNaN(post.userPictureID) ? (
                   <AdvancedImage
                     className="postUserImage"
                     cldImg={cloudinary

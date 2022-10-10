@@ -56,14 +56,15 @@ const Register = () => {
       password &&
       password === confirmPassword
     ) {
+      const userID = uuidv4();
       const userData = {
         email,
         username: username.toLowerCase(),
         password,
-        id: uuidv4(),
+        id: userID,
         created: new Date(),
-        pictureID: null,
-        bannerID: null,
+        pictureID: userID,
+        bannerID: userID,
         bio: '',
         following: [],
         followers: [],

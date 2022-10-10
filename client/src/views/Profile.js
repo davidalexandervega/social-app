@@ -88,7 +88,7 @@ const Profile = () => {
         <>
           <div className="viewBox" ref={profileRef}>
             <div className="profileBanner">
-              {profileUser.bannerID ? (
+              {!isNaN(profileUser.bannerID) ? (
                 <AdvancedImage
                   cldImg={cloudinary
                     .image(`/social-app/banners/${profileUser.id}`)
@@ -99,7 +99,7 @@ const Profile = () => {
             </div>
             <div className="profileHeader">
               <div className="profilePicture">
-                {profileUser.pictureID ? (
+                {!isNaN(profileUser.pictureID) ? (
                   <AdvancedImage
                     cldImg={cloudinary
                       .image(`/social-app/pictures/${profileUser.id}`)

@@ -108,6 +108,8 @@ const fetchProfile = async (req, res) => {
 const editProfile = async (req, res) => {
   let bannerID, pictureID;
 
+  console.log('request body:', req.body);
+
   if (req.files.banner) {
     await cloudinary.search
       .expression(`public_id:social-app/banners/${req.body.userID}`)
@@ -116,9 +118,10 @@ const editProfile = async (req, res) => {
         bannerID = `${response.resources[0].version}`;
       });
   } else if (req.body.banner === 'null' || req.body.banner === '') {
-    bannerID = null;
+    await cloudinary.uploader.destroy(`social-app/banners/${req.body.userID}`);
+    bannerID = req.body.userID;
   } else {
-    bannerID = req.body.bannerID;
+    bannerID = req.body.banner;
   }
 
   if (req.files.picture) {
@@ -129,10 +132,14 @@ const editProfile = async (req, res) => {
         pictureID = `${response.resources[0].version}`;
       });
   } else if (req.body.picture === 'null' || req.body.picture === '') {
-    pictureID = null;
+    await cloudinary.uploader.destroy(`social-app/pictures/${req.body.userID}`);
+    pictureID = req.body.userID;
   } else {
-    pictureID = req.body.pictureID;
+    pictureID = req.body.picture;
   }
+
+  console.log('pictureID: ', pictureID);
+  console.log('bannerID', bannerID);
 
   userModel
     .update(

@@ -73,7 +73,7 @@ const replyModel = sequelize.define(
       references: {
         model: 'users',
         key: 'pictureID',
-        allowNull: true,
+        allowNull: false,
       },
       onUpdate: 'CASCADE',
     },

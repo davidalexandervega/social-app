@@ -61,12 +61,12 @@ const userModel = sequelize.define(
     },
     bannerID: {
       type: Sequelize.DataTypes.STRING(255),
-      allowNull: true,
+      allowNull: false,
       unique: true,
     },
     pictureID: {
       type: Sequelize.DataTypes.STRING(255),
-      allowNull: true,
+      allowNull: false,
       unique: true,
     },
   },

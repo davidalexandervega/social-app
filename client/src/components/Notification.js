@@ -73,7 +73,7 @@ const Notification = (props) => {
         ) : null}
       </div>
       <span className="notificationCreatorPicture">
-        {notification.creatorPictureID ? (
+        {!isNaN(notification.creatorPictureID) ? (
           <AdvancedImage
             className="notificationCreatorImage"
             cldImg={cloudinary
