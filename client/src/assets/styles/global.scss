@@ -148,6 +148,11 @@ textarea:focus {
   color: rgb(255, 64, 0);
 }
 
+.clientMessage {
+  cursor: default;
+  user-select: none;
+}
+
 .loadingContainer {
   display: flex;
   justify-content: center;

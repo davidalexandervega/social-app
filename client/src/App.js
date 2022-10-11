@@ -73,7 +73,7 @@ const App = () => {
             <Route
               path="*"
               exact={true}
-              element={<div className="view">404: page not found.</div>}
+              element={<div className="view clientMessage">404: page not found.</div>}
             />
           </Routes>
         ) : null}

@@ -15,6 +15,7 @@ import { disablePost, enablePost } from '../features/post/postSlice';
 
 import '../assets/styles/Settings.scss';
 import { BallTriangle } from 'react-loading-icons';
+import PreventSettings from '../components/PreventSettings';
 
 const Settings = () => {
   const dispatch = useDispatch();
@@ -250,6 +251,7 @@ const Settings = () => {
                 change password
               </div>
             </form>
+            {username === 'demo' ? <PreventSettings /> : null}
           </div>
         </>
       ) : (

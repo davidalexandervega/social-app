@@ -155,6 +155,7 @@ const Profile = () => {
             {posts.map((post) => (
               <Post key={post.id} post={post} />
             ))}
+            {posts.length === 0 ? <span className="clientMessage">no posts yet...</span> : null}
           </div>
         </>
       ) : (

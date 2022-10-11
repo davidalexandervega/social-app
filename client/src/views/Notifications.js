@@ -28,6 +28,9 @@ const Notifications = (props) => {
       {notifications.map((notification) => (
         <Notification key={notification.id} notification={notification} />
       ))}
+      {notifications.length === 0 ? (
+        <span className="clientMessage">you have no new notifications.</span>
+      ) : null}
     </div>
   );
 };
