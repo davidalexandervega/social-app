@@ -25,11 +25,7 @@ export const register = createAsyncThunk('auth/register', async (user, thunkAPI)
   try {
     return await authService.register(user);
   } catch (error) {
-    // check if any errors, and using the message as the payload if so:
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
+    const message = error.response.data;
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -38,10 +34,7 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
   try {
     return await authService.login(user);
   } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
+    const message = error.response.data;
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -55,10 +48,7 @@ export const fetchUser = createAsyncThunk('auth/user/fetch-user', async (userID,
     const token = thunkAPI.getState().auth.token;
     return await authService.fetchUser(userID, token);
   } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
+    const message = error.response.data;
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -70,10 +60,7 @@ export const fetchProfile = createAsyncThunk(
       const token = thunkAPI.getState().auth.token;
       return await authService.fetchProfile(username, token);
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = error.response.data;
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -86,10 +73,7 @@ export const editProfile = createAsyncThunk(
       const token = thunkAPI.getState().auth.token;
       return await authService.editProfile(profileData, token);
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = error.response.data;
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -112,10 +96,7 @@ export const changePassword = createAsyncThunk(
       const token = thunkAPI.getState().auth.token;
       return await authService.changePassword(passwordData, token);
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = error.response.data;
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -126,10 +107,7 @@ export const followUser = createAsyncThunk('auth/user/follow', async (followData
     const token = thunkAPI.getState().auth.token;
     return await authService.followUser(followData, token);
   } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
+    const message = error.response.data;
     return thunkAPI.rejectWithValue(message);
   }
 });

@@ -15,11 +15,7 @@ export const createReply = createAsyncThunk('replies/create', async (newReplyDat
     const token = thunkAPI.getState().auth.token;
     return await replyService.createReply(newReplyData, token);
   } catch (error) {
-    // check if any errors, and using the message as the payload if so:
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
+    const message = error.response.data;
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -29,10 +25,7 @@ export const fetchReplies = createAsyncThunk('replies/fetch', async (postID, thu
     const token = thunkAPI.getState().auth.token;
     return await replyService.fetchReplies(postID, token);
   } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
+    const message = error.response.data;
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -43,10 +36,7 @@ export const likeReply = createAsyncThunk('replies/like', async (replyData, thun
 
     return await replyService.likeReply(replyData, token);
   } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
+    const message = error.response.data;
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -56,10 +46,7 @@ export const deleteReply = createAsyncThunk('replies/delete', async (replyID, th
     const token = thunkAPI.getState().auth.token;
     return await replyService.deleteReply(replyID, token);
   } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
+    const message = error.response.data;
     return thunkAPI.rejectWithValue(message);
   }
 });

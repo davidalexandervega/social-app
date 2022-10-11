@@ -12,10 +12,7 @@ export const createNotification = createAsyncThunk(
       const token = thunkAPI.getState().auth.token;
       return await notificationService.createNotification(notificationData, token);
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = error.response.data;
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -28,10 +25,7 @@ export const fetchNotifications = createAsyncThunk(
       const token = thunkAPI.getState().auth.token;
       return await notificationService.fetchNotifications(userID, token);
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = error.response.data;
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -44,10 +38,7 @@ export const checkNotifications = createAsyncThunk(
       const token = thunkAPI.getState().auth.token;
       return await notificationService.checkNotifications(userID, token);
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = error.response.data;
       return thunkAPI.rejectWithValue(message);
     }
   }

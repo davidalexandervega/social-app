@@ -14,10 +14,7 @@ export const createPost = createAsyncThunk('posts/create', async (newPostData, t
     const token = thunkAPI.getState().auth.token;
     return await postService.createPost(newPostData, token);
   } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
+    const message = error.response.data;
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -27,10 +24,7 @@ export const fetchAllPosts = createAsyncThunk('posts/fetch', async (_, thunkAPI)
     const token = thunkAPI.getState().auth.token;
     return await postService.fetchAllPosts(token);
   } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
+    const message = error.response.data;
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -42,10 +36,7 @@ export const fetchUserPosts = createAsyncThunk(
       const token = thunkAPI.getState().auth.token;
       return await postService.fetchUserPosts(username, token);
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = error.response.data;
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -56,10 +47,7 @@ export const fetchPostByID = createAsyncThunk('posts/fetch/id', async (postID, t
     const token = thunkAPI.getState().auth.token;
     return await postService.fetchPostByID(postID, token);
   } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
+    const message = error.response.data;
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -69,10 +57,7 @@ export const likePost = createAsyncThunk('posts/like', async (postData, thunkAPI
     const token = thunkAPI.getState().auth.token;
     return await postService.likePost(postData, token);
   } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
+    const message = error.response.data;
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -82,10 +67,7 @@ export const deletePost = createAsyncThunk('posts/delete', async (postID, thunkA
     const token = thunkAPI.getState().auth.token;
     return await postService.deletePost(postID, token);
   } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
+    const message = error.response.data;
     return thunkAPI.rejectWithValue(message);
   }
 });

@@ -19,9 +19,7 @@ const createReply = async (req, res) => {
       res.status(201).json(reply.dataValues);
     })
     .catch(() => {
-      res.status(500).json({
-        error: 'server error',
-      });
+      res.status(500).send('server error');
     });
 };
 
@@ -35,9 +33,7 @@ const fetchReplies = (req, res) => {
       res.status(200).json(response);
     })
     .catch(() => {
-      res.status(503).json({
-        error: 'server eror',
-      });
+      res.status(503).send('server error');
     });
 };
 
@@ -58,9 +54,7 @@ const likeReply = (req, res) => {
       res.status(200).json(response[1].dataValues);
     })
     .catch(() => {
-      res.status(500).json({
-        error: 'post unable to be updated',
-      });
+      res.status(500).send('reply unable to be updated');
     });
 };
 
@@ -76,9 +70,7 @@ const deleteReply = (req, res) => {
       });
     })
     .catch(() => {
-      res.status(500).json({
-        error: 'replyunable to be deleted',
-      });
+      res.status(500).send('reply unable to be deleted');
     });
 };
 

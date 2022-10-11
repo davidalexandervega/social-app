@@ -19,9 +19,7 @@ const createNotification = async (req, res) => {
       res.status(201).json(notification.dataValues);
     })
     .catch(() => {
-      res.status(500).json({
-        error: 'server error',
-      });
+      res.status(500).send('server error');
     });
 };
 
@@ -39,9 +37,7 @@ const fetchNotifications = (req, res) => {
       res.status(200).json(response);
     })
     .catch(() => {
-      res.status(404).json({
-        error: 'user notifications not found',
-      });
+      res.status(404).send('user notifications not found');
     });
 };
 
@@ -69,9 +65,7 @@ const checkNotifications = (req, res) => {
         });
     })
     .catch(() => {
-      res.status(500).json({
-        error: 'notifications unable to be updated',
-      });
+      res.status(500).send('notifications unable to be updated');
     });
 };
 

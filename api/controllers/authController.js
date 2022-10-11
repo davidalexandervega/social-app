@@ -36,9 +36,7 @@ const register = (req, res) => {
       res.status(201).json(user.dataValues);
     })
     .catch(() => {
-      res.status(503).json({
-        error: 'server error',
-      });
+      res.status(503).send('server error');
     });
 };
 
@@ -59,9 +57,7 @@ const login = async (req, res) => {
   if (user && (await bcrypt.compare(req.body.password, user.password))) {
     res.json(generateToken(user.id));
   } else {
-    res.status(400).json({
-      error: 'invalid credentials',
-    });
+    res.status(400).send('invalid credentials');
   }
 };
 
@@ -82,9 +78,7 @@ const fetchUser = async (req, res) => {
   if (user) {
     res.json(user);
   } else {
-    res.status(404).json({
-      error: 'user not found',
-    });
+    res.status(404).send('user not found');
   }
 };
 
@@ -105,9 +99,7 @@ const fetchProfile = async (req, res) => {
   if (user) {
     res.json(user);
   } else {
-    res.status(404).json({
-      error: 'user not found',
-    });
+    res.status(404).send('user not found');
   }
 };
 

@@ -21,9 +21,7 @@ const createPost = async (req, res) => {
       res.status(201).json(post.dataValues);
     })
     .catch(() => {
-      res.status(500).json({
-        error: 'server error',
-      });
+      res.status(500).send('server error');
     });
 };
 
@@ -37,9 +35,7 @@ const fetchAllPosts = (req, res) => {
       res.status(200).json(response);
     })
     .catch(() => {
-      res.status(503).json({
-        error: 'server eror',
-      });
+      res.status(500).send('server error');
     });
 };
 
@@ -57,9 +53,7 @@ const fetchUserPosts = (req, res) => {
       res.status(200).json(response);
     })
     .catch(() => {
-      res.status(404).json({
-        error: 'user posts not found',
-      });
+      res.status(404).send('user posts not found');
     });
 };
 
@@ -77,9 +71,7 @@ const fetchPostByID = (req, res) => {
       res.status(200).json(response[0].dataValues);
     })
     .catch(() => {
-      res.status(404).json({
-        error: 'post not found',
-      });
+      res.status(404).send('post not found');
     });
 };
 
@@ -100,9 +92,7 @@ const likePost = (req, res) => {
       res.status(200).json(response[1].dataValues);
     })
     .catch(() => {
-      res.status(500).json({
-        error: 'post unable to be updated',
-      });
+      res.status(500).send('post unable to be updated');
     });
 };
 
@@ -127,9 +117,7 @@ const deletePost = (req, res) => {
       });
     })
     .catch(() => {
-      res.status(500).json({
-        error: 'post unable to be deleted',
-      });
+      res.status(500).send('post unable to be deleted');
     });
 };
 

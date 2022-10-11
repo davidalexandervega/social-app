@@ -12,7 +12,7 @@ import '../assets/styles/Login.scss';
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { token, isError, isSuccess, message } = useSelector((state) => state.auth);
+  const { token, isError, isSuccess } = useSelector((state) => state.auth);
 
   // initialize login form:
   const [formData, setFormData] = useState({
@@ -59,7 +59,7 @@ const Login = () => {
       dispatch(reset());
       navigate('/');
     }
-  }, [token, isError, isSuccess, message, navigate, dispatch]);
+  }, [token, isError, isSuccess, navigate, dispatch]);
 
   return (
     <div className="loginPage" ref={loginRef}>

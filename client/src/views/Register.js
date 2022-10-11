@@ -37,7 +37,9 @@ const Register = () => {
   const { email, username, password, confirmPassword } = formData;
 
   // regular expressions used to validate form data:
-  const reEmail = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim;
+  const reEmail =
+    // eslint-disable-next-line no-useless-escape
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const reUsername = /^[a-zA-Z0-9_]+$/;
 
   const onChange = (e) => {
@@ -50,12 +52,10 @@ const Register = () => {
   const errorRef = useRef();
 
   const onRegister = () => {
-    if (
-      reEmail.test(email) &&
-      reUsername.test(username) &&
-      password &&
-      password === confirmPassword
-    ) {
+    errorRef.current.innerHTML = '';
+    const validEmail = reEmail.test(email);
+    const validUsername = reUsername.test(username);
+    if (validEmail && validUsername && password && password === confirmPassword) {
       const userID = uuidv4();
       const userData = {
         email,
@@ -74,13 +74,11 @@ const Register = () => {
         navigate('/login');
       }, 1000);
     } else {
-      if (!reUsername.test(username)) {
+      if (!validUsername) {
         errorRef.current.innerHTML = 'usernames must be alphanumeric & may contain underscores';
-      }
-      if (!reEmail.test(email)) {
+      } else if (!validEmail) {
         errorRef.current.innerHTML = 'invalid email';
-      }
-      if (password !== confirmPassword) {
+      } else if (password !== confirmPassword) {
         errorRef.current.innerHTML = 'passwords do not match';
       }
     }
