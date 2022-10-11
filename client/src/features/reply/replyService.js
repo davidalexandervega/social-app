@@ -33,8 +33,6 @@ const fetchReplies = async (postID, token) => {
 };
 
 const likeReply = async (replyData, token) => {
-  console.log('liking reply...');
-  console.log(replyData);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

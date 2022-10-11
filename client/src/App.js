@@ -28,7 +28,6 @@ const App = () => {
   // fetch the user from the token claim info if present:
   useEffect(() => {
     if (token) {
-      console.log('token:', jwt(token));
       dispatch(fetchUser(jwt(token).id));
     }
   }, [dispatch, token]);
