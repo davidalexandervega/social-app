@@ -165,26 +165,44 @@ const editUser = async (req, res) => {
     });
 
   if (user && (await bcrypt.compare(req.body.password, user.password))) {
-    userModel
-      .update(
-        {
-          email: req.body.email,
-          username: req.body.newUsername,
-        },
-        {
-          where: { id: req.body.userID },
-          returning: true,
-          plain: true,
-        }
-      )
-      .then((response) => {
-        res.status(200).json(response[1].dataValues);
-      })
-      .catch(() => {
-        res.status(500).send('user unable to be updated');
-      });
+    // if the request body has a new username specified,
+    // check if it is already taken:
+    let alreadyTaken;
+    if (req.body.newUsername !== req.body.username) {
+      alreadyTaken = await userModel
+        .findAll({
+          where: {
+            username: req.body.newUsername,
+          },
+        })
+        .then((response) => {
+          return response[0].dataValues;
+        });
+
+      if (alreadyTaken) res.status(401).send('username already taken');
+    }
+    if (req.body.newUsername === req.body.username || !alreadyTaken) {
+      userModel
+        .update(
+          {
+            email: req.body.newEmail,
+            username: req.body.newUsername,
+          },
+          {
+            where: { id: req.body.userID },
+            returning: true,
+            plain: true,
+          }
+        )
+        .then((response) => {
+          res.status(200).json(response[1].dataValues);
+        })
+        .catch(() => {
+          res.status(500).send('user unable to be updated');
+        });
+    }
   } else {
-    res.status(401).send('incorrect username or password');
+    res.status(401).send('incorrect password');
   }
 };
 
