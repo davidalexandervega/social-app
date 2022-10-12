@@ -36,12 +36,11 @@ An `.env` file is required in `api/` with the following parameters:
 NODE_ENV=*either development or production*
 PORT=*port for local hosting*
 SECRET_KEY=*a chosen secret key to sign jwt with*
-DB_HOST=*the database hostname*
-DB_PORT=*the database port*
-DB_NAME=*the name of the database*
-DB_USER=*the database username*
-DB_PASSWORD=*the database password*
+CLOUDINARY_CLOUD_NAME=*the cloudinary library name*
+CLOUDINARY_API_KEY=*the cloudinary API key*
+CLOUDINARY_API_SECRET=*the cloudinary API secret*
 CLOUDINARY_URL=*the cloudinary library connection URL*
+DB_CONNECTION_URI=*the postgres database connection URI*
 ```
 
 ## Commands
