@@ -4,7 +4,7 @@ A social media web application initially designed as a tool for experimenting wi
 
 This project was created using React, Redux, Express, and PostgreSQL, with Cloudinary as a file host.
 
-[live site](social-infinity.herokuapp.com)
+[live site](https://social-infinity.herokuapp.com/)
 
 ## Features
 
