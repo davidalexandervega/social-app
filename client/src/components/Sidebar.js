@@ -79,7 +79,7 @@ const Sidebar = (props) => {
                 className="sidebarImage"
               />
             ) : (
-              <ProfileCircled height="50px" width="50px" strokeWidth="1.1" />
+              <ProfileCircled height="50px" width="50px" strokeWidth="0.9" />
             )}
           </div>
           {username}
