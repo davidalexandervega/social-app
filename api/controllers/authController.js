@@ -109,13 +109,27 @@ const fetchProfile = async (req, res) => {
 const editProfile = async (req, res) => {
   let bannerID, pictureID;
 
+  /*
+it's important to note that cloudinary keeps version numbers for images,
+which becomes relevant when one with the same public id (aka filename) is replaced.
+if the version number is not supplied on render, cloudinary will render
+whatever image has last been cached by the browser.
+therefore, a user's pictureID and bannerID correspond to the version number
+provided on upload. if there is no picture, then the id is set to the user's id.
+this is in order to allow the pictureID and bannerID fields to be used as
+foreign keys in the database, and therefore cascade updates to objects
+(such as posts) when the user's information is updated.
+  */
+
   if (req.files.banner) {
     // extract the version number from the upload path:
     bannerID = req.files.banner[0].path.split('/upload/v')[1].split('/')[0];
   } else if (req.body.banner === req.body.userID) {
+    // if the banner id is the user id, then there's no banner or it needs to be deleted:
     await cloudinary.uploader.destroy(`social-app/banners/${req.body.userID}`);
     bannerID = req.body.userID;
   } else {
+    // if an existing version number was sent in the request, then no change:
     bannerID = req.body.banner;
   }
 
@@ -123,9 +137,11 @@ const editProfile = async (req, res) => {
     // extract the version number from the upload path:
     pictureID = req.files.picture[0].path.split('/upload/v')[1].split('/')[0];
   } else if (req.body.picture === req.body.userID) {
+    // if the picture id is the user id, then there's no profile picture or it needs to be deleted:
     await cloudinary.uploader.destroy(`social-app/pictures/${req.body.userID}`);
     pictureID = req.body.userID;
   } else {
+    // if an existing version number was sent in the request, then no change:
     pictureID = req.body.picture;
   }
 
@@ -181,6 +197,7 @@ const editUser = async (req, res) => {
 
       if (alreadyTaken) res.status(401).send('username already taken');
     }
+
     if (req.body.newUsername === req.body.username || !alreadyTaken) {
       userModel
         .update(

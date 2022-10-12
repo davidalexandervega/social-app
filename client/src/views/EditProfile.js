@@ -44,6 +44,18 @@ const EditProfile = () => {
     };
   }, [dispatch, navigate, user]);
 
+  /*
+it's important to note that cloudinary keeps version numbers for images,
+which becomes relevant when one with the same public id (aka filename) is replaced.
+if the version number is not supplied on render, cloudinary will render
+whatever image has last been cached by the browser.
+therefore, a user's pictureID and bannerID correspond to the version number
+provided on upload. if there is no picture, then the id is set to the user's id.
+this is in order to allow the pictureID and bannerID fields to be used as
+foreign keys in the database, and therefore cascade updates to objects
+(such as posts) when the user's information is updated.
+  */
+
   // initialize edit form:
   const [profileData, setProfileData] = useState({
     banner: user ? user.bannerID : null,
@@ -248,9 +260,7 @@ const EditProfile = () => {
               </div>
             </div>
           ) : (
-            <div className="editUnavailable">
-              edit page is unavailable if it's not your account.
-            </div>
+            <div className="clientMessage">edit page is unavailable if it's not your account.</div>
           )}
         </>
       ) : (
