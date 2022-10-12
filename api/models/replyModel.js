@@ -49,6 +49,7 @@ const replyModel = sequelize.define(
         model: 'posts',
         key: 'id',
       },
+      onDelete: 'CASCADE',
     },
     userID: {
       type: Sequelize.DataTypes.UUID,
