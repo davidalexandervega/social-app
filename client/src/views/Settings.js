@@ -32,8 +32,8 @@ const Settings = () => {
     if (user.id) {
       dispatch(disablePost());
       setTimeout(() => {
-        settingsHeaderRef.current.classList.add('fade');
-        settingsRef.current.classList.add('fade');
+        if (settingsHeaderRef.current) settingsHeaderRef.current.classList.add('fade');
+        if (settingsRef.current) settingsRef.current.classList.add('fade');
       }, 200);
     } else {
       navigate('/');
@@ -251,7 +251,7 @@ const Settings = () => {
                 change password
               </div>
             </form>
-            {username === 'demo' ? <PreventSettings /> : null}
+            {username === 'socialite' ? <PreventSettings /> : null}
           </div>
         </>
       ) : (

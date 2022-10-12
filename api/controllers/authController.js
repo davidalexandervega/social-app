@@ -167,7 +167,7 @@ const editUser = async (req, res) => {
   if (user && (await bcrypt.compare(req.body.password, user.password))) {
     // if the request body has a new username specified,
     // check if it is already taken:
-    let alreadyTaken;
+    let alreadyTaken = false;
     if (req.body.newUsername !== req.body.username) {
       alreadyTaken = await userModel
         .findAll({
@@ -176,7 +176,7 @@ const editUser = async (req, res) => {
           },
         })
         .then((response) => {
-          return response[0].dataValues;
+          if (response.length > 0) return true;
         });
 
       if (alreadyTaken) res.status(401).send('username already taken');
