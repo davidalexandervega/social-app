@@ -1,0 +1,20 @@
+{
+  "name": "social-app",
+  "version": "1.0.0",
+  "description": "A social media web application initially designed as a tool for experimenting with ideas around user interaction. It also serves as a portfolio-style demonstration.",
+  "main": "index.js",
+  "scripts": {
+    "start-production": "cd api && node app",
+    "heroku-postbuild": "cd api && npm install && cd ../client && npm install && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidalexandervega/social-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davidalexandervega/social-app/issues"
+  },
+  "homepage": "https://github.com/davidalexandervega/social-app#readme"
+}
