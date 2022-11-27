@@ -9,8 +9,8 @@ import { createPost } from '../features/post/postSlice';
 import '../assets/styles/NewPost.scss';
 import { DoubleCheck, Cancel, Check } from 'iconoir-react';
 
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+// axios.defaults.xsrfCookieName = 'csrftoken';
+// axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 const NewPost = (props) => {
   const dispatch = useDispatch();

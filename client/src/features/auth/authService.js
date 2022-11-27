@@ -1,7 +1,8 @@
 import axios from 'axios';
+
 // handle django's CSRF verification conflict:
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+// axios.defaults.xsrfCookieName = 'csrftoken';
+// axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 // this includes the proxy definied in package.json
 // otherwise you would need the full path to the server-side:
