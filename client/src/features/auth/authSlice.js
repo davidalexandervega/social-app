@@ -131,6 +131,8 @@ export const authSlice = createSlice({
     ejectProfile: (state) => {
       state.profileUser = null;
     },
+    // update the follower count on the user profile as it's being viewed,
+    // triggering the button to change as well:
     updateFollowing: (state) => {
       if (state.profileUser.followers.includes(state.user.id)) {
         state.profileUser.followers.splice(state.profileUser.followers.indexOf(state.user.id), 1);

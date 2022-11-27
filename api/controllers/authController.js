@@ -262,6 +262,16 @@ const changePassword = async (req, res) => {
 // route: PUT /api/users/follow
 // access: private
 const followUser = async (req, res) => {
+  const creator = await userModel
+    .findAll({
+      where: {
+        id: req.body.creatorID,
+      },
+    })
+    .then((response) => {
+      return response[0].dataValues;
+    });
+
   const target = await userModel
     .findAll({
       where: {
@@ -272,27 +282,42 @@ const followUser = async (req, res) => {
       return response[0].dataValues;
     });
 
+  const following = [...creator.following];
   const followers = [...target.followers];
   if (followers.includes(req.body.creatorID)) {
     followers.splice(followers.indexOf(req.body.creatorID), 1);
+    userModel.update(
+      {
+        followers: followers,
+      },
+      { where: { id: req.body.targetID }, returning: true, plain: true }
+    );
+    following.splice(followers.indexOf(req.body.targetID), 1);
     userModel
       .update(
         {
-          followers: followers,
+          following: following,
         },
-        { where: { id: req.body.targetID }, returning: true, plain: true }
+        { where: { id: req.body.creatorID }, returning: true, plain: true }
       )
       .then((response) => {
         res.status(200).json(response[1].dataValues);
       });
   } else {
     followers.push(req.body.creatorID);
+    userModel.update(
+      {
+        followers: followers,
+      },
+      { where: { id: req.body.targetID }, returning: true, plain: true }
+    );
+    following.push(req.body.targetID);
     userModel
       .update(
         {
-          followers: followers,
+          following: following,
         },
-        { where: { id: req.body.targetID }, returning: true, plain: true }
+        { where: { id: req.body.creatorID }, returning: true, plain: true }
       )
       .then((response) => {
         res.status(200).json(response[1].dataValues);
