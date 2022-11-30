@@ -1,10 +1,32 @@
 const replyModel = require('../models/replyModel');
-
+const postModel = require('../models/postModel');
 // description: create reply
 // route: POST /api/replies/
 // access: private
 const createReply = async (req, res) => {
-  return replyModel
+  // first, add the id of the reply to the origin post's replies array:
+  const origin = await postModel
+    .findAll({
+      where: {
+        id: req.body.originID,
+      },
+    })
+    .then((response) => {
+      return response[0].dataValues;
+    });
+
+  const replies = [...origin.replies];
+  replies.push(req.body.id);
+
+  postModel.update(
+    {
+      replies: replies,
+    },
+    { where: { id: req.body.originID } }
+  );
+
+  // now, formally create the reply:
+  replyModel
     .create({
       id: req.body.id,
       originID: req.body.originID,
@@ -61,7 +83,36 @@ const likeReply = (req, res) => {
 // description: delete a reply
 // route: DELETE /api/replies/?id=
 // access: public
-const deleteReply = (req, res) => {
+const deleteReply = async (req, res) => {
+  // first, delete the id of the reply to the origin post's replies array:
+  const reply = await replyModel
+    .findAll({
+      where: {
+        id: req.query.id,
+      },
+    })
+    .then((response) => {
+      return response[0].dataValues;
+    });
+  const origin = await postModel
+    .findAll({
+      where: {
+        id: reply.originID,
+      },
+    })
+    .then((response) => {
+      return response[0].dataValues;
+    });
+  replies = [...origin.replies];
+  replies.splice(replies.indexOf(req.query.id), 1);
+  postModel.update(
+    {
+      replies: replies,
+    },
+    { where: { id: reply.originID } }
+  );
+
+  // now, formally delete the reply:
   replyModel
     .destroy({ where: { id: req.query.id } })
     .then(() => {
